@@ -26,6 +26,17 @@ public class ChatServer{
 
         }
     }
+
+    public void closeServerSocket(){
+        try{
+            if(serverSocket != null){
+                serverSocket.close();
+            }
+        }catch(IOExeption e){
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) throws IOException {
 
         ServerSocket serverSocket = new ServerSocket(1337);
