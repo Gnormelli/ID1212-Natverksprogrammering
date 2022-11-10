@@ -20,7 +20,7 @@ public class ClientHandler implements Runnable {
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.id = getUserID();
             clientHandlers.add(this);
-            broadcastMessage("Server: A new user has entered");
+            broadcastMessage("Server: A new user " + this.id + " has entered");
         }catch(IOException e ){
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
@@ -70,7 +70,7 @@ public class ClientHandler implements Runnable {
 
     public void removeClientHandler(){
         clientHandlers.remove(this);
-        broadcastMessage("Server: Client " + id + "left");
+        broadcastMessage("Server: Client " + id + " left");
     }
 
     public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter){
