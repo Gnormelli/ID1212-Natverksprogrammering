@@ -32,7 +32,7 @@ public class ChatServer{
             if(serverSocket != null){
                 serverSocket.close();
             }
-        }catch(IOExeption e){
+        }catch(IOException e){
             e.printStackTrace();
         }
     }
