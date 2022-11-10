@@ -46,11 +46,13 @@ public class ChatClient {
             public void run() {
                 String msgFromOthers;
                 while (socket.isConnected()){
-                    try {
+                   try {
                         msgFromOthers = bufferedReader.readLine();
                         System.out.println(msgFromOthers);
                     }catch(IOException e){
+                        System.out.println("Disconnected from server");
                         closeEverything(socket, bufferedReader, bufferedWriter);
+                        break;
                     }
                 }
             }
@@ -77,11 +79,12 @@ public class ChatClient {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Connecting...");
 
-        Socket socket = new Socket("localhost", 1337);
+        Socket socket = new Socket("00000", 1337);
         ChatClient chatClient = new ChatClient(socket);
         System.out.println("Connected!");
         chatClient.listenForMessage();
         chatClient.sendMessage();
+
 
     }
 
