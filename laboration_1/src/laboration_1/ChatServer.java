@@ -23,7 +23,7 @@ public class ChatServer{
                 thread.start();
             }
         }catch(IOException exception){
-
+            closeServerSocket();
         }
     }
 
@@ -39,7 +39,7 @@ public class ChatServer{
 
     public static void main(String[] args) throws IOException {
 
-        ServerSocket serverSocket = new ServerSocket(1337);
+        ServerSocket serverSocket = new ServerSocket(8080);
         ChatServer server = new ChatServer(serverSocket);
         server.startServer();
 

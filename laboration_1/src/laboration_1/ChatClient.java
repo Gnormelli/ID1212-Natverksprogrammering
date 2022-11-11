@@ -9,14 +9,14 @@ public class ChatClient {
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
-    private int id;
+    //private int id;
 
     public ChatClient(Socket socket){
         try{
             this.socket = socket;
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.id = id;
+            //this.id = id;
 
         }catch(IOException e){
             closeEverything(socket, bufferedReader, bufferedWriter);
@@ -24,9 +24,9 @@ public class ChatClient {
     }
     public void sendMessage(){
         try{
-            bufferedWriter.write(id);
-            bufferedWriter.newLine();
-            bufferedWriter.flush();
+            //bufferedWriter.write(id);
+            //bufferedWriter.newLine();
+            //bufferedWriter.flush();
 
             Scanner scanner = new Scanner(System.in);
             while(socket.isConnected()){
@@ -76,15 +76,14 @@ public class ChatClient {
         }
     }
     public static void main(String[] args) throws IOException {
-        Scanner scanner = new Scanner(System.in);
+        //Scanner scanner = new Scanner(System.in);
         System.out.println("Connecting...");
 
-        Socket socket = new Socket("00000", 1337);
+        Socket socket = new Socket("172.26.176.1", 8080);
         ChatClient chatClient = new ChatClient(socket);
         System.out.println("Connected!");
         chatClient.listenForMessage();
         chatClient.sendMessage();
-
 
     }
 
