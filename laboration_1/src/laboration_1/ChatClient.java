@@ -23,22 +23,26 @@ public class ChatClient {
         }
     }
     public void sendMessage(){
-        try{
-            //bufferedWriter.write(id);
-            //bufferedWriter.newLine();
-            //bufferedWriter.flush();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //bufferedWriter.write(id);
+                    //bufferedWriter.newLine();
+                    //bufferedWriter.flush();
 
-            Scanner scanner = new Scanner(System.in);
-            while(socket.isConnected()){
-                String messageToSend = scanner.nextLine();
+                    Scanner scanner = new Scanner(System.in);
+                    while (socket.isConnected()) {
+                        String messageToSend = scanner.nextLine();
                         bufferedWriter.write(messageToSend);
                         bufferedWriter.newLine();
                         bufferedWriter.flush();
+                    }
+                } catch (IOException e) {
+                    closeEverything(socket, bufferedReader, bufferedWriter);
+                }
             }
-        }catch(IOException e){
-            closeEverything(socket,bufferedReader, bufferedWriter);
-        }
-
+        }).start();
     }
     public void listenForMessage(){
         new Thread(new Runnable() {
@@ -84,6 +88,7 @@ public class ChatClient {
         System.out.println("Connected!");
         chatClient.listenForMessage();
         chatClient.sendMessage();
+        System.out.println("exit sendMessage");
 
     }
 
