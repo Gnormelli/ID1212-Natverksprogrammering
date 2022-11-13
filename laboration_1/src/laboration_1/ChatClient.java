@@ -83,7 +83,7 @@ public class ChatClient {
         //Scanner scanner = new Scanner(System.in);
         System.out.println("Connecting...");
 
-        Socket socket = new Socket("172.26.176.1", 8080);
+        Socket socket = new Socket("0", 8080);
         ChatClient chatClient = new ChatClient(socket);
         System.out.println("Connected!");
         chatClient.listenForMessage();
