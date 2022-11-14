@@ -8,21 +8,21 @@ public class ClientHandler implements Runnable {
 
     public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
     private Socket socket;
-    private BufferedReader bufferedReader;
-    private BufferedWriter bufferedWriter;
+    private BufferedReader inputReader;
+    private BufferedWriter outputWriter;
     private int id;
 
 
     public ClientHandler(Socket serverSocket) {
         try {
             this.socket = serverSocket;
-            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.outputWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.id = getUserID();
             clientHandlers.add(this);
-            broadcastMessage("Server: A new user " + this.id + " has entered");
+            propagateMessage("User with id " + this.id + " joined the chat");
         }catch(IOException e ){
-            closeEverything(socket, bufferedReader, bufferedWriter);
+            closeEverything(socket, inputReader, outputWriter);
         }
 
     }
@@ -46,41 +46,41 @@ public class ClientHandler implements Runnable {
 
         while(socket.isConnected()){
             try{
-                message = bufferedReader.readLine();
-                broadcastMessage(message);
+                message = inputReader.readLine();
+                propagateMessage(message);
             }catch(IOException e ){
-                closeEverything(socket, bufferedReader, bufferedWriter);
+                closeEverything(socket, inputReader, outputWriter);
                 break;
             }
         }
     }
-    public void broadcastMessage(String messageToSend){
+    public void propagateMessage(String messageToSend){
         for (ClientHandler clientHandler : clientHandlers){
            try{
             if(clientHandler.id != this.id){
-                clientHandler.bufferedWriter.write(messageToSend);
-                clientHandler.bufferedWriter.newLine();
-                clientHandler.bufferedWriter.flush();
+                clientHandler.outputWriter.write(messageToSend);
+                clientHandler.outputWriter.newLine();
+                clientHandler.outputWriter.flush();
             }
            }catch(IOException e){
-               closeEverything(socket, bufferedReader, bufferedWriter);
+               closeEverything(socket, inputReader, outputWriter);
            }
         }
     }
 
     public void removeClientHandler(){
         clientHandlers.remove(this);
-        broadcastMessage("Server: Client " + id + " left");
+        propagateMessage("Server: Client " + id + " left");
     }
 
-    public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter){
+    public void closeEverything(Socket socket, BufferedReader inputReader, BufferedWriter outputWriter){
         removeClientHandler();
         try{
-            if (bufferedReader != null){
-                bufferedReader.close();
+            if (inputReader != null){
+                inputReader.close();
             }
-            if(bufferedWriter != null){
-                bufferedWriter.close();
+            if(outputWriter != null){
+                outputWriter.close();
             }
             if (socket != null) {
                 socket.close();

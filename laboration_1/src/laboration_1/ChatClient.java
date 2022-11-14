@@ -8,18 +8,16 @@ public class ChatClient {
 
     private Socket socket;
     private BufferedReader bufferedReader;
-    private BufferedWriter bufferedWriter;
-    //private int id;
+    private BufferedWriter outputWriter;
 
     public ChatClient(Socket socket){
         try{
             this.socket = socket;
-            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            this.outputWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            //this.id = id;
 
         }catch(IOException e){
-            closeEverything(socket, bufferedReader, bufferedWriter);
+            closeConnection(socket, bufferedReader, outputWriter);
         }
     }
     public void sendMessage(){
@@ -27,19 +25,15 @@ public class ChatClient {
             @Override
             public void run() {
                 try {
-                    //bufferedWriter.write(id);
-                    //bufferedWriter.newLine();
-                    //bufferedWriter.flush();
-
                     Scanner scanner = new Scanner(System.in);
                     while (socket.isConnected()) {
                         String messageToSend = scanner.nextLine();
-                        bufferedWriter.write(messageToSend);
-                        bufferedWriter.newLine();
-                        bufferedWriter.flush();
+                        outputWriter.write(messageToSend);
+                        outputWriter.newLine();
+                        outputWriter.flush();
                     }
                 } catch (IOException e) {
-                    closeEverything(socket, bufferedReader, bufferedWriter);
+                    closeConnection(socket, bufferedReader, outputWriter);
                 }
             }
         }).start();
@@ -54,8 +48,8 @@ public class ChatClient {
                         msgFromOthers = bufferedReader.readLine();
                         System.out.println(msgFromOthers);
                     }catch(IOException e){
-                        System.out.println("Disconnected from server");
-                        closeEverything(socket, bufferedReader, bufferedWriter);
+                        System.out.println("Disconnect from server");
+                        closeConnection(socket, bufferedReader, outputWriter);
                         break;
                     }
                 }
@@ -64,13 +58,13 @@ public class ChatClient {
         }).start();
     }
 
-    public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter){
+    public void closeConnection(Socket socket, BufferedReader inputReader, BufferedWriter outputWriter){
         try{
-            if (bufferedReader != null){
-                bufferedReader.close();
+            if (inputReader != null){
+                inputReader.close();
             }
-            if(bufferedWriter != null){
-                bufferedWriter.close();
+            if(outputWriter != null){
+                outputWriter.close();
             }
             if (socket != null) {
                 socket.close();
@@ -83,12 +77,13 @@ public class ChatClient {
         //Scanner scanner = new Scanner(System.in);
         System.out.println("Connecting...");
 
-        Socket socket = new Socket("172.26.176.1", 8080);
+        Socket socket = new Socket("localhost", 8000);
+        // System.out.println("This works");
         ChatClient chatClient = new ChatClient(socket);
         System.out.println("Connected!");
         chatClient.listenForMessage();
         chatClient.sendMessage();
-        System.out.println("exit sendMessage");
+        //System.out.println("exit sendMessage");
 
     }
 

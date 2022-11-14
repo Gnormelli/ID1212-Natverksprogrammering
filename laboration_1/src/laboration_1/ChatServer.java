@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-
 public class ChatServer{
     private ServerSocket serverSocket;
 
@@ -16,18 +15,18 @@ public class ChatServer{
             while(!serverSocket.isClosed()){
 
                 Socket socket = serverSocket.accept();
-                System.out.println("New user connected");
+                System.out.println("A new user has connected");
                 ClientHandler clientHandler = new ClientHandler(socket);
 
                 Thread thread = new Thread(clientHandler);
                 thread.start();
             }
         }catch(IOException exception){
-            closeServerSocket();
+            closeSocket();
         }
     }
 
-    public void closeServerSocket(){
+    public void closeSocket(){
         try{
             if(serverSocket != null){
                 serverSocket.close();
@@ -39,7 +38,7 @@ public class ChatServer{
 
     public static void main(String[] args) throws IOException {
 
-        ServerSocket serverSocket = new ServerSocket(8080);
+        ServerSocket serverSocket = new ServerSocket(8000);
         ChatServer server = new ChatServer(serverSocket);
         server.startServer();
 
