@@ -11,6 +11,7 @@ public class ChatClient {
     private BufferedWriter outputWriter;
 
     public ChatClient(Socket socket){
+        // Alt synchronized (this){}
         try{
             this.socket = socket;
             this.outputWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));

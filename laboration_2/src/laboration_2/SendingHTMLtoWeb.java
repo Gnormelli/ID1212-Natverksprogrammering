@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Controller {
+public class SendingHTMLtoWeb {
+
     private ServerSocket serverSocket;
 
-    public Controller(ServerSocket serverSocket) {
+    public SendingHTMLtoWeb(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
     }
+
     public void startServer(){
         try {
             while(!serverSocket.isClosed()){
@@ -37,10 +39,8 @@ public class Controller {
     }
 
     public static void main(String[] args) throws IOException {
-
         ServerSocket serverSocket = new ServerSocket(8000);
-        Controller server = new Controller(serverSocket);
+        SendingHTMLtoWeb server = new SendingHTMLtoWeb(serverSocket);
         server.startServer();
-
     }
 }
