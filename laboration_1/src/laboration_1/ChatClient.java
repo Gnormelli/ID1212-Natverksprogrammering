@@ -7,17 +7,17 @@ import java.util.Scanner;
 public class ChatClient {
 
     private Socket socket;
-    private BufferedReader bufferedReader;
+    private BufferedReader inputReader;
     private BufferedWriter outputWriter;
 
     public ChatClient(Socket socket){
         try{
             this.socket = socket;
             this.outputWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
         }catch(IOException e){
-            closeConnection(socket, bufferedReader, outputWriter);
+            closeConnection(socket, inputReader, outputWriter);
         }
     }
     public void sendMessage(){
@@ -33,7 +33,7 @@ public class ChatClient {
                         outputWriter.flush();
                     }
                 } catch (IOException e) {
-                    closeConnection(socket, bufferedReader, outputWriter);
+                    closeConnection(socket, inputReader, outputWriter);
                 }
             }
         }).start();
@@ -45,11 +45,11 @@ public class ChatClient {
                 String msgFromOthers;
                 while (socket.isConnected()){
                    try {
-                        msgFromOthers = bufferedReader.readLine();
+                        msgFromOthers = inputReader.readLine();
                         System.out.println(msgFromOthers);
                     }catch(IOException e){
                         System.out.println("Disconnect from server");
-                        closeConnection(socket, bufferedReader, outputWriter);
+                        closeConnection(socket, inputReader, outputWriter);
                         break;
                     }
                 }
