@@ -20,8 +20,9 @@ public class ClientHandler implements Runnable {
             this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.id = getUserID();
             clientHandlers.add(this);
-            informServer("User with id " + this.id + " joined the chat");
+            informServer();
         }catch(IOException e ){
+            System.out.println("ClientHandler");
             closeEverything(socket, inputReader, outputWriter);
         }
 
@@ -47,22 +48,32 @@ public class ClientHandler implements Runnable {
         while(socket.isConnected()){
             try{
                 message = inputReader.readLine();
-                informServer(message);
+                informServer();
+
             }catch(IOException e ){
+                System.out.println("run");
                 closeEverything(socket, inputReader, outputWriter);
                 break;
             }
         }
     }
-    public void informServer(String messageToSend){
-        for (ClientHandler clientHandler : clientHandlers){
+    public void informServer(){
+        for (ClientHandler client : clientHandlers){
            try{
-            if(clientHandler.id != this.id){
-                clientHandler.outputWriter.write(messageToSend);
-                clientHandler.outputWriter.newLine();
-                clientHandler.outputWriter.flush();
+            if(client.id != this.id){
+                client.outputWriter.write("HTTP/1.1 200 OK");
+                client.outputWriter.write("\r\n");
+                client.outputWriter.write("Content-Type: text/html");
+                client.outputWriter.write("\r\n");
+                client.outputWriter.write("<p> Hello world </p>");
+                client.outputWriter.newLine();
+                client.outputWriter.flush();
+               // client.outputWriter.write(messageToSend);
+               // client.outputWriter.newLine();
+               // client.outputWriter.flush();
             }
            }catch(IOException e){
+               System.out.println("informServer");
                closeEverything(socket, inputReader, outputWriter);
            }
         }
@@ -70,7 +81,7 @@ public class ClientHandler implements Runnable {
 
     public void removeClientHandler(){
         clientHandlers.remove(this);
-        informServer("Server: Client " + id + " left");
+        informServer();
     }
 
     public void closeEverything(Socket socket, BufferedReader inputReader, BufferedWriter outputWriter){
@@ -91,3 +102,4 @@ public class ClientHandler implements Runnable {
     }
 
 }
+

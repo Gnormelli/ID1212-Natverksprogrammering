@@ -20,18 +20,21 @@ public class View {
             closeConnection(socket, inputReader, outputWriter);
         }
     }
-    public void sendMessage(){
+    public void sendMessage(String host){
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Scanner scanner = new Scanner(System.in);
-                    while (socket.isConnected()) {
-                        String messageToSend = scanner.nextLine();
-                        outputWriter.write(messageToSend);
+                    String file = "index.html";
+                    /**
+                        String messageToSend =
+                                "GET /" + file + " HTTP/1.1 \n" +
+                                "Host: " + host + "\n" +
+                                "Content-Type: text/html" ;
+                     */
+                        outputWriter.write("FUNKA RÅÅÅÅÅ!!!");
                         outputWriter.newLine();
                         outputWriter.flush();
-                    }
                 } catch (IOException e) {
                     closeConnection(socket, inputReader, outputWriter);
                 }
@@ -75,14 +78,15 @@ public class View {
     }
     public static void main(String[] args) throws IOException {
         //Scanner scanner = new Scanner(System.in);
+        String host = "localhost";
         System.out.println("Connecting...");
 
-        Socket socket = new Socket("localhost", 8000);
+        Socket socket = new Socket(host, 8000);
         // System.out.println("This works");
         View view = new View(socket);
         System.out.println("Connected!");
         view.listenForMessage();
-        view.sendMessage();
+        view.sendMessage(host);
         //System.out.println("exit sendMessage");
 
     }
