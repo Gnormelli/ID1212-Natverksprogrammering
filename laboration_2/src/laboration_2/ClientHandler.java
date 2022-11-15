@@ -20,9 +20,8 @@ public class ClientHandler implements Runnable {
             this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.id = getUserID();
             clientHandlers.add(this);
-            informServer();
+            propagateMessage(serverSocket);
         }catch(IOException e ){
-            System.out.println("ClientHandler");
             closeEverything(socket, inputReader, outputWriter);
         }
 
@@ -38,9 +37,9 @@ public class ClientHandler implements Runnable {
     }
 
 
-        /**
-         * Overrides  Implements Runnable
-         */
+    /**
+     * Overrides  Implements Runnable
+     */
     @Override
     public void run() {
         String message;
@@ -48,40 +47,35 @@ public class ClientHandler implements Runnable {
         while(socket.isConnected()){
             try{
                 message = inputReader.readLine();
-                informServer();
-
+                //propagateMessage(message);
             }catch(IOException e ){
-                System.out.println("run");
                 closeEverything(socket, inputReader, outputWriter);
                 break;
             }
         }
     }
-    public void informServer(){
-        for (ClientHandler client : clientHandlers){
-           try{
-            if(client.id != this.id){
-                client.outputWriter.write("HTTP/1.1 200 OK");
-                client.outputWriter.write("\r\n");
-                client.outputWriter.write("Content-Type: text/html");
-                client.outputWriter.write("\r\n");
-                client.outputWriter.write("<p> Hello world </p>");
-                client.outputWriter.newLine();
-                client.outputWriter.flush();
-               // client.outputWriter.write(messageToSend);
-               // client.outputWriter.newLine();
-               // client.outputWriter.flush();
-            }
-           }catch(IOException e){
-               System.out.println("informServer");
-               closeEverything(socket, inputReader, outputWriter);
-           }
+    public void propagateMessage(Socket serverSocket){
+
+        try{
+
+            PrintWriter out = new PrintWriter(serverSocket.getOutputStream(), true);
+            out.println("HTTP/1.1 200 OK");
+            out.println("Content-Type: text/html");
+            out.println("\r\n");
+            out.println("<p> Can we connect? Yes </p>");
+            out.flush();
+
+            out.close();
+            System.out.println("im here");
+        }catch(IOException e){
+            closeEverything(socket, inputReader, outputWriter);
+
         }
     }
 
     public void removeClientHandler(){
         clientHandlers.remove(this);
-        informServer();
+        //propagateMessage("Server: Client " + id + " left");
     }
 
     public void closeEverything(Socket socket, BufferedReader inputReader, BufferedWriter outputWriter){
@@ -102,4 +96,3 @@ public class ClientHandler implements Runnable {
     }
 
 }
-
