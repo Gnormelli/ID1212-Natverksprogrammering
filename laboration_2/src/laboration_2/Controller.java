@@ -26,19 +26,18 @@ public class Controller{
 
                 System.out.println(socket);
 
+                /**
                 this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String inputLine;
                 while (!(inputLine = this.inputReader.readLine()).equals(""))
                       System.out.println(inputLine);
                 this.inputReader.close();
-
+                 */
                // reqeustName = (from above)
                // if(requestName != "favoicon"){
                   //  Thread thread = new Thread(clientHandler);
                 //    thread.start();
                // }
-
-
 
                 Thread thread = new Thread(clientHandler);
                 thread.start();

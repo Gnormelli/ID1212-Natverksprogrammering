@@ -40,6 +40,7 @@ public class ClientHandler implements Runnable {
     /**
      * Overrides  Implements Runnable
      */
+
     @Override
     public void run() {
         String message;
@@ -47,6 +48,7 @@ public class ClientHandler implements Runnable {
         while(socket.isConnected()){
             try{
                 message = inputReader.readLine();
+                System.out.println(message);
                 //propagateMessage(message);
             }catch(IOException e ){
                 closeEverything(socket, inputReader, outputWriter);
@@ -63,6 +65,7 @@ public class ClientHandler implements Runnable {
             out.println("Content-Type: text/html");
             out.println("\r\n");
             out.println("<p> Can we connect? Yes </p>");
+            out.println("<button type=\"button\">Click Me!</button>");
             out.flush();
 
             out.close();
