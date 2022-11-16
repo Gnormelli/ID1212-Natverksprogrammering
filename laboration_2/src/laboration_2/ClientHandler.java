@@ -8,10 +8,27 @@ public class ClientHandler implements Runnable {
 
     public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
     private Socket socket;
+    public String coockie;
+    private int guessInt;
     private BufferedReader inputReader;
     private BufferedWriter outputWriter;
     private int id;
 
+    public ClientHandler(Socket serverSocket, int guessInt,String coockie) {
+        try {
+            this.guessInt = guessInt;
+            this.coockie = coockie;
+            this.socket = serverSocket;
+            this.outputWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.id = getUserID();
+            clientHandlers.add(this);
+            propagateMessage(serverSocket);
+        } catch (IOException e) {
+            closeEverything(socket, inputReader, outputWriter);
+        }
+
+    }
 
     public ClientHandler(Socket serverSocket) {
         try {
@@ -78,15 +95,15 @@ public class ClientHandler implements Runnable {
             out.println("\r\n");
             out.println("<html>\n" +
                     "<head>\n" +
-                    "<title>Guess Game</title>");
+                    "<title>Number Guess Game</title>\n"+
+                    "</head>\n");
             out.println("<script type = \"text/javascript\">\n" +
                     "function inputfocus(form){\n"
                             + "document.getElementById(\"field\").value"+
                     "}\n" +
                     "</script>");
-            out.println("</head>\n" +
-                    "\n" +
-                    "<body> \n" +
+            out.println("<body> \n" +
+                    "<h>Number Guess Game</h>\n" +
                     "<form name=\"guessform\">\n" +
                     "<input type=text name=guess>\n" +
                     "<input type=submit value=\"Guess\">\n" +
