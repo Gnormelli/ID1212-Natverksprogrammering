@@ -16,22 +16,6 @@ public class ClientHandler implements Runnable {
     private int id;
     private int randomNumber;
 
-    public ClientHandler(Socket serverSocket, int guessInt,String coockie) {
-        try {
-            this.guessInt = guessInt;
-            this.coockie = coockie;
-            this.socket = serverSocket;
-            this.outputWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.id = getUserID();
-            clientHandlers.add(this);
-            propagateMessage(serverSocket);
-        } catch (IOException e) {
-            closeEverything(socket, inputReader, outputWriter);
-        }
-
-    }
-
     public ClientHandler(Socket serverSocket, int guessInt) {
         try {
 
@@ -145,7 +129,7 @@ public class ClientHandler implements Runnable {
             out.println("HTTP/1.1 200 OK");
             out.println("Content-Type: text/html");
             out.println("\r\n");
-            out.println("<html>\n" + messageToUser  +
+            out.println("<html>\n" +
                     "<head>\n" +
                     "<title>Number Guess Game</title>\n"+
                     "</head>\n");
@@ -155,7 +139,7 @@ public class ClientHandler implements Runnable {
                     "}\n" +
                     "</script>");
             out.println("<body> \n" +
-                    "<h>Number Guess Game</h>\n" +
+                    "<h>" +messageToUser+"</h>\n" +
                     "<form name=\"guessform\">\n" +
                     "<input type=text name=guess>\n" +
                     "<input type=submit value=\"Guess\">\n" +
