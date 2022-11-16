@@ -3,28 +3,60 @@ package laboration_2;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class ClientHandler implements Runnable {
 
     public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
     private Socket socket;
+    public String coockie;
+    private int guessInt;
     private BufferedReader inputReader;
     private BufferedWriter outputWriter;
     private int id;
+    private int randomNumber;
 
 
-    public ClientHandler(Socket serverSocket) {
+    public ClientHandler(Socket serverSocket, int guessInt) {
         try {
+
+            this.guessInt = guessInt;
+            this.coockie = "GenerateCookie"; //This needs to generate a cookie
             this.socket = serverSocket;
             this.outputWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.id = getUserID();
+            setRandomNumber();
+
             clientHandlers.add(this);
+
             propagateMessage(serverSocket);
         } catch (IOException e) {
             closeEverything(socket, inputReader, outputWriter);
         }
 
+    }
+
+    //For when we already have a cookie
+    public ClientHandler(Socket serverSocket, int guessInt,String coockie) {
+        try {
+            this.guessInt = guessInt;
+            this.coockie = coockie;
+            this.socket = serverSocket;
+            this.outputWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.id = getUserID();
+            clientHandlers.add(this);
+
+            propagateMessage(serverSocket);
+        } catch (IOException e) {
+            closeEverything(socket, inputReader, outputWriter);
+        }
+
+    }
+    public void setRandomNumber(){
+        Random rand = new Random();
+        this.randomNumber = rand.nextInt(100);
     }
 
     public int getUserID() {
@@ -49,9 +81,11 @@ public class ClientHandler implements Runnable {
             try {
                 message = inputReader.readLine();
                 System.out.println(message);
+
                 //propagateMessage(this.socket);
                 listenForMessage();
             } catch (IOException e) {
+                System.out.println(e);
                 closeEverything(socket, inputReader, outputWriter);
                 break;
             }
@@ -71,12 +105,32 @@ public class ClientHandler implements Runnable {
     public void propagateMessage(Socket serverSocket) {
 
         try {
+            String messageToUser = "Welcome to the Number Guess Game. Guess a number between 1 and 100.";
+            if(guessInt != -1){
+                int guessResulte = getGuessResult(guessInt); // -1 is to low, 0 is rigth, 1 is to hige.
+
+                switch (guessResulte) {
+                    case 1:
+                        messageToUser = "Nope, guess higher";
+                        break;
+                    case -1:
+                        messageToUser = "Nope, guess lower";
+                        break;
+                    case 0:
+                        messageToUser = "You made it!!!";
+                        setRandomNumber();
+                        break;
+                }
+
+                //Give a message if it is to hige or low or rigth
+            }
+
 
             PrintWriter out = new PrintWriter(serverSocket.getOutputStream(), true);
             out.println("HTTP/1.1 200 OK");
             out.println("Content-Type: text/html");
             out.println("\r\n");
-            out.println("<html>\n" +
+            out.println("<html>\n" + messageToUser  +
                     "<head>\n" +
                     "<title>Guess Game</title>");
             out.println("<script type = \"text/javascript\">\n" +
@@ -97,16 +151,21 @@ public class ClientHandler implements Runnable {
             //"  <button type=\"submit\" formmethod=\"post\">Submit using POST</button>");
             out.flush();
             out.close();
-            System.out.println("im here");
+
         } catch (IOException e) {
             closeEverything(socket, inputReader, outputWriter);
         }
     }
 
-    public void myFunction() {
 
-        System.out.println("hii there");
+    public int getGuessResult(int guessInt) {
 
+        if (guessInt > randomNumber)
+            return -1;
+        else if (guessInt < randomNumber)
+            return 1;
+        else
+            return 0;
     }
     public void removeClientHandler() {
         clientHandlers.remove(this);
@@ -130,19 +189,8 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    /**
-            PrintWriter out = new PrintWriter(serverSocket.getOutputStream(), true);
-            out.println("HTTP/1.1 200 OK");
-            out.println("Content-Type: text/html");
-            out.println("\r\n");
-            out.println("<p> Can we connect? Yes </p>");
-            out.println("<input type='text' name='guess'>");
-            out.println("onclick=\"window.location.href='Students.html';\"");
-            out.println("<input type=\"button\" onclick=\"location.href='https://google.com';\" value=\"Go to Google\" />");
 
 
-            out.flush();
-            out.close();
-     */
+
 }
 
