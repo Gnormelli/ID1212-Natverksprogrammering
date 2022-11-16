@@ -37,6 +37,7 @@ public class Controller{
 
                     while(!inputLine.equals(""))
                     {
+                        System.out.println(inputLine);
                         if(inputLine.contains("Cookie ")){
                             System.out.println("Found coockie");
                             cookie = "cookie code";   // This needs to be implemented
@@ -67,9 +68,6 @@ public class Controller{
                         thread.start();
 
                     }
-
-
-
                 }
             }
         }catch(IOException exception){

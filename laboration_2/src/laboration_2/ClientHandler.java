@@ -128,6 +128,7 @@ public class ClientHandler implements Runnable {
             PrintWriter out = new PrintWriter(serverSocket.getOutputStream(), true);
             out.println("HTTP/1.1 200 OK");
             out.println("Content-Type: text/html");
+            out.println("Set-Cookie: cookie ="+ this.id);
             out.println("\r\n");
             out.println("<html>\n" +
                     "<head>\n" +
@@ -136,8 +137,11 @@ public class ClientHandler implements Runnable {
             out.println("<script type = \"text/javascript\">\n" +
                     "function inputfocus(form){\n"
                             + "document.getElementById(\"field\").value"+
+                    "function cookieCreator(){\n"
+                            + "document.cookie = \"Cookie = "+ this.id +"\").value"+
                     "}\n" +
                     "</script>");
+
             out.println("<body> \n" +
                     "<h>" +messageToUser+"</h>\n" +
                     "<form name=\"guessform\">\n" +
