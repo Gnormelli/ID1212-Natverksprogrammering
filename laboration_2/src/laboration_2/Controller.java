@@ -38,17 +38,17 @@ public class Controller{
                     while(!inputLine.equals(""))
                     {
                         System.out.println(inputLine);
-                        if(inputLine.contains("Cookie ")){
+                        if(inputLine.contains("Cookie: ")){
                             System.out.println("Found coockie");
-                            cookie = "cookie code";   // This needs to be implemented
+                            cookie = inputLine.split("Cookie: ")[1];   // This needs to be implemented
+                            cookie = inputLine.split(" ")[0];
                         }
                         inputLine = this.inputReader.readLine();
                     }
+                    System.out.println(cookie);
                     if (cookie.equals("nothing")){
                         ClientHandler clientHandlerFirstTime = new ClientHandler(socket, guessInt);
-                        //Generate cookie
                         System.out.println("A new user has connected");
-                        System.out.println(socket);
                         clientHandlers.add(clientHandlerFirstTime);
                         Thread thread = new Thread(clientHandlerFirstTime);
                         thread.start();

@@ -13,18 +13,19 @@ public class ClientHandler implements Runnable {
     private int guessInt;
     private BufferedReader inputReader;
     private BufferedWriter outputWriter;
-    private int id;
+    public int id;
     private int randomNumber;
 
     public ClientHandler(Socket serverSocket, int guessInt) {
         try {
 
             this.guessInt = guessInt;
-            this.coockie = "GenerateCookie"; //This needs to generate a cookie
+
             this.socket = serverSocket;
             this.outputWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.id = getUserID();
+            this.coockie = Integer.toString(this.id);
             setRandomNumber();
 
             clientHandlers.add(this);
