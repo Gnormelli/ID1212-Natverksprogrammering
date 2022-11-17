@@ -14,7 +14,7 @@ public class View{
             this.id = id;
     }
 
-    public void propagateMessage(String messageToUser) throws IOException {
+    public void propagateMessage(String messageToUser, String numberOfGuesses) throws IOException {
         try{
         PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
         out.println("HTTP/1.1 200 OK");
@@ -29,12 +29,12 @@ public class View{
                 "function inputfocus(form){\n"
                 + "document.getElementById(\"field\").value" +
                 "function cookieCreator(){\n"
-                + "document.cookie = \"Cookie = " + this.id + "\").value" +
+                + "document.cookie = \"" + this.id + "\").value" +
                 "}\n" +
                 "</script>");
 
         out.println("<body> \n" +
-                "<h>" + messageToUser + "</h>\n" +
+                "<h>" + messageToUser + "Number of guesses = "+ numberOfGuesses +"</h>\n" +
                 "<form name=\"guessform\">\n" +
                 "<input type=text name=guess>\n" +
                 "<input type=submit value=\"Guess\">\n" +

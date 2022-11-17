@@ -14,6 +14,8 @@ public class Controller{
     private ServerSocket serverSocket;
     private Socket socket;
     private BufferedReader inputReader;
+
+
     public static ArrayList<Model> models = new ArrayList<>();
 
     public Controller(ServerSocket serverSocket) {
@@ -22,8 +24,10 @@ public class Controller{
     public void startServer(){
         try {
             while(!serverSocket.isClosed()){
+                int numberOfGuesses = 0;
                 int guessInt = -1;
                 String cookie = "nothing";
+                int randomNumber = -1;
                 this.socket = serverSocket.accept();
 
                 this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -38,43 +42,46 @@ public class Controller{
 
                     while(!inputLine.equals(""))
                     {
-                        System.out.println(inputLine);
+                        System.out.println(inputLine);            //prints the entire request
                         if(inputLine.contains("Cookie: ")){
                             System.out.println("Found cookie");
-                            cookie = inputLine.split("Cookie: ")[1];   // This needs to be implemented
+                            cookie = inputLine.split("Cookie: ")[1];
                             cookie = cookie.split(" ")[0];
-
                         }
                         inputLine = this.inputReader.readLine();
                     }
-                    System.out.println(cookie); //Remove later
+                    System.out.println("cookie is = " + cookie); //Remove later
                     if (cookie.equals("nothing")){
                         {
                             int count = 1;
-                            for (Model models : models) {
+                            for (Model models : models) {           //generates cookie based on #of models
                                 count++;
                             }
                             cookie = Integer.toString(count);
                         }
 
-                        Model modelFirstTime = new Model(socket, guessInt);
-                        int userID = modelFirstTime.getUserID();
-
-                        View website = new View(this.socket, userID);    //user id mot cookie senare
+                        Model modelFirstTime = new Model(this.socket, guessInt, cookie);
+                        View website = new View(this.socket, Integer.parseInt(cookie));
 
                         String messageToUser = modelFirstTime.createTheMessage();
-                        website.propagateMessage(messageToUser);
-
+                        website.propagateMessage(messageToUser, Integer.toString(numberOfGuesses));
                         System.out.println("A new user has connected");
                         models.add(modelFirstTime);
+                        inputReader.close();
                         Thread thread = new Thread(modelFirstTime);
                         thread.start();
 
                     }
                     else{
-                        Model modelNotFirstTime = new Model(socket, guessInt ,cookie);
-                        System.out.println("A new user has connected");
-
+                        for(Model model : models){
+                            if(cookie.equals(model.cookie)){
+                                randomNumber = model.getRandomNumber();
+                                numberOfGuesses = model.getNumberOfGuesses() + 1;
+                            }
+                        }
+                        Model modelNotFirstTime = new Model(this.socket, guessInt ,cookie, randomNumber, numberOfGuesses);
+                        System.out.println("A user (with a cookie has returned)");
+                        inputReader.close();
                         Thread thread = new Thread(modelNotFirstTime);
                         thread.start();
 
