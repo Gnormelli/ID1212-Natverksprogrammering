@@ -12,8 +12,9 @@ import java.util.ArrayList;
 
 public class Controller{
     private ServerSocket serverSocket;
+    private Socket socket;
     private BufferedReader inputReader;
-    public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
+    public static ArrayList<Model> models = new ArrayList<>();
 
     public Controller(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
@@ -23,11 +24,11 @@ public class Controller{
             while(!serverSocket.isClosed()){
                 int guessInt = -1;
                 String cookie = "nothing";
-                Socket socket = serverSocket.accept();
+                this.socket = serverSocket.accept();
 
                 this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                String inputLine;
-                inputLine = this.inputReader.readLine();
+                String inputLine = this.inputReader.readLine();
+
                 if (!inputLine.contains("favicon")) {
                     if(inputLine.contains("guess")){
                         String result = inputLine.split("guess=")[1];
@@ -39,32 +40,42 @@ public class Controller{
                     {
                         System.out.println(inputLine);
                         if(inputLine.contains("Cookie: ")){
-                            System.out.println("Found coockie");
+                            System.out.println("Found cookie");
                             cookie = inputLine.split("Cookie: ")[1];   // This needs to be implemented
-                            cookie = inputLine.split(" ")[0];
+                            cookie = cookie.split(" ")[0];
+
                         }
                         inputLine = this.inputReader.readLine();
                     }
-                    System.out.println(cookie);
+                    System.out.println(cookie); //Remove later
                     if (cookie.equals("nothing")){
-                        ClientHandler clientHandlerFirstTime = new ClientHandler(socket, guessInt);
+                        {
+                            int count = 1;
+                            for (Model models : models) {
+                                count++;
+                            }
+                            cookie = Integer.toString(count);
+                        }
+
+                        Model modelFirstTime = new Model(socket, guessInt);
+                        int userID = modelFirstTime.getUserID();
+
+                        View website = new View(this.socket, userID);    //user id mot cookie senare
+
+                        String messageToUser = modelFirstTime.createTheMessage();
+                        website.propagateMessage(messageToUser);
+
                         System.out.println("A new user has connected");
-                        clientHandlers.add(clientHandlerFirstTime);
-                        Thread thread = new Thread(clientHandlerFirstTime);
+                        models.add(modelFirstTime);
+                        Thread thread = new Thread(modelFirstTime);
                         thread.start();
 
                     }
                     else{
-                        for(ClientHandler clientHandler : clientHandlers){
-                            if(clientHandler.coockie.equals(cookie)){
-                                //clientHandler.propagateMessage();  //Send it over to that handeler somehow
-                            }
-                        }
-                        ClientHandler clientHandlerNotFirstTime = new ClientHandler(socket, guessInt ,cookie);
+                        Model modelNotFirstTime = new Model(socket, guessInt ,cookie);
                         System.out.println("A new user has connected");
 
-
-                        Thread thread = new Thread(clientHandlerNotFirstTime);
+                        Thread thread = new Thread(modelNotFirstTime);
                         thread.start();
 
                     }
