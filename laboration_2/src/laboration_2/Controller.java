@@ -16,15 +16,19 @@ public class Controller{
     private BufferedReader inputReader;
 
 
+
     public static ArrayList<Model> models = new ArrayList<>();
 
     public Controller(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
     }
     public void startServer(){
+        View website;
         try {
             while(!serverSocket.isClosed()){
-                int numberOfGuesses = 0;
+
+                int modelCount = 0;
+                int currentModel = 0;
                 int guessInt = -1;
                 String cookie = "nothing";
                 int randomNumber = -1;
@@ -43,10 +47,10 @@ public class Controller{
                     while(!inputLine.equals(""))
                     {
                         System.out.println(inputLine);            //prints the entire request
-                        if(inputLine.contains("Cookie: ")){
+                        if(inputLine.contains("cookieForGKServer=")){
                             System.out.println("Found cookie");
-                            cookie = inputLine.split("Cookie: ")[1];
-                            cookie = cookie.split(" ")[0];
+                            cookie = inputLine.split("cookieForGKServer=")[1];
+                            cookie = cookie.split(";")[0];
                         }
                         inputLine = this.inputReader.readLine();
                     }
@@ -61,10 +65,10 @@ public class Controller{
                         }
 
                         Model modelFirstTime = new Model(this.socket, guessInt, cookie);
-                        View website = new View(this.socket, Integer.parseInt(cookie));
+                        website = new View(this.socket, Integer.parseInt(cookie));
 
                         String messageToUser = modelFirstTime.createTheMessage();
-                        website.propagateMessage(messageToUser, Integer.toString(numberOfGuesses));
+                        website.propagateMessage(messageToUser);
                         System.out.println("A new user has connected");
                         models.add(modelFirstTime);
                         inputReader.close();
@@ -75,22 +79,38 @@ public class Controller{
                     else{
                         for(Model model : models){
                             if(cookie.equals(model.cookie)){
-                                randomNumber = model.getRandomNumber();
-                                numberOfGuesses = model.getNumberOfGuesses() + 1;
+                                currentModel = modelCount;
                             }
+                            modelCount++;
+                        }
+
+                        try{  //If a sends request with a cookie but the model list is empty
+                            models.get(currentModel);
+                        }catch(IndexOutOfBoundsException e){
+                            Model modelNotFirstTime = new Model(this.socket, guessInt ,cookie, randomNumber, 0);
+                            models.add(modelCount, modelNotFirstTime);
+                        }
+                        models.get(currentModel);
+                        models.get(currentModel).setGuess(guessInt);
+                        if(guessInt != -1){
+                            models.get(currentModel).incrementNumberOfGuesses();
+                        }
+
+                        //Model modelNotFirstTime = new Model(this.socket, guessInt ,cookie, randomNumber, numberOfGuesses); //get from models list instead
+
+                        try{
+                            website = new View(this.socket, Integer.parseInt(cookie));
+                        }catch(NumberFormatException e){
+                            website = new View(this.socket, modelCount);
                         }
 
 
+                        String messageToUser = models.get(currentModel).createTheMessage();
 
-                        Model modelNotFirstTime = new Model(this.socket, guessInt ,cookie, randomNumber, numberOfGuesses);
-
-                        View website = new View(this.socket, Integer.parseInt(cookie));
-
-                        String messageToUser = modelNotFirstTime.createTheMessage();
-                        website.propagateMessage(messageToUser, Integer.toString(numberOfGuesses));
+                        website.propagateMessage(messageToUser);
                         System.out.println("A user (with a cookie has returned)");
                         inputReader.close();
-                        Thread thread = new Thread(modelNotFirstTime);
+                        Thread thread = new Thread(models.get(currentModel));
                         thread.start();
 
                     }

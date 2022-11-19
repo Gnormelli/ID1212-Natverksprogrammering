@@ -12,7 +12,7 @@ public class Model implements Runnable {
     private int guessInt;
     private BufferedReader inputReader;
     private BufferedWriter outputWriter;
-    public int userID;
+
     public String cookie;
     private int randomNumber;
     private String messageToUser;
@@ -25,7 +25,7 @@ public class Model implements Runnable {
             this.outputWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.guessInt = guessInt;
-            this.userID = createUserID();
+
             this.cookie = cookie;
             generateAndSetRandomNumber();
             models.add(this);
@@ -43,7 +43,7 @@ public class Model implements Runnable {
             this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.guessInt = guessInt;
             this.cookie = cookie;
-            this.userID = createUserID();
+
             this.randomNumber = randomNumber;
             this.numberOfGuesses = numberOfGuesses;
             models.add(this);
@@ -60,16 +60,19 @@ public class Model implements Runnable {
     public int getRandomNumber(){
         return this.randomNumber;
     }
-    public int createUserID() {
-        int count = 1;
-        for (Model model : models) {
-            count++;
-        }
-        return count;
-    }
+
     public int getNumberOfGuesses(){
         return this.numberOfGuesses;
     }
+
+    public void incrementNumberOfGuesses(){
+        this.numberOfGuesses++;
+    }
+
+    public void setGuess(int guess){
+        this.guessInt = guess;
+    }
+
 
 
     /**
@@ -112,14 +115,18 @@ public class Model implements Runnable {
 
             switch (guessResulte) {
                 case 1:
-                    messageToUser = "Nope, guess higher";
+                    messageToUser = "Nope, guess higher.<br>" +
+                                    "Number of guesses: " + numberOfGuesses;
                     break;
                 case -1:
-                    messageToUser = "Nope, guess lower";
+                    messageToUser = "Nope, guess lower.<br>" +
+                            "Number of guesses: " + numberOfGuesses;
                     break;
                 case 0:
-                    messageToUser = "You made it!!!";
+                    messageToUser = "You made it!!!<br>" +
+                            "Number of guesses: " + numberOfGuesses;
                     generateAndSetRandomNumber();
+                    numberOfGuesses = 0;
                     break;
             }
         }
@@ -135,9 +142,6 @@ public class Model implements Runnable {
             return 0;
     }
 
-    public int getUserID() {
-        return userID;
-    }
 
     public void removeClientHandler() {
         models.remove(this);
