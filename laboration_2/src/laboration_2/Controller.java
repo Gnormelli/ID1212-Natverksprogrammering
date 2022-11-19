@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class Controller{
     private ServerSocket serverSocket;
-
+    private Socket socket;
     private BufferedReader inputReader;
 
 
@@ -28,7 +28,7 @@ public class Controller{
                 int guessInt = -1;
                 String cookie = "nothing";
                 int randomNumber = -1;
-                Socket socket = serverSocket.accept();
+                this.socket = serverSocket.accept();
 
                 this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String inputLine = this.inputReader.readLine();
@@ -60,8 +60,8 @@ public class Controller{
                             cookie = Integer.toString(count);
                         }
 
-                        Model modelFirstTime = new Model(socket, guessInt, cookie);
-                        View website = new View(socket, Integer.parseInt(cookie));
+                        Model modelFirstTime = new Model(this.socket, guessInt, cookie);
+                        View website = new View(this.socket, Integer.parseInt(cookie));
 
                         String messageToUser = modelFirstTime.createTheMessage();
                         website.propagateMessage(messageToUser, Integer.toString(numberOfGuesses));
@@ -82,9 +82,9 @@ public class Controller{
 
 
 
-                        Model modelNotFirstTime = new Model(socket, guessInt ,cookie, randomNumber, numberOfGuesses);
+                        Model modelNotFirstTime = new Model(this.socket, guessInt ,cookie, randomNumber, numberOfGuesses);
 
-                        View website = new View(socket, Integer.parseInt(cookie));
+                        View website = new View(this.socket, Integer.parseInt(cookie));
 
                         String messageToUser = modelNotFirstTime.createTheMessage();
                         website.propagateMessage(messageToUser, Integer.toString(numberOfGuesses));
