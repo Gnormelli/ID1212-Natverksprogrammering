@@ -7,11 +7,11 @@ import java.net.Socket;
 public class View{
 
     private Socket socket;
-    private int id;
+    private int cookie;
 
-    public View(Socket serverSocket, int id) {
+    public View(Socket serverSocket, int cookie) {
             this.socket = serverSocket;
-            this.id = id;
+            this.cookie = cookie;
     }
 
     public void propagateMessage(String messageToUser, String numberOfGuesses) throws IOException {
@@ -19,7 +19,7 @@ public class View{
         PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
         out.println("HTTP/1.1 200 OK");
         out.println("Content-Type: text/html");
-        out.println("Set-Cookie: cookie =" + this.id);
+        out.println("Set-Cookie: " + this.cookie);
         out.println("\r\n");
         out.println("<html>\n" +
                 "<head>\n" +
@@ -29,7 +29,7 @@ public class View{
                 "function inputfocus(form){\n"
                 + "document.getElementById(\"field\").value" +
                 "function cookieCreator(){\n"
-                + "document.cookie = \"" + this.id + "\").value" +
+                + "document.cookie = \"" + this.cookie + "\").value" +
                 "}\n" +
                 "</script>");
 

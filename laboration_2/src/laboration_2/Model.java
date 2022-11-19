@@ -9,7 +9,6 @@ public class Model implements Runnable {
 
     public static ArrayList<Model> models = new ArrayList<>();
     private Socket socket;
-    public String coockie;
     private int guessInt;
     private BufferedReader inputReader;
     private BufferedWriter outputWriter;
@@ -27,7 +26,7 @@ public class Model implements Runnable {
             this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.guessInt = guessInt;
             this.userID = createUserID();
-            this.coockie = cookie;
+            this.cookie = cookie;
             generateAndSetRandomNumber();
             models.add(this);
         }catch(IOException e){
@@ -43,7 +42,7 @@ public class Model implements Runnable {
             this.outputWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.guessInt = guessInt;
-            this.coockie = cookie;
+            this.cookie = cookie;
             this.userID = createUserID();
             this.randomNumber = randomNumber;
             this.numberOfGuesses = numberOfGuesses;
