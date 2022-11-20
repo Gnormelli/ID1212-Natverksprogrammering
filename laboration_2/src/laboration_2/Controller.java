@@ -32,6 +32,7 @@ public class Controller{
                 int guessInt = -1;
                 String cookie = "nothing";
                 int randomNumber = -1;
+                int cookieCount = 0;
                 this.socket = serverSocket.accept();
 
                 this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -46,34 +47,32 @@ public class Controller{
 
                     while(!inputLine.equals(""))
                     {
-                        System.out.println(inputLine);            //prints the entire request
+                       // System.out.println(inputLine);            //prints the entire request
                         if(inputLine.contains("cookieForGKServer=")){
-                            System.out.println("Found cookie");
+                          //  System.out.println("Found cookie");
                             cookie = inputLine.split("cookieForGKServer=")[1];
                             cookie = cookie.split(";")[0];
                         }
                         inputLine = this.inputReader.readLine();
                     }
-                    System.out.println("cookie is = " + cookie); //Remove later
+                    //System.out.println("cookie is = " + cookie);
+
                     if (cookie.equals("nothing")){
                         {
-                            int count = 1;
-                            for (Model models : models) {           //generates cookie based on #of models
-                                count++;
+                            for (Model models : models) {           //generates cookie based on # of models
+                                cookieCount++;
                             }
-                            cookie = Integer.toString(count);
+                            cookie = Integer.toString(cookieCount);
                         }
 
                         Model modelFirstTime = new Model(this.socket, guessInt, cookie);
+                        modelFirstTime.generateAndSetRandomNumber();
                         website = new View(this.socket, Integer.parseInt(cookie));
 
-                        String messageToUser = modelFirstTime.createTheMessage();
-                        website.propagateMessage(messageToUser);
-                        System.out.println("A new user has connected");
+
                         models.add(modelFirstTime);
-                        inputReader.close();
-                        Thread thread = new Thread(modelFirstTime);
-                        thread.start();
+                        modelCount = cookieCount;
+                        sendMessageAndStartThread(modelCount, website);
 
                     }
                     else{
@@ -90,7 +89,7 @@ public class Controller{
                             Model modelNotFirstTime = new Model(this.socket, guessInt ,cookie, randomNumber, 0);
                             models.add(modelCount, modelNotFirstTime);
                         }
-                        models.get(currentModel);
+
                         models.get(currentModel).setGuess(guessInt);
                         if(guessInt != -1){
                             models.get(currentModel).incrementNumberOfGuesses();
@@ -103,15 +102,7 @@ public class Controller{
                         }catch(NumberFormatException e){
                             website = new View(this.socket, modelCount);
                         }
-
-
-                        String messageToUser = models.get(currentModel).createTheMessage();
-
-                        website.propagateMessage(messageToUser);
-                        System.out.println("A user (with a cookie has returned)");
-                        inputReader.close();
-                        Thread thread = new Thread(models.get(currentModel));
-                        thread.start();
+                        sendMessageAndStartThread(currentModel, website);
 
                     }
                 }
@@ -133,6 +124,16 @@ public class Controller{
         }
     }
 
+    private void sendMessageAndStartThread(int modelNumber, View view) throws IOException {
+
+        String messageToUser = models.get(modelNumber).createTheMessage();
+        view.propagateMessage(messageToUser);
+        System.out.println("A new http request");
+        inputReader.close();
+        Thread thread = new Thread(models.get(modelNumber));
+        thread.start();
+
+    }
     public static void main(String[] args) throws IOException {
 
         ServerSocket serverSocket = new ServerSocket(8000);

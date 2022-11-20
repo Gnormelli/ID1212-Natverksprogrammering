@@ -11,27 +11,22 @@ public class Model implements Runnable {
     private Socket socket;
     private int guessInt;
     private BufferedReader inputReader;
-    private BufferedWriter outputWriter;
-
     public String cookie;
     private int randomNumber;
     private String messageToUser;
     private int numberOfGuesses;
-        //For first time entery (no cookie from start)
+        //For first time entry (no cookie from start)
     public Model(Socket socket, int guessInt, String cookie) throws IOException {
 
         try {
             this.socket = socket;
-            this.outputWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.guessInt = guessInt;
-
             this.cookie = cookie;
-            generateAndSetRandomNumber();
             models.add(this);
         }catch(IOException e){
             System.out.println(e);
-            closeEverything(socket,inputReader,outputWriter);
+            closeEverything(socket,inputReader);
         }
     }
 
@@ -39,17 +34,16 @@ public class Model implements Runnable {
     public Model(Socket socket, int guessInt, String cookie, int randomNumber, int numberOfGuesses) throws IOException {
         try {
             this.socket = socket;
-            this.outputWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.guessInt = guessInt;
             this.cookie = cookie;
-
             this.randomNumber = randomNumber;
             this.numberOfGuesses = numberOfGuesses;
+
             models.add(this);
         }catch(IOException e){
             System.out.println(e);
-            closeEverything(socket,inputReader,outputWriter);
+            closeEverything(socket,inputReader);
         }
 
     }
@@ -57,23 +51,13 @@ public class Model implements Runnable {
         Random rand = new Random();
         this.randomNumber = rand.nextInt(100);
     }
-    public int getRandomNumber(){
-        return this.randomNumber;
-    }
-
-    public int getNumberOfGuesses(){
-        return this.numberOfGuesses;
-    }
-
     public void incrementNumberOfGuesses(){
-        this.numberOfGuesses++;
+        numberOfGuesses++;
     }
 
     public void setGuess(int guess){
-        this.guessInt = guess;
+        guessInt = guess;
     }
-
-
 
     /**
      * Overrides  Implements Runnable
@@ -87,12 +71,11 @@ public class Model implements Runnable {
             try {
                 message = inputReader.readLine();
                 System.out.println(message);
-
-                //propagateMessage(this.socket);
                 listenForMessage();
+
             } catch (IOException e) {
                 System.out.println(e);
-                closeEverything(socket, inputReader, outputWriter);
+                closeEverything(socket, inputReader);
                 break;
             }
         }
@@ -104,16 +87,16 @@ public class Model implements Runnable {
             System.out.println(msgFromServer);
         }catch(IOException e){
             System.out.println("Server can´t listen anymore");
-            closeEverything(socket, inputReader, outputWriter);
+            closeEverything(socket, inputReader);
         }
     }
 
     public String createTheMessage() {
-        String messageToUser = "Welcome to the Number Guess Game. Guess a number between 1 and 100.";
+        messageToUser = "Welcome to the Number Guess Game. Guess a number between 1 and 100.";
         if(guessInt != -1){
-            int guessResulte = getGuessResult(guessInt); // -1 is to low, 0 is rigth, 1 is to hige.
+            int guessResult = getGuessResult(guessInt); // -1 is too low, 0 is right, 1 is too high.
 
-            switch (guessResulte) {
+            switch (guessResult) {
                 case 1:
                     messageToUser = "Nope, guess higher.<br>" +
                                     "Number of guesses: " + numberOfGuesses;
@@ -145,17 +128,13 @@ public class Model implements Runnable {
 
     public void removeClientHandler() {
         models.remove(this);
-        //propagateMessage("Server: Client " + id + " left");
     }
 
-    public void closeEverything(Socket socket, BufferedReader inputReader, BufferedWriter outputWriter) {
+    public void closeEverything(Socket socket, BufferedReader inputReader) {
         removeClientHandler();
         try {
             if (inputReader != null) {
                 inputReader.close();
-            }
-            if (outputWriter != null) {
-                outputWriter.close();
             }
             if (socket != null) {
                 socket.close();

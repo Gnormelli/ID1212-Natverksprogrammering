@@ -14,7 +14,6 @@ public class View{
             this.cookie = cookie;
     }
 
-
     public void propagateMessage(String messageToUser) throws IOException {
         try{
             PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
