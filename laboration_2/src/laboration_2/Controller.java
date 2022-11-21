@@ -39,15 +39,18 @@ public class Controller{
                 String inputLine = this.inputReader.readLine();
 
                 if (!inputLine.contains("favicon")) {
+
                     if(inputLine.contains("guess")){
                         String result = inputLine.split("guess=")[1];
                         String guessString = result.split(" HTTP/")[0];
-                        guessInt = Integer.parseInt(guessString);
+                        if(!guessString.equals("")){             //in case user presses guess with a empty field
+                            guessInt = Integer.parseInt(guessString);
+                        }
                     }
 
                     while(!inputLine.equals(""))
                     {
-                       // System.out.println(inputLine);            //prints the entire request
+                        System.out.println(inputLine);            //prints the entire request
                         if(inputLine.contains("cookieForGKServer=")){
                           //  System.out.println("Found cookie");
                             cookie = inputLine.split("cookieForGKServer=")[1];
@@ -132,6 +135,10 @@ public class Controller{
         inputReader.close();
         Thread thread = new Thread(models.get(modelNumber));
         thread.start();
+
+    }
+
+    private void invalidGuess() throws IOException {
 
     }
     public static void main(String[] args) throws IOException {
