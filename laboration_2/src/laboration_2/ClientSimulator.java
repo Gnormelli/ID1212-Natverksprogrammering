@@ -42,8 +42,9 @@ public class ClientSimulator {
                 generateAndSetRandomGuess();
                 continueIteration = true;
                 while (continueIteration) {
-                    uri = URI.create("http://localhost:8000/?guess=" + randomGuess);
+                    uri = URI.create("http://localhost:8000/?guess=" + randomGuess + "cookie=" + );
                     this.request = HttpRequest.newBuilder().GET().uri(uri).build();
+                
                     receivedResponse();
                     checkResponseFromServer();
                 }
