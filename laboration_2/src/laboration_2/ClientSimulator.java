@@ -17,6 +17,7 @@ public class ClientSimulator {
     private int randomGuess;
     private int numberOfGuesses;
     private boolean continueIteration;
+    private String cookie;
 
     public ClientSimulator() {
         this.httpClient = HttpClient.newBuilder()
@@ -28,6 +29,7 @@ public class ClientSimulator {
         this.response = null;
         this.numberOfGuesses = 0;
         this.continueIteration = false;
+        this.cookie = "0";
     }
 
     public void runSimulation() throws IOException, InterruptedException {
@@ -42,10 +44,13 @@ public class ClientSimulator {
                 generateAndSetRandomGuess();
                 continueIteration = true;
                 while (continueIteration) {
-                    uri = URI.create("http://localhost:8000/?guess=" + randomGuess + "cookie=" + );
+                    uri = URI.create("http://localhost:8000/?guess=" + randomGuess);
                     this.request = HttpRequest.newBuilder().GET().uri(uri).build();
-                
+
                     receivedResponse();
+                    cookie = response.body().split("cookie = \"")[1];
+                    cookie = response.body().split("\"")[0];
+                    this.request = this.request + " cookie=" + cookie;
                     checkResponseFromServer();
                 }
                 numTests++;
@@ -84,6 +89,7 @@ public class ClientSimulator {
                     this.upperBound = 100;
                     this.lowerBound = 0;
                     ++numberOfGuesses;
+                    cookie = Integer.toString(Integer.valueOf(cookie) + 1);
                     break;
         }
     }
