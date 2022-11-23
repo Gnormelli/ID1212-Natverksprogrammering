@@ -2,17 +2,15 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.*;
 import java.net.Socket;
-import java.util.Scanner;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
-
-public class MailClient {
-
-
+public class SSLClient {
     private SSLSocket socket;
     private BufferedReader inputReader;
     private BufferedWriter outputWriter;
 
-    public MailClient(SSLSocket socket){
+    public SSLClient(SSLSocket socket){
         try{
             this.socket = socket;
             this.outputWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -22,12 +20,16 @@ public class MailClient {
         }
     }
 
-    public void startClient(){
+    public void startSession(){
         String response;
         try {
-            Scanner scanner = new Scanner(System.in);
             String[] supported = socket.getSupportedCipherSuites();
             socket.setEnabledCipherSuites(supported);
+
+            /**
+             * Is this needed?
+            socket.startHandshake();
+             */
 
             response = this.inputReader.readLine();
             System.out.println(response);
@@ -65,13 +67,42 @@ public class MailClient {
             }
             System.out.println("------------Above is from Fetch");
 
-            String header = "a003 fetch 8 body[header]";
-            this.outputWriter.write(header);
+            String header1 = "a003 fetch ";
+
+            String header2 = " body[header]";
+            String headerComp = "";
+            for (int i = 2; i <= 10; i++) {
+                headerComp = header1 + Integer.valueOf(i) + header2;
+                this.outputWriter.write(headerComp);
+                this.outputWriter.newLine();
+
+                this.outputWriter.flush();
+                while(!(response = this.inputReader.readLine()).contains("FETCH completed")){
+                    if (response.contains("=?utf-8?")) {
+                        if(response.contains("=?utf-8?q?")){
+                            printURLEncoded(response);
+                        }
+                        else {
+                            String decoded = base64ToUTF8Subject(response);
+                            System.out.println(decoded);
+                        }
+                    }
+
+                }
+            }
+
+            System.out.println("------------Above is from Fetch");
+
+            String body = "a003 fetch 8 body[TEXT]";
+            this.outputWriter.write(body);
             this.outputWriter.newLine();
 
             this.outputWriter.flush();
             while(!(response = this.inputReader.readLine()).contains("FETCH completed")){
-                System.out.println(response);
+                if(!response.contains("8 FETCH (BODY[TEXT]") && !response.equals("") && !response.equals(" FLAGS (\\Seen))")){
+                    String decoded = base64ToUTF8mailText(response);
+                    System.out.println(decoded);
+                }
             }
             System.out.println("------------Above is from Fetch");
 
@@ -79,6 +110,44 @@ public class MailClient {
             System.out.println(e);
             throw new RuntimeException(e);
         }
+    }
+
+
+    public String base64ToUTF8Subject(String response){
+        String decode = response.split("utf-8\\?B\\?")[1];
+        decode = decode.split("\\?")[0];
+        String decodedString = base64ToUTF8mailText(decode);
+        System.out.print("Subject: ");
+        return decodedString;
+    }
+
+     public String base64ToUTF8mailText(String decode){
+         byte[] decodedBytes = Base64.getDecoder().decode(decode);
+         return new String(decodedBytes);
+
+     }
+
+    public void printURLEncoded(String response) throws IOException {
+        int responseLength = response.length();
+        response = makeURLDecodedFormatedSoWeCanDecodeIt(response);
+        response = java.net.URLDecoder.decode(response, StandardCharsets.UTF_8);
+        System.out.print("Subject: ");
+        System.out.print(response);
+        while (responseLength == 84){
+            response = this.inputReader.readLine();
+            responseLength = response.length();
+            response = makeURLDecodedFormatedSoWeCanDecodeIt(response);
+            response = java.net.URLDecoder.decode(response, StandardCharsets.UTF_8);
+            System.out.print(response);
+        }
+        System.out.println();
+    }
+    public String makeURLDecodedFormatedSoWeCanDecodeIt(String response){
+        response = response.split("utf-8\\?q\\?")[1];
+        response = response.split("\\?")[0];
+        response = response.replace("=", "%");
+        response = response.replace("_", " ");
+        return response;
     }
 
     public void closeConnection(Socket socket, BufferedReader inputReader, BufferedWriter outputWriter){
@@ -105,12 +174,10 @@ public class MailClient {
         SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
         SSLSocket socket = null;
         socket = (SSLSocket) factory.createSocket(host, port);
-        MailClient mailClient = new MailClient(socket);
-        
+        SSLClient SSLClient = new SSLClient(socket);
 
-        mailClient.startClient();
+        SSLClient.startSession();
         System.out.println("Connected!");
-
     }
 }
 
