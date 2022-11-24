@@ -1,12 +1,17 @@
 package laboration_2;
 
+import java.awt.*;
 import java.io.IOException;
+import java.net.CookieHandler;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.List;
 
 public class ClientSimulator {
     private HttpClient httpClient;
@@ -29,7 +34,7 @@ public class ClientSimulator {
         this.response = null;
         this.numberOfGuesses = 0;
         this.continueIteration = false;
-        this.cookie = "0";
+        this.cookie = "";
     }
 
     public void runSimulation() throws IOException, InterruptedException {
@@ -47,10 +52,14 @@ public class ClientSimulator {
                     uri = URI.create("http://localhost:8000/?guess=" + randomGuess);
                     this.request = HttpRequest.newBuilder().GET().uri(uri).build();
 
+                    if(cookie != null) {
+                        uri = URI.create("http://localhost:8000/?guess=" + randomGuess);
+                        HttpRequest.Builder builder = HttpRequest.newBuilder();
+                        builder.GET();
+                        builder.headers("Cookie", cookie);
+                        this.request = builder.uri(uri).build();
+                    }
                     receivedResponse();
-                    cookie = response.body().split("cookie = \"")[1];
-                    cookie = response.body().split("\"")[0];
-                    this.request = this.request + " cookie=" + cookie;
                     checkResponseFromServer();
                 }
                 numTests++;
@@ -65,6 +74,9 @@ public class ClientSimulator {
     private void receivedResponse() throws IOException, InterruptedException {
         this.response = this.httpClient.send(this.request,
                 HttpResponse.BodyHandlers.ofString());
+
+        List<String> headers = response.headers().allValues("Set-cookie");        //
+        cookie = headers.get(0).split("=")[1];
         System.out.println("Status code: " + this.response.statusCode());
         System.out.println("Headers: " + this.response.headers().allValues("content-type"));
         System.out.println("Body: " + this.response.body());

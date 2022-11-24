@@ -28,9 +28,9 @@ public class View{
             out.println("<script type = \"text/javascript\">\n" +
                     "function inputfocus(form){\n"
                     + "document.getElementById(\"field\").value" +
-                    "function cookieCreator(){\n"
-                    + "document.cookie = \"" + this.cookie + "\").value" +
-                    "}\n" +
+//                    "function cookieCreator(){\n"
+//                    + "document.cookie = \"" + this.cookie + "\").value" +
+//                    "}\n" +
                     "</script>");
 
             out.println("<body> \n" +
