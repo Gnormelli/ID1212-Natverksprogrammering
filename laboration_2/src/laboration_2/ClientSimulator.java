@@ -56,7 +56,7 @@ public class ClientSimulator {
                         uri = URI.create("http://localhost:8000/?guess=" + randomGuess);
                         HttpRequest.Builder builder = HttpRequest.newBuilder();
                         builder.GET();
-                        builder.headers("Cookie", cookie);
+                        builder.headers("Cookie", "cookieForGKServer=" + cookie);
                         this.request = builder.uri(uri).build();
                     }
                     receivedResponse();
