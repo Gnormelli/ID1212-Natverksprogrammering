@@ -8,11 +8,10 @@
 <body>
 <h><%= "Message to user" %>
 </h>
-<form name="guessform">
-    <input type=text name=guess>
-    <input type=submit value="Guess">
+<form name="guessform"  action="add" method="post">
+    <input type="text" name="guess">
+    <input type="submit" value="Guess">
 </form>
 <br/>
-<a href="hello-servlet">Hello Servlet</a>
 </body>
 </html>

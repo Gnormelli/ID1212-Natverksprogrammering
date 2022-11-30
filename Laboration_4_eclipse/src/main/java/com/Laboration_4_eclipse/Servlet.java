@@ -1,13 +1,14 @@
-package com.example.laboration_4;
+package com.Laboration_4_eclipse;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintWriter;
 
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-//@WebServlet(name = "Laboration_4_war_exploded", value = "/Laboration_4_war_exploded")
-public class HelloServlet extends HttpServlet {
-    private String message;
+public class Servlet extends HttpServlet{
+	private String message;
 
     public void init() {
         message = "HHEJ!";
