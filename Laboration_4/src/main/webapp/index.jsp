@@ -2,11 +2,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JSP - Hello World</title>
+    <title>Number Guess Game</title>
 </head>
+<script type = "text/javascript"> function inputfocus(form){document.getElementById("field").value}</script>
 <body>
-<h1><%= "Hello World!" %>
-</h1>
+<h><%= "Message to user" %>
+</h>
+<form name="guessform">
+    <input type=text name=guess>
+    <input type=submit value="Guess">
+</form>
 <br/>
 <a href="hello-servlet">Hello Servlet</a>
 </body>
