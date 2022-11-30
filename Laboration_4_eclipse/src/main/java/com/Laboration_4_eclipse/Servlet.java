@@ -15,9 +15,8 @@ public class Servlet extends HttpServlet{
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String guess = request.getParameter("guess");
+        int guess = Integer.parseInt(request.getParameter("guess"));
 
-        // Hello
         PrintWriter out = response.getWriter();
         System.out.println(guess);
         out.println(guess);
