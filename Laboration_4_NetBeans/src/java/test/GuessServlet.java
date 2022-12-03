@@ -37,15 +37,26 @@ public class GuessServlet extends HttpServlet {
 
 
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+       
         HttpSession session = req.getSession(true);
         PrintWriter out = res.getWriter();
-        Model model;
         
+        Model model;
         if(session.isNew()) {
+            //out.println("im new");
+            int guessInt = Integer.parseInt(req.getParameter("guess"));
             model = new Model();
-            model.setGuess(-1);  
+            model.incrementNumberOfGuesses();
+            model.setGuess(guessInt);  
+            
             session.setAttribute("model", model);            
-        }else {    
+        }else if((req.getParameter("guess").equals(""))){
+            //out.print("i stopped a crash");
+            model = (Model) session.getAttribute("model");
+        }
+        
+        else { 
+            //out.println("hi there im old");
             model = (Model) session.getAttribute("model");
             int guessInt = Integer.parseInt(req.getParameter("guess"));
             model.setGuess(guessInt);
