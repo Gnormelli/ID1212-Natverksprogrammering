@@ -8,6 +8,19 @@
         <servlet-name>DBServlet</servlet-name>
         <url-pattern>/DBServlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>GuessServlet</servlet-name>
+        <servlet-class>test.GuessServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GuessServlet</servlet-name>
+        <url-pattern>/GuessServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GuessServlet</servlet-name>
+        <url-pattern>/guess</url-pattern>
+    </servlet-mapping>
+    
     <session-config>
         <session-timeout>
             30
