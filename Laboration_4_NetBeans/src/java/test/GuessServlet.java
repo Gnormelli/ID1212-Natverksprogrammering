@@ -62,10 +62,12 @@ public class GuessServlet extends HttpServlet {
             model.setGuess(guessInt);
             model.incrementNumberOfGuesses();
         }
-        out.print(model.createTheMessage());
+       
         //Set the content type 
         res.setContentType("text/html");
+        session.setAttribute("messageToUser", model.createTheMessage());
         RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
         rd.include(req, res);
+   
     }
 }

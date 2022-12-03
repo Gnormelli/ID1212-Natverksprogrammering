@@ -7,10 +7,10 @@
     </head>
 <body>
     <%  
-        String name=request.getParameter("guess");  
-        if(name == null){
-            out.print("Welcome to the Number Guess Game. Guess a number between 1 and 100.");
-        }
+        
+        String messageToUser = (String) session.getAttribute("messageToUser");
+        out.print(messageToUser);
+        
            
        
       
