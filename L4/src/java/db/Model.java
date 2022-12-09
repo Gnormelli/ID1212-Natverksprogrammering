@@ -27,8 +27,9 @@ public class Model {
    private Connection conn;
    private DataSource ds;
    public String subject;
-	 
-    public Model()  {
+   
+  
+    public Model(){
         try{
                 subject = "nothing";
                 logdIn = false;
@@ -83,10 +84,10 @@ public class Model {
         this.subject = subject;
     }
     
-    public List<Quiz> getQuestions(){
+    public List<Question> getQuestions(){
         int id = 0;
         ResultSet rs;
-        List<Quiz> selectedQuiz =new ArrayList<Quiz>();
+        List<Question> quiz =new ArrayList<Question>();
         try{
             for(Pair<Integer, String> pair : this.allSubjects){
                 if(pair.getValue() == this.subject){
@@ -97,8 +98,8 @@ public class Model {
             while (rs.next()) {
                if (rs.getInt("id")== id){
                   
-                    selectedQuiz.add(
-                                new Quiz(
+                    quiz.add(
+                                new Question(
                                         rs.getInt("id"), rs.getString("text"),
                                         rs.getString("options"),rs.getString("answer")
                                         )
@@ -108,7 +109,7 @@ public class Model {
         }catch(Exception e){
             System.out.println("getQuestions: \n" + e);
         }
-        return selectedQuiz;
+        return quiz;
     }
    
     public List<Pair> getSubjects(){

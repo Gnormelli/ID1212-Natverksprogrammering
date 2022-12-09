@@ -9,7 +9,7 @@
     </head>
 <body>
 
-    <h4>Quiz</h4>
+    <h4>Choose subject: </h4>
     <form method="GET" action="/L4/DBServlet">
       
        <% List<Pair> allSubjects = (List) session.getAttribute("allSubjects"); 

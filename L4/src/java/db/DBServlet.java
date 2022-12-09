@@ -52,6 +52,7 @@ public class DBServlet extends HttpServlet {
                        chooseSubject(request, response);
                    }else{ //String username =(String) request.getParameter("username");
                        //start quiz for the subject
+                       System.out.println("Here");
                    }
                    
                    
@@ -75,28 +76,28 @@ public class DBServlet extends HttpServlet {
     }
     
     private void chooseSubject(HttpServletRequest request, HttpServletResponse response){
-            
+            Model model = null;
+            HttpSession session = null;
+            String subject;
             try{
-                System.out.println("begins choosenSubject+");
-                HttpSession session = request.getSession(true);
-                response.setContentType("text/html");
-                Model model = (Model)session.getAttribute("model");
-                List<Pair> allSubjects = model.getSubjects();
-                PrintWriter out = response.getWriter();
-                
-                
-                session.setAttribute("allSubjects", allSubjects);
-                RequestDispatcher rd = request.getRequestDispatcher("subjectChoose.jsp");
-                rd.include(request, response);
-                
-                String subject = request.getParameter("subject1");
-                System.out.print("Valt subject: "+ subject);
-                model.setChoosenSubject(subject);
-                session.setAttribute("model", model);
-                
-                //session.setAttribute("model", model);
-                
-                  
+                System.out.print((String)request.getParameter("subject1"));
+                if(((String)request.getParameter("subject1")).equals("null")){
+                    System.out.println("begins choosenSubject");
+                    session = request.getSession(true);
+                    response.setContentType("text/html");
+                    model = (Model)session.getAttribute("model");
+                    List<Pair> allSubjects = model.getSubjects();
+                    PrintWriter out = response.getWriter();
+
+                    session.setAttribute("allSubjects", allSubjects);
+                    RequestDispatcher rd = request.getRequestDispatcher("subjectChoose.jsp");
+                    rd.include(request, response);
+                }else{
+                    subject =(String)request.getParameter("subject1");
+                    System.out.print("Valt subject: "+ subject);
+                    model.setChoosenSubject(subject);
+                    session.setAttribute("model", model);   
+                }       
         }catch(Exception e){
                 System.out.println("choosenSubject" + e);
         }

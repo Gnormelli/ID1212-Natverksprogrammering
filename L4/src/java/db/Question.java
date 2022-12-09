@@ -9,17 +9,21 @@ package db;
  *
  * @author Gustav Normelli
  */
-public class Quiz {
+public class Question {
     int id;
     String text;
     String options;
     String answer;
     
     
-    public Quiz(int id, String text, String options, String answer){
+    public Question(int id, String text, String options, String answer){
         this.id = id;
         this.text = text;
         this.options = options;
         this.answer = answer; 
+    }
+    
+    public String getText(){
+        return this.text;
     }
 }
