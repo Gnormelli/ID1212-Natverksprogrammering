@@ -27,6 +27,7 @@ public class Model {
    private Connection conn;
    private DataSource ds;
    public String subject;
+   public List<Question> quiz;
    
   
     public Model(){
@@ -38,6 +39,7 @@ public class Model {
                 ds = (DataSource)envContext.lookup("jdbc/derby");
                 conn = ds.getConnection();
                 stmt = conn.createStatement();
+                quiz =new ArrayList<Question>();
             }catch(Exception e){  
             
             }     
@@ -84,32 +86,33 @@ public class Model {
         this.subject = subject;
     }
     
-    public List<Question> getQuestions(){
+    public void setQuestions(){
         int id = 0;
         ResultSet rs;
-        List<Question> quiz =new ArrayList<Question>();
         try{
             for(Pair<Integer, String> pair : this.allSubjects){
-                if(pair.getValue() == this.subject){
+                if(pair.getValue().equals(this.subject)){
                     id = pair.getKey();
+                    System.out.println(id);
                 }
             }
             rs = stmt.executeQuery("select * from questions");
             while (rs.next()) {
                if (rs.getInt("id")== id){
-                  
-                    quiz.add(
+                   String text = rs.getString("text");
+                    this.quiz.add(
                                 new Question(
-                                        rs.getInt("id"), rs.getString("text"),
+                                        rs.getInt("id"), text,
                                         rs.getString("options"),rs.getString("answer")
                                         )
                                     );
+               System.out.println(text);
                }
+                                        
             }
         }catch(Exception e){
             System.out.println("getQuestions: \n" + e);
         }
-        return quiz;
     }
    
     public List<Pair> getSubjects(){

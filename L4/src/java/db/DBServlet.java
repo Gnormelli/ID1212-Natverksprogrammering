@@ -42,39 +42,32 @@ public class DBServlet extends HttpServlet {
                     response.setContentType("text/html");
                     RequestDispatcher rd = request.getRequestDispatcher("failedToLogIn.jsp");
                     rd.include(request, response);
-                }
-            
-                
+                }    
             }else{
               
                Model model = (Model)session.getAttribute("model");
                
                if((boolean) session.getAttribute("loggedIn") == true){
-               
-                String subject =(String) request.getParameter("subject1");            
+                    String subject =(String) request.getParameter("subject1");            
                    if(subject == null){
-                       
                        chooseSubject(request, response);
                    }else{ //String username =(String) request.getParameter("username");
                        model.setChoosenSubject(subject);
                        session.setAttribute("model", model);
                        //start quiz for the subject
-                       out.print("im a quiz with the subject " + subject);
-                   }
-                   
-                   
-               }else{
-                    
-                   boolean logdIn = checkLogIn(request, response);
-                   if(logdIn){
-                       chooseSubject(request, response);
-                   }else{
-                    out.println("Wrong log in information");
-                    response.setContentType("text/html");
-                    RequestDispatcher rd = request.getRequestDispatcher("failedToLogIn.jsp");
-                    rd.include(request, response);
-                   }
-               }
+                       playQuiz(request, response);
+                   }      
+                }else{
+                    boolean logdIn = checkLogIn(request, response);
+                    if(logdIn){
+                        chooseSubject(request, response);
+                    }else{
+                     out.println("Wrong log in information");
+                     response.setContentType("text/html");
+                     RequestDispatcher rd = request.getRequestDispatcher("failedToLogIn.jsp");
+                     rd.include(request, response);
+                    }
+                }
             }
         }
         catch(Exception e){
@@ -82,32 +75,6 @@ public class DBServlet extends HttpServlet {
         }
 	
     }
-    
-    private void chooseSubject(HttpServletRequest request, HttpServletResponse response){
-            
-            try{
-               
-                
-                HttpSession session = request.getSession(true);
-                response.setContentType("text/html");
-                Model model = (Model)session.getAttribute("model");
-                List<Pair> allSubjects = model.getSubjects();
-                PrintWriter out = response.getWriter();
-                
-               
-                session.setAttribute("allSubjects", allSubjects);
-                RequestDispatcher rd = request.getRequestDispatcher("subjectChoose.jsp");
-                rd.include(request, response);
-               
-                
-                //session.setAttribute("model", model);
-                
-                  
-        }catch(Exception e){
-                System.out.println("choosenSubject" + e);
-        }
-    }
-    
     private boolean checkLogIn(HttpServletRequest request, HttpServletResponse response){
         try{
             HttpSession session = request.getSession(true);
@@ -121,5 +88,37 @@ public class DBServlet extends HttpServlet {
             
         }
        return false;
+    }
+    private void chooseSubject(HttpServletRequest request, HttpServletResponse response){
+            try{
+                HttpSession session = request.getSession(true);
+                response.setContentType("text/html");
+                Model model = (Model)session.getAttribute("model");
+                List<Pair> allSubjects = model.getSubjects();
+                  
+                session.setAttribute("allSubjects", allSubjects);
+                RequestDispatcher rd = request.getRequestDispatcher("subjectChoose.jsp");
+                rd.include(request, response);
+        }catch(Exception e){
+                System.out.println("choosenSubject" + e);
+        }
+    }
+    private void playQuiz(HttpServletRequest request, HttpServletResponse response){
+        try{
+                HttpSession session = request.getSession(true);
+                response.setContentType("text/html");
+                
+                Model model = (Model)session.getAttribute("model");
+                model.setQuestions();
+                String text;
+                System.out.println("Nåntion");
+                for(Question item : model.quiz){
+                    text = item.getText();
+                    System.out.println(text);
+                }
+            
+        }catch(Exception e){
+            System.out.println("playQuiz : \n" + e);
+        }
     }
 }
