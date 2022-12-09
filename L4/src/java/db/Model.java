@@ -30,7 +30,7 @@ public class Model {
 	 
     public Model()  {
         try{
-                subject = "nothing";
+                subject = null;
                 logdIn = false;
                 initContext = new InitialContext();
                 envContext  = (Context)initContext.lookup("java:/comp/env");
