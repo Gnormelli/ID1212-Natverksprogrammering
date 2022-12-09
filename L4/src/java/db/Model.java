@@ -60,7 +60,7 @@ public class Model {
                 passwordExisting.add(rs.getString("password"));
             }
 
-
+            
             if(usernamesExisting.contains(username)){
 
                 int passwordIndex = usernamesExisting.indexOf(username);
@@ -76,7 +76,7 @@ public class Model {
 
             }
         }catch(Exception e){
-                
+                System.out.println(e);
         }
        return true;
     }

@@ -83,11 +83,17 @@ public class DBServlet extends HttpServlet {
             
             try{
                 HttpSession session = request.getSession(true);
+                response.setContentType("text/html");
                 Model model = (Model)session.getAttribute("model");
-                model.getSubjects();
+                List<Pair> allSubjects = model.getSubjects();
                 
                 
-                response.setContentType("text/html");  //NEXT STEP IS TO PRINT OUT ALL SUBJKECTS AN LET THEM CHOOSE
+                session.setAttribute("allSubjects", allSubjects);
+                RequestDispatcher rd = request.getRequestDispatcher("subjectChoose.jsp");
+                rd.include(request, response);
+                
+                String subject = request.getParameter("form");
+                  //NEXT STEP IS TO PRINT OUT ALL SUBJKECTS AN LET THEM CHOOSE
               //  int index = model.chooseSubject(allSubjects);
                // allSubjects.get(index);
                 
@@ -109,7 +115,7 @@ public class DBServlet extends HttpServlet {
             String password =(String) request.getParameter("password");
             Model model = (Model)session.getAttribute("model");
             boolean areWeLoggedIn = model.logIn(username, password);
-            out.print(areWeLoggedIn);
+            out.println("We are logged in (from check log in) = " + areWeLoggedIn);
             return areWeLoggedIn;
         }catch(Exception e){
             
