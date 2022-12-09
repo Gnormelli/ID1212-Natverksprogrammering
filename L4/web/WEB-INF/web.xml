@@ -8,6 +8,10 @@
         <servlet-name>DBServlet</servlet-name>
         <url-pattern>/DBServlet</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DBServlet</servlet-name>
+        <url-pattern>/form</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
