@@ -67,11 +67,6 @@ public class DBServlet extends HttpServlet {
                    }
                }
             }
-            
-            
-        
-        
-        
         }
         catch(Exception e){
             out.println(e.getMessage());
@@ -82,27 +77,28 @@ public class DBServlet extends HttpServlet {
     private void chooseSubject(HttpServletRequest request, HttpServletResponse response){
             
             try{
+                System.out.println("begins choosenSubject+");
                 HttpSession session = request.getSession(true);
                 response.setContentType("text/html");
                 Model model = (Model)session.getAttribute("model");
                 List<Pair> allSubjects = model.getSubjects();
+                PrintWriter out = response.getWriter();
                 
                 
                 session.setAttribute("allSubjects", allSubjects);
                 RequestDispatcher rd = request.getRequestDispatcher("subjectChoose.jsp");
                 rd.include(request, response);
                 
-                String subject = request.getParameter("form");
-                  //NEXT STEP IS TO PRINT OUT ALL SUBJKECTS AN LET THEM CHOOSE
-              //  int index = model.chooseSubject(allSubjects);
-               // allSubjects.get(index);
+                String subject = request.getParameter("subject1");
+                System.out.print("Valt subject: "+ subject);
+                model.setChoosenSubject(subject);
+                session.setAttribute("model", model);
                 
-         //   while (rs.next()) {
-                //out.print(rs.getString("username") + "<br>");
-               // out.println(rs.getString("password"));
-         //   }
+                //session.setAttribute("model", model);
+                
+                  
         }catch(Exception e){
-                
+                System.out.println("choosenSubject" + e);
         }
     }
     

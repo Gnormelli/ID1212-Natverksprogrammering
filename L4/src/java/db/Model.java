@@ -29,17 +29,17 @@ public class Model {
    public String subject;
 	 
     public Model()  {
-    	try{
-         subject = "nothing";
-         logdIn = false;
-         initContext = new InitialContext();
-         envContext  = (Context)initContext.lookup("java:/comp/env");
-         ds = (DataSource)envContext.lookup("jdbc/derby");
-         conn = ds.getConnection();
-         stmt = conn.createStatement();
-         }catch(Exception e){
+        try{
+                subject = "nothing";
+                logdIn = false;
+                initContext = new InitialContext();
+                envContext  = (Context)initContext.lookup("java:/comp/env");
+                ds = (DataSource)envContext.lookup("jdbc/derby");
+                conn = ds.getConnection();
+                stmt = conn.createStatement();
+            }catch(Exception e){  
             
-        }
+            }     
         
            
     }
@@ -51,7 +51,6 @@ public class Model {
         try{
             rs = stmt.executeQuery("select username from users");
 
-            
             while (rs.next()) {
                 usernamesExisting.add(rs.getString("username"));
             }
@@ -59,8 +58,6 @@ public class Model {
             while (rs.next()) {
                 passwordExisting.add(rs.getString("password"));
             }
-
-            
             if(usernamesExisting.contains(username)){
 
                 int passwordIndex = usernamesExisting.indexOf(username);
@@ -72,8 +69,6 @@ public class Model {
                 }
             }else{
                 return false;
-
-
             }
         }catch(Exception e){
                 System.out.println(e);
@@ -84,8 +79,38 @@ public class Model {
         this.allSubjects = allSubjects;
     }
     
- 
+    public void setChoosenSubject(String subject){
+        this.subject = subject;
+    }
     
+    public List<Quiz> getQuestions(){
+        int id = 0;
+        ResultSet rs;
+        List<Quiz> selectedQuiz =new ArrayList<Quiz>();
+        try{
+            for(Pair<Integer, String> pair : this.allSubjects){
+                if(pair.getValue() == this.subject){
+                    id = pair.getKey();
+                }
+            }
+            rs = stmt.executeQuery("select * from questions");
+            while (rs.next()) {
+               if (rs.getInt("id")== id){
+                  
+                    selectedQuiz.add(
+                                new Quiz(
+                                        rs.getInt("id"), rs.getString("text"),
+                                        rs.getString("options"),rs.getString("answer")
+                                        )
+                                    );
+               }
+            }
+        }catch(Exception e){
+            System.out.println("getQuestions: \n" + e);
+        }
+        return selectedQuiz;
+    }
+   
     public List<Pair> getSubjects(){
         try{
             ResultSet rs = stmt.executeQuery("select * from quizzes");
@@ -100,7 +125,6 @@ public class Model {
         }catch(Exception e){
             
         }
-        return this.allSubjects;
-       
+        return this.allSubjects;     
     }
 }

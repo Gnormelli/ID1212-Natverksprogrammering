@@ -11,7 +11,6 @@
 
     <h4>Quiz</h4>
     <form method="GET" action="/L4/DBServlet">
-       
       
        <% List<Pair> allSubjects = (List) session.getAttribute("allSubjects"); 
             String subject;
@@ -20,12 +19,6 @@
                 out.print("<p><input type='checkbox' name='subject1' value='" + subject + "'</p>" + subject);
            }
        %>
-       
-        
-        
-        
-        
-        
         <p><input type="submit" value="Skicka">
     </form>
 </body>
