@@ -28,7 +28,10 @@ public class Model {
    private DataSource ds;
    public String subject;
    public List<Question> quiz;
-   
+   public int points;
+   public int currentQuiz;
+   public int higescore;
+   public String higescoreSubject;
   
     public Model(){
         try{
@@ -40,6 +43,8 @@ public class Model {
                 conn = ds.getConnection();
                 stmt = conn.createStatement();
                 quiz =new ArrayList<Question>();
+                higescore = 0;
+                
             }catch(Exception e){  
             
             }     
@@ -93,12 +98,24 @@ public class Model {
             for(Pair<Integer, String> pair : this.allSubjects){
                 if(pair.getValue().equals(this.subject)){
                     id = pair.getKey();
-                    System.out.println(id);
+                    
                 }
             }
+            rs = stmt.executeQuery("select question_id from selector");
+            List<Integer> listOfQuestionId = new ArrayList<Integer>();
+            while (rs.next()) {
+                this.currentQuiz = rs.getInt("question_id");
+                listOfQuestionId.add(this.currentQuiz);
+            }
+           
+            
+            
+            
             rs = stmt.executeQuery("select * from questions");
             while (rs.next()) {
-               if (rs.getInt("id")== id){
+                
+                
+                if(listOfQuestionId.contains(rs.getInt("id"))){
                    String text = rs.getString("text");
                     this.quiz.add(
                                 new Question(
@@ -106,7 +123,7 @@ public class Model {
                                         rs.getString("options"),rs.getString("answer")
                                         )
                                     );
-               System.out.println(text);
+               
                }
                                         
             }
@@ -130,5 +147,41 @@ public class Model {
             
         }
         return this.allSubjects;     
+    }
+    
+    
+    
+    public int getResult(String answersUrl)  {
+        
+        
+        quiz.get(0).getAnswer();
+        
+        String[] answerArray = answersUrl.split("AnswerToQuestion_"); //index 0 is empty Watch out!
+        int points = 0;
+      
+        for(int i = 1; answerArray.length > i; i++){
+            answerArray[i] = answerArray[i].split("&")[0];
+            answerArray[i] = answerArray[i].split("=")[1];
+          }
+       
+        
+        for(int i = 1; answerArray.length >= i; i++){
+          //  System.out.println(quiz.get(i).answer);
+            //if(){ //iif correct answer
+           // System.out.println(answerArray[i]);
+                points++;
+           // }      
+        }
+        
+        
+        
+       // System.out.println(this.allSubjects.get(this.currentQuiz).getKey());
+        
+        if(points > higescore){
+            higescore = points;
+            
+        }
+        
+        return points;
     }
 }

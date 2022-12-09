@@ -1,3 +1,4 @@
+<%@page import="db.Model"%>
 <%@page import="db.Question"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -10,17 +11,29 @@
 <body>
 
     <h4>Quiz</h4>
-     <h4>Choose subject: </h4>
+     
     <form method="GET" action="/L4/DBServlet">
       
-       <% List<Question> quizList = (List) session.getAttribute("allSubjects"); 
-            String text;
-            for(Question item : quizList){
-                text = item.getText();
-                out.print("<p><input type='checkbox' name='subject1' value='" + subject + "'</p>" + subject);
-           }
-       %>
-        <p><input type="submit" value="Skicka">
+        
+           <% 
+              Model model = (Model) session.getAttribute("model"); 
+               
+              String text;
+              for(Question item : model.quiz){
+                out.print("<p>"+ item.getText()+" </p>");
+
+                for (String option : item.getOptionsArray())
+                    out.print("<p><input type='checkbox' name='AnswerToQuestion_"+ item.getId()  +  "' value='" + option + "'</p>" + option);
+                }
+
+              
+              List<Question> quiz;
+       
+       %>   
+        
+       
+        <p><input type="submit" name="quizAnswerd" value="true">
     </form>
 </body>
 </html>
+      

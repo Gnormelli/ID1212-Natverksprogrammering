@@ -30,11 +30,21 @@ public class DBServlet extends HttpServlet {
             if(session.isNew()){
                 
                 session.setAttribute("model", new Model());
-                //log in
                 boolean logdIn = checkLogIn(request, response);
+                 session.setAttribute("loggedIn", logdIn);
+                
+              
+                
+                
+                
+                
+                //log in
+                
+                
                 //get info from user
                
-                session.setAttribute("loggedIn", logdIn);
+               
+                
                 if(logdIn){
                     chooseSubject(request, response);
                 }else{
@@ -44,21 +54,36 @@ public class DBServlet extends HttpServlet {
                     rd.include(request, response);
                 }    
             }else{
-              
+             
                Model model = (Model)session.getAttribute("model");
                
                if((boolean) session.getAttribute("loggedIn") == true){
-                    String subject =(String) request.getParameter("subject1");            
-                   if(subject == null){
-                       chooseSubject(request, response);
-                   }else{ //String username =(String) request.getParameter("username");
-                       model.setChoosenSubject(subject);
-                       session.setAttribute("model", model);
-                       //start quiz for the subject
-                       playQuiz(request, response);
-                   }      
+                          
+                   String quizButton =(String) request.getParameter("quizAnswerd");
+                   if(quizButton == null){
+                       
+                        String subject =(String) request.getParameter("subject1");
+                        if(subject == null){
+                           chooseSubject(request, response);
+                        }else{ //String username =(String) request.getParameter("username");
+                          
+                           model.setChoosenSubject(subject);
+                           session.setAttribute("model", model);
+                           //start quiz for the subject
+                           playQuiz(request, response);
+                       } 
+                        
+                       //modelSaveQuiz
+                       
+                    }else{
+                    
+                        String answers = request.getQueryString();
+                        model.getResult(answers);
+                    }
+                         
                 }else{
                     boolean logdIn = checkLogIn(request, response);
+                    session.setAttribute("loggedIn", logdIn);
                     if(logdIn){
                         chooseSubject(request, response);
                     }else{
@@ -81,6 +106,12 @@ public class DBServlet extends HttpServlet {
             response.setContentType("text/html");
             String username =(String) request.getParameter("username");
             String password =(String) request.getParameter("password");
+           
+            
+           
+            
+            
+            
             Model model = (Model)session.getAttribute("model");
             boolean areWeLoggedIn = model.logIn(username, password);
             return areWeLoggedIn;
@@ -110,13 +141,9 @@ public class DBServlet extends HttpServlet {
                 
                 Model model = (Model)session.getAttribute("model");
                 model.setQuestions();
-                String text;
-                System.out.println("Nåntion");
-                for(Question item : model.quiz){
-                    text = item.getText();
-                    System.out.println(text);
-                }
-            
+                session.setAttribute("model", model);
+                RequestDispatcher rd = request.getRequestDispatcher("quiz.jsp");
+                rd.include(request, response);
         }catch(Exception e){
             System.out.println("playQuiz : \n" + e);
         }
