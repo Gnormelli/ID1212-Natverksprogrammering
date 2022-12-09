@@ -38,7 +38,7 @@ public class Model {
          conn = ds.getConnection();
          stmt = conn.createStatement();
          }catch(Exception e){
-            
+            System.out.println("Constructor: " + e);
         }
         
            
@@ -48,10 +48,12 @@ public class Model {
         ResultSet rs;
         List<String> usernamesExisting=new ArrayList<String>(); 
         List<String> passwordExisting=new ArrayList<String>();
+        System.out.println("Borde vara här ");
         try{
             rs = stmt.executeQuery("select username from users");
-
             
+            subject = "Här borde vi få ett lösenord tillbaka ";
+            System.out.println("Är inte här");
             while (rs.next()) {
                 usernamesExisting.add(rs.getString("username"));
             }
@@ -76,7 +78,7 @@ public class Model {
 
             }
         }catch(Exception e){
-                
+            System.out.println("logIn: \n" + e);
         }
        return true;
     }
@@ -84,7 +86,11 @@ public class Model {
         this.allSubjects = allSubjects;
     }
     
- 
+
+    // Test for database to get the code working 
+    public String getSubject(){
+        return subject;
+    }
     
     public List<Pair> getSubjects(){
         try{

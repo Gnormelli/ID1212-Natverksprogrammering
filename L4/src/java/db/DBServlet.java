@@ -28,11 +28,12 @@ public class DBServlet extends HttpServlet {
         try{
           
             if(session.isNew()){
+                
                 session.setAttribute("model", new Model());
                 //log in
                 boolean logdIn = checkLogIn(request, response);
                 //get info from user
-               
+             
                 session.setAttribute("loggedIn", logdIn);
                 if(logdIn){
                     chooseSubject(request, response);
@@ -110,6 +111,7 @@ public class DBServlet extends HttpServlet {
             Model model = (Model)session.getAttribute("model");
             boolean areWeLoggedIn = model.logIn(username, password);
             out.print(areWeLoggedIn);
+            out.print(model.getSubject());
             return areWeLoggedIn;
         }catch(Exception e){
             
