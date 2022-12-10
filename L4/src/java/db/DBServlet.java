@@ -24,7 +24,7 @@ public class DBServlet extends HttpServlet {
         HttpSession session = request.getSession(true);
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        
+        RequestDispatcher rd;
         try{
           
             if(session.isNew()){
@@ -33,24 +33,13 @@ public class DBServlet extends HttpServlet {
                 boolean logdIn = checkLogIn(request, response);
                  session.setAttribute("loggedIn", logdIn);
                 
-              
-                
-                
-                
-                
-                //log in
-                
-                
-                //get info from user
-               
-               
                 
                 if(logdIn){
                     chooseSubject(request, response);
                 }else{
                     out.println("Wrong log in information");
                     response.setContentType("text/html");
-                    RequestDispatcher rd = request.getRequestDispatcher("failedToLogIn.jsp");
+                    rd = request.getRequestDispatcher("failedToLogIn.jsp");
                     rd.include(request, response);
                 }    
             }else{
@@ -78,7 +67,11 @@ public class DBServlet extends HttpServlet {
                     }else{
                     
                         String answers = request.getQueryString();
-                        model.getResult(answers);
+                        model.setResult(answers);
+                        session.setAttribute("model", model);
+                        rd = request.getRequestDispatcher("subjectChoose.jsp");
+                        rd.include(request, response);
+                        
                     }
                          
                 }else{
@@ -89,7 +82,7 @@ public class DBServlet extends HttpServlet {
                     }else{
                      out.println("Wrong log in information");
                      response.setContentType("text/html");
-                     RequestDispatcher rd = request.getRequestDispatcher("failedToLogIn.jsp");
+                     rd = request.getRequestDispatcher("failedToLogIn.jsp");
                      rd.include(request, response);
                     }
                 }
@@ -106,11 +99,6 @@ public class DBServlet extends HttpServlet {
             response.setContentType("text/html");
             String username =(String) request.getParameter("username");
             String password =(String) request.getParameter("password");
-           
-            
-           
-            
-            
             
             Model model = (Model)session.getAttribute("model");
             boolean areWeLoggedIn = model.logIn(username, password);
@@ -125,9 +113,7 @@ public class DBServlet extends HttpServlet {
                 HttpSession session = request.getSession(true);
                 response.setContentType("text/html");
                 Model model = (Model)session.getAttribute("model");
-                List<Pair> allSubjects = model.getSubjects();
-                  
-                session.setAttribute("allSubjects", allSubjects);
+               
                 RequestDispatcher rd = request.getRequestDispatcher("subjectChoose.jsp");
                 rd.include(request, response);
         }catch(Exception e){
