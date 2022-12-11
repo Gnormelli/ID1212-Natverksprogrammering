@@ -5,6 +5,8 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+
+
 public class SSLClient {
     private SSLSocket socket;
     private BufferedReader inputReader;
