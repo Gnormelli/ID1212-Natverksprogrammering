@@ -22,4 +22,9 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
-/.metadata/
+/Laboration_4_NetBeans/nbproject/private/
+/Laboration_4_NetBeans/build/
+/Laboration_4_NetBeans/dist/
+/L4/nbproject/private/
+/L4/build/
+/L4/dist/

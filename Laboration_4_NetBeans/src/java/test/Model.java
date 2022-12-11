@@ -1,18 +1,36 @@
-package com.servlet;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package test;
 
 import java.util.Random;
 
+/**
+ *
+ * @author Gustav Normelli
+ */
 public class Model {
+	
+ 
+
     private int guessInt;
     private int randomNumber;
     private String messageToUser;
     private int numberOfGuesses;
-    
-    public Model(int guessInt)  {
-            this.guessInt = guessInt;
+	
+    public Model()  {
+    	numberOfGuesses = 0;
+    	Random rand = new Random();
+        this.randomNumber = rand.nextInt(100);
     }
     
-    public void generateAndSetRandomNumber(){
+    public void setGuess(int guess) {
+    	this.guessInt = guess;
+    }
+    
+    private void generateAndSetRandomNumber(){
         Random rand = new Random();
         this.randomNumber = rand.nextInt(100);
     }
