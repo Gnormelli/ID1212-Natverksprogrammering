@@ -77,15 +77,10 @@ public class Model {
                 passwordExisting.add(rs.getString("password"));
             }
            
-            
-           
             rs = stmt.executeQuery("select id from users");
             while (rs.next()) {
                 userIDExisting.add(rs.getString("id"));
             }
-            
-            
-            
             
             if(usernamesExisting.contains(username)){
 
@@ -95,7 +90,6 @@ public class Model {
                    
                     this.userID = userIDExisting.get(passwordIndex);
                     
-                   
                     return true;
                 }else{
                     return false;
@@ -152,43 +146,28 @@ public class Model {
             System.out.println("getQuestions: \n" + e);
         }
     }
-   
     public List<Pair> getSubjects(){
-       
-     
            return this.allSubjects;
-        
-        
     }
     
     
        public List<Pair> setSubjects(){
         try{
             ResultSet rs = stmt.executeQuery("select * from quizzes");
-            
             while (rs.next()) {
                allSubjects.add(new Pair​(rs.getInt("id"), rs.getString("subject")));
-               
             }
-     
-          
         }catch(Exception e){
             
         }
         return this.allSubjects;     
     }
-    
-    
-    
   public int setResult(String answersUrl)  {
-        
         List<Pair> answerList = new ArrayList<Pair>();
-        quiz.get(0).getAnswer();
         String[] answerArray = answersUrl.split("AnswerToQuestion_"); //index 0 is empty Watch out!
         points = 0;
         int questionID;
         Pair input;
-        
         for(int i = 1; answerArray.length > i; i++){
             questionID = Integer.valueOf(answerArray[i].charAt(0)) - 48;
             answerArray[i] = answerArray[i].split("&")[0];
@@ -196,9 +175,8 @@ public class Model {
             input =  new Pair(questionID,answerArray[i]);
             answerList.add(input);  //HERE IS QUESTION ID AND USER ANSWER STORED
         }
+       
         String[] trueAnswers;
-            
-        
         String userAnswer;
         int sizeOfList = answerList.size();
         for(int i = 0; sizeOfList > i; i++){
@@ -215,16 +193,15 @@ public class Model {
          
         checkAndPushHigescore();
         addToScores();
-        
         return points;
     }
     
     private void checkAndPushHigescore(){
         
        try{
-        
-               stmt.executeUpdate("INSERT INTO results (user_id,quiz_id,score) VALUES ("+this.userID+","+this.subjectID+","+points+")");
-                System.out.println("new score :" + points);
+            quiz =new ArrayList<Question>(); //Resets quiz
+            stmt.executeUpdate("INSERT INTO results (user_id,quiz_id,score) VALUES ("+this.userID+","+this.subjectID+","+points+")");
+            System.out.println("new score :" + points);
                 
           }catch(Exception e){
             System.out.println(e);
@@ -245,36 +222,23 @@ public class Model {
         String score;
         Pair pairHold;
            try{
-               
                rs = stmt.executeQuery("SELECT SCORE, quiz_id FROM RESULTS");
                 while(rs.next()){
-                     
                     quiz_number = rs.getString("quiz_id");
-                     
                     score = rs.getString("SCORE");
-                    
                     for(Pair set : allSubjects){
-                        
-                       
-                        
                         if(Integer.valueOf(quiz_number) == (int)(set.getKey())){
-                            
                             subject_string = (String)set.getValue();
                         }
                     }
                     pairHold = new Pair(subject_string,score);
                     this.listOfScores.add(pairHold);
-                    
                 }
-
-                quiz =new ArrayList<Question>();
+                this.quiz =new ArrayList<Question>();   //resets quiz
            }catch(Exception e){
             System.out.println(e);
             System.out.println("error in set scores");
         }
-        
-        
     }
-    
 }
 

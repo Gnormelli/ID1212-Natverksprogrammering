@@ -33,7 +33,7 @@
        %>   
         
        
-        <p><input type="submit" name="quizAnswerd" value="true">
+        <p><input type="submit" name="quizAnswerd" value="check">
     </form>
 </body>
 </html>
