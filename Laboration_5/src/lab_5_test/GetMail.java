@@ -37,15 +37,16 @@ public class GetMail {
             String contentType= msg.getContentType();
             System.out.println(contentType);
             String content = (String) msg.getContent();
-         System.out.println(content);
-/*
-          Message[] messages = inbox.getMessages();
+            System.out.println(content);
+           /*
+                Message[] messages = inbox.getMessages();
 
-            for (Message msg : messages) {
-                if (msg.getFrom().toString().equals("normelli@kth.se")){
-                    System.out.print(msg.getContent());
+                for (Message msg : messages) {
+                    if (msg.getFrom().toString().equals("normelli@kth.se")){
+                        System.out.print(msg.getContent());
+                    }
                 }
-            }*/
+         */
         }catch (MessagingException exception){
             System.out.println(exception);
         } catch (IOException e) {
