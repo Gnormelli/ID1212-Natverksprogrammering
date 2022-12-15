@@ -3,8 +3,16 @@ package com.ID1212.ID1212_Project_Intelij.Models;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-@Entity
-@Table
+@Entity(name = "QueuePost")
+@Table(
+        name = "QueuePost",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "queuePost_location_unique",
+                        columnNames = "location"
+                )
+        }
+)
 public class QueuePost {
     /**
      * Map QueuePost to database
@@ -19,12 +27,52 @@ public class QueuePost {
             strategy = GenerationType.SEQUENCE,
             generator = "queuepost_sequence"
     )
+    @Column(
+            name = "id",
+            updatable = false
+    )
     private Long id;
+
+
+    @Column(
+            name = "location",
+            nullable = false,
+            columnDefinition = "TEXT"
+
+    )
     private String location;
+
+
+    @Column(
+            name = "comment",
+            columnDefinition = "TEXT"
+    )
     private String comment;
+
+
+    @Column(
+            name = "help",
+            nullable = false,
+            columnDefinition = "BOOLEAN"
+    )
     private Boolean help;
+
+
+    @Column(
+            name = "present",
+            columnDefinition = "TEXT"
+    )
     private Boolean present;
+
+
+    @Column(
+            name = "localDateTime",
+            nullable = false,
+            columnDefinition = "TIME"
+    )
     private LocalDateTime localDateTime;
+
+
 
     protected QueuePost() {
     }
