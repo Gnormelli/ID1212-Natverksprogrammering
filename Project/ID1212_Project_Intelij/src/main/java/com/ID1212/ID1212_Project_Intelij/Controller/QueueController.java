@@ -3,9 +3,7 @@ package com.ID1212.ID1212_Project_Intelij.Controller;
 import com.ID1212.ID1212_Project_Intelij.Models.QueuePost;
 import com.ID1212.ID1212_Project_Intelij.Service.ProvideService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,5 +28,10 @@ public class QueueController {
     @GetMapping
     public List<QueuePost> getQueuePosts(){
         return service.getQueuePosts();
+    }
+
+    @PostMapping
+    public void registerNewQueuePost(@RequestBody QueuePost queuePost){
+        service.addNewQueuePost(queuePost);
     }
 }
