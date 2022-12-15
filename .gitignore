@@ -35,3 +35,5 @@ replay_pid*
 /Laboration_5/dist/
 /Laboration_5/nbproject/private/
 /Project/ID1212_Project_1/nbproject/private/
+Project/ID1212_Project_Intelij/src/main/resources/application.properties
+*.properties
