@@ -1,8 +1,24 @@
 package com.ID1212.ID1212_Project_Intelij.Models;
 
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+@Entity
+@Table
 public class QueuePost {
+    /**
+     * Map QueuePost to database
+     */
+    @Id
+    @SequenceGenerator(
+            name = "queuepost_sequence",
+            sequenceName = "queuepost_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "queuepost_sequence"
+    )
     private Long id;
     private String location;
     private String comment;
