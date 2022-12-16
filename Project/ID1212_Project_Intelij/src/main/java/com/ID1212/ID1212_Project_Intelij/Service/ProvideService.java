@@ -25,7 +25,7 @@ public class ProvideService {
         return queuePostRepository.findAll();
     }
 
-    public void addNewQueuePost(QueuePost queuePost){
+    public void addNewQueuePost(QueuePost queuePost){   //get it to save it to database
         System.out.println(queuePost);
     }
     /**
