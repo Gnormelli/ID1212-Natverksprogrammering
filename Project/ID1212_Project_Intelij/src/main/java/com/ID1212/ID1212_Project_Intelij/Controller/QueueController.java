@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/ver1/queuePost")
+//@RequestMapping(path = "api/ver1/queuePost")
 public class QueueController {
     private final ProvideService service;
 
@@ -25,7 +25,8 @@ public class QueueController {
      * Uses RestController and set to GetMapping to make it a RestFull endpoint
      * @return QueuePost JSON
      */
-    @GetMapping
+//    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/getQueue")
     public List<QueuePost> getQueuePosts(){
         return service.getQueuePosts();
     }

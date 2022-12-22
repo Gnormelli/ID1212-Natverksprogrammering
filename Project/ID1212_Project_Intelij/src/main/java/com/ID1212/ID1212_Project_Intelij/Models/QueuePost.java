@@ -1,7 +1,9 @@
 package com.ID1212.ID1212_Project_Intelij.Models;
 
-import jakarta.persistence.*;
+// If one uses Spring Boot 3.0.0
+// import jakarta.persistence.*;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 @Entity(name = "QueuePost")
 @Table(

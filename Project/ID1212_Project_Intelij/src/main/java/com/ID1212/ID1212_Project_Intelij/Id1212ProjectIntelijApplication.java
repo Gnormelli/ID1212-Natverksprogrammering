@@ -6,6 +6,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 public class Id1212ProjectIntelijApplication {
@@ -21,4 +23,19 @@ public class Id1212ProjectIntelijApplication {
 			queuePostRepository.save(maria);
 		};
 	}
+
+	/**
+	 * IF we want to make cross origin global for the application
+	 * @return
+	 */
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/getQueue").allowedOrigins("http://localhost:3000");
+			}
+		};
+	}
+
 }
