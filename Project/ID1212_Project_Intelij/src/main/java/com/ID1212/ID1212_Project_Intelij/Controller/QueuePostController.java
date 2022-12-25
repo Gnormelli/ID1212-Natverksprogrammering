@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-//@RequestMapping(path = "api/ver1/queuePost")
-public class QueueController {
+@RequestMapping(path = "api/queuePost")
+public class QueuePostController {
     private final ProvideService service;
 
     /**
@@ -17,7 +17,7 @@ public class QueueController {
      * @param service
      */
     @Autowired
-    public QueueController(ProvideService service) {
+    public QueuePostController(ProvideService service) {
         this.service = service;
     }
 
@@ -31,7 +31,7 @@ public class QueueController {
         return service.getQueuePosts();
     }
 
-    @PostMapping
+    @PostMapping("/postQueue")
     public void registerNewQueuePost(@RequestBody QueuePost queuePost){
         service.addNewQueuePost(queuePost);
     }

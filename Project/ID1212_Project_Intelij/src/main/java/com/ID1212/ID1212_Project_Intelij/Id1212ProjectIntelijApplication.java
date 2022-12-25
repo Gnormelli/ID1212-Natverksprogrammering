@@ -1,8 +1,5 @@
 package com.ID1212.ID1212_Project_Intelij;
 
-import com.ID1212.ID1212_Project_Intelij.DataAccess.QueuePostRepository;
-import com.ID1212.ID1212_Project_Intelij.Models.QueuePost;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -16,16 +13,16 @@ public class Id1212ProjectIntelijApplication {
 		SpringApplication.run(Id1212ProjectIntelijApplication.class, args);
 	}
 
-	@Bean
-	CommandLineRunner commandLineRunner(QueuePostRepository queuePostRepository){
-		return args -> {
-			QueuePost maria = new QueuePost("Hemma", "hej", Boolean.TRUE, Boolean.FALSE);
-			queuePostRepository.save(maria);
-		};
-	}
+//	@Bean
+//	CommandLineRunner commandLineRunner(DataRepository dataRepository){
+//		return args -> {
+//			QueuePost maria = new QueuePost("Hemma", "hej", Boolean.TRUE, Boolean.FALSE);
+//			dataRepository.save(maria);
+//		};
+//	}
 
 	/**
-	 * IF we want to make cross origin global for the application
+	 * IF we want to make cross-origin global for the application
 	 * @return
 	 */
 	@Bean
@@ -34,6 +31,7 @@ public class Id1212ProjectIntelijApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/getQueue").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/postQueue").allowedOrigins("http://localhost:3000");
 			}
 		};
 	}
