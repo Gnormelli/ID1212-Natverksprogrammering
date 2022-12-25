@@ -48,15 +48,13 @@ public class User implements UserDetails {
     )
     String email;
 
-
-
     @ManyToOne
     @JoinColumn(name = "fk_id_role")
     Role userRole;
 
     @Column(
             name = "profile_picture",
-            nullable = false,
+            nullable = true,
             columnDefinition = "TEXT"
     )
     String profilePicture;
@@ -100,13 +98,19 @@ public class User implements UserDetails {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", profilePicture=" + profilePicture +
+                ", userRole=" + userRole +
+                ", profilePicture='" + profilePicture + '\'' +
+                ", locked=" + locked +
+                ", enabled=" + enabled +
                 '}';
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+//        List<GrantedAuthority> roles = new ArrayList<>();
+//        roles.add(new SimpleGrantedAuthority("ROLE_"+userRole.getRoleName()));
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_"+userRole.getRoleName());
+        return Collections.singletonList(authority);
     }
 
     @Override
@@ -165,11 +169,11 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public Role getAppUserRole() {
+    public Role getUserRole() {
         return userRole;
     }
 
-    public void setAppUserRole(Role userRole) {
+    public void setUserRole(Role userRole) {
         this.userRole = userRole;
     }
 

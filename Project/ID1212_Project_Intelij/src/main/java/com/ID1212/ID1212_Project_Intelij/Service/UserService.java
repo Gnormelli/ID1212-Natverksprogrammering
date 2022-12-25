@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService implements UserDetailsService {
+    // Instead of contructor userRepository is autowired
     @Autowired
     UserRepository userRepository;
 
