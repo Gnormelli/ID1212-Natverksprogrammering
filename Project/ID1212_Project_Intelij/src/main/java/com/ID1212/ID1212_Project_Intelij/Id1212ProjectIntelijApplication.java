@@ -32,7 +32,7 @@ public class Id1212ProjectIntelijApplication {
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/postQueue").allowedOrigins("http://localhost:3000");
 				registry.addMapping("/getQueue").allowedOrigins("http://localhost:3000");
-				registry.addMapping("/getQueue").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/login").allowedOrigins("http://localhost:3000");
 			}
 		};
 	}

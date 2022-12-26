@@ -16,8 +16,6 @@ public class HomeController {
     @Autowired
     UserService userService;
 
-
-
     @GetMapping(value = "home")
     public String home(){
         return "Home";
