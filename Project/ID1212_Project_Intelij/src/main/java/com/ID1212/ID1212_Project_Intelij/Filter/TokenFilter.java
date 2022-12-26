@@ -1,75 +1,55 @@
 package com.ID1212.ID1212_Project_Intelij.Filter;
 
-import com.ID1212.ID1212_Project_Intelij.DataAccess.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.Date;
 
-@Component
-public class TokenFilter extends OncePerRequestFilter {
-    @Autowired
-    private UserRepository userRepository;
 
-    @Autowired
-    private TokenValidator tokenValidator;
+public class TokenFilter extends UsernamePasswordAuthenticationFilter {
+    private final AuthenticationManager authenticationManager;
+
+    public TokenFilter(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+    }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-            if (request.getCookies() == null) {
-                filterChain.doFilter(request, response);
-                return;
-            }
-            // From HTTP get authorization header
-            Optional<Cookie> jwtOptional = Arrays.stream(request.getCookies())
-                    .filter(cookie -> "jwt".equals(cookie.getName()))
-                    .findAny();
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                username,
+                password
+        );
+        return authenticationManager.authenticate(authenticationToken);
+    }
 
-            // If empty try again
-            if (jwtOptional.isEmpty()) {
-                filterChain.doFilter(request, response);
-                return;
-            }
+    @Override
+    protected void successfulAuthentication(HttpServletRequest request,
+                                            HttpServletResponse response,
+                                            FilterChain chain,
+                                            Authentication authResult)
+            throws IOException, ServletException {
+        User user = (User) authResult.getPrincipal();
+        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+        String accessToken = JWT.create().withSubject(user.getUsername())
+                .withExpiresAt(new Date(System.currentTimeMillis()+10*60*1000))
+                .withIssuer(request.getRequestURI().toString())
+                .withClaim("role", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).colle)
 
-            String token = jwtOptional.get().getValue();
-            UserDetails userDetails = userRepository
-                        .findByUsername(tokenValidator.getUsernameFromToken(token))
-                        .orElse(null);
-
-            // Get jwt token and validate
-            if (!tokenValidator.validateToken(token, userDetails)) {
-                filterChain.doFilter(request, response);
-                return;
-            }
-
-            UsernamePasswordAuthenticationToken
-                    authentication = new UsernamePasswordAuthenticationToken(
-                    userDetails, null,
-                    userDetails == null ?
-                            List.of() : userDetails.getAuthorities()
-            );
-
-            authentication.setDetails(
-                    new WebAuthenticationDetailsSource().buildDetails(request)
-            );
-
-            // User is now validated by security context from spring security!
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        filterChain.doFilter(request, response);
 
     }
 }

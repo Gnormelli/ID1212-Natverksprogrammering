@@ -1,10 +1,12 @@
 package com.ID1212.ID1212_Project_Intelij.Config;
 
 import com.ID1212.ID1212_Project_Intelij.DataAccess.UserRepository;
+import com.ID1212.ID1212_Project_Intelij.Filter.TokenFilter;
 import com.ID1212.ID1212_Project_Intelij.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -74,24 +76,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception{
         http
                 .csrf().disable()
-                .authorizeRequests()
-                //.antMatchers("/secure/**").hasAnyRole("ADMIN", "USER")
-                .antMatchers("/home").hasAnyRole("ADMIN", "USER")
-                .antMatchers("/addrole").permitAll()
-                .antMatchers("/api/queuePost").permitAll()
-                .antMatchers("/postQueue").permitAll()
-                .antMatchers("/getQueue").permitAll()
-                .antMatchers("/createUser").permitAll()
-                .antMatchers("/admin").hasRole("ADMIN")
-                .antMatchers("/user").hasRole("USER")
-                .anyRequest().authenticated()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .formLogin().loginPage("/login").permitAll()
-                .loginProcessingUrl("/perform_login")
-                .defaultSuccessUrl("/home", true)
-                .and().exceptionHandling()
-                .and().cors()
-                .and().httpBasic();
+                .authorizeRequests().anyRequest().permitAll()
+                .and()
+                .addFilter(new TokenFilter(authenticationManagerBean()));
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception{
+        return super.authenticationManagerBean();
     }
 
 

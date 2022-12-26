@@ -26,8 +26,8 @@ export default function LogInPage(props) {
   }
 
   const [formData, setFormData] = React.useState({
-    username: "",
-    password: "",
+    username: "Luke",
+    password: "qwerty",
   });
 
   function handelChange(event) {

@@ -17,7 +17,7 @@ public class LoginController {
         this.userService = userService;
     }
 
-    @GetMapping("/login")
+    @GetMapping("login")
     public String login(User user){
         System.out.println(user);
         return "redirect: /home";
