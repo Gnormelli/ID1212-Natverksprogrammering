@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/queuePost")
+@RequestMapping(path = "/")
 public class QueuePostController {
     private final ProvideService service;
 

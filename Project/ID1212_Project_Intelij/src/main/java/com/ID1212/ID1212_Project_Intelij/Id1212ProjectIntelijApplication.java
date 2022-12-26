@@ -30,8 +30,9 @@ public class Id1212ProjectIntelijApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/getQueue").allowedOrigins("http://localhost:3000");
 				registry.addMapping("/postQueue").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/getQueue").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/getQueue").allowedOrigins("http://localhost:3000");
 			}
 		};
 	}

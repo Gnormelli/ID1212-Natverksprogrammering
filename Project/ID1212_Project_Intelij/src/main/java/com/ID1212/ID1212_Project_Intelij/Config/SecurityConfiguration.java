@@ -11,30 +11,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
 
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    //UserService userService;
     @Autowired
     UserService userService;
-    /**
-     * Used if we want not to extend with WebSecurityConfigurerAdapter
-    @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http
-                .csrf(csrf -> csrf.ignoringAntMatchers("/postgres-console/**"))
-                .authorizeRequests(auth -> auth
-                        .mvcMatchers("/postgres-console/**")
-                        .mvcMatchers("/api/queuePost").permitAll()
-                        .anyRequest().authenticated())
-                .headers(headers -> headers.frameOptions().sameOrigin())
-                .build();
 
-    }
-    */
     @Bean
     PasswordEncoder bcryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
@@ -64,25 +48,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/home").hasAnyRole("ADMIN", "USER")
                 .antMatchers("/addrole").permitAll()
+                .antMatchers("/api/queuePost").permitAll()
+                .antMatchers("/postQueue").permitAll()
+                .antMatchers("/getQueue").permitAll()
                 .antMatchers("/createUser").permitAll()
                 .antMatchers("/admin").hasRole("ADMIN")
                 .antMatchers("/user").hasRole("USER")
                 .anyRequest().authenticated()
+                .and()
+                .formLogin().loginPage("/login").permitAll()
                 .and().httpBasic();
     }
-/**
-    @Bean
-    public void configure(HttpSecurity http)throws Exception{
-        http
-            .csrf().disable()
-            .authorizeRequests()
-            .antMatchers("/").permitAll()
-            .antMatchers("/user").hasRole("USER")
-            .antMatchers("/admin").hasRole("ADMIN")
-            .anyRequest().authenticated()
-            .and()
-            .httpBasic()
-            .and().build();
-    }
-*/
 }
