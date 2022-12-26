@@ -31,10 +31,9 @@ const ApiCall = {
     const getQueueEndpoint = "/getQueue";
     return ApiCall.apiCall(getQueueEndpoint).then((data) => data);
   },
-  getTemperatures() {
-    return ApiCall.apiCall("/").then((data) => {
-      return data;
-    });
+  getLoginInformation(loginForm) {
+    const postLoginEndpoint = "/login";
+    return ApiCall.apiCall(postLoginEndpoint, loginForm).then((data) => data);
   },
 };
 

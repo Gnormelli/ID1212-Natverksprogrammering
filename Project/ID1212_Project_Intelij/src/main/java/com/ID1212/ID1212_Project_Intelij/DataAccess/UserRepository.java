@@ -1,10 +1,15 @@
 package com.ID1212.ID1212_Project_Intelij.DataAccess;
 
 import com.ID1212.ID1212_Project_Intelij.Models.User;
-import com.ID1212.ID1212_Project_Intelij.Models.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 
-public interface UserRepository extends JpaRepository<User, Integer> {
+import java.util.Optional;
 
-    User findByUsername(String username);
+public interface UserRepository extends JpaRepository<User, Long> {
+
+    // Can be Optional<User>
+    Optional<User> findByUsername(String username);
+
+    UserDetails findByUsernameAndPassword(String username, String password);
 }

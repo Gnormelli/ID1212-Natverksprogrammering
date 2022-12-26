@@ -20,8 +20,9 @@ export default function LogInPage(props) {
 
   function logIn() {
     console.log("Sending request to login");
+    console.log("Is is this printed: ");
     console.log(formData);
-    ApiPost.postLoginInformation(formData).then((e) => console.log(e));
+    ApiCall.getLoginInformation(formData).then((e) => console.log(e));
   }
 
   const [formData, setFormData] = React.useState({
