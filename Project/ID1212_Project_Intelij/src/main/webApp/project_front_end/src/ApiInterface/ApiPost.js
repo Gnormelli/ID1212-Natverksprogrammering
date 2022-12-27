@@ -12,8 +12,9 @@ const ApiPost = {
           // HTTP headers
             "Content-Type": "application/json",
             "Access-Control-Allow-Headers":
-                // "Origin, X-Requested-With, " +
+                "Origin, X-Requested-With, " +
                 "Content-Type, Accept",
+           // "Access-Control-Allow-Origin": "http://localhost:3000",
             "mode": "no-cors"
             },
             

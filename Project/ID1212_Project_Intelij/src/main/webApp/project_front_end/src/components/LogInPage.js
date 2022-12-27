@@ -48,7 +48,7 @@ export default function LogInPage(props) {
     ApiCall.getData().then((e) => console.log(e));
 
     const post = {
-      id: 6,
+      id: 20,
       location: "Front-End",
       comment: "Det funkar ju faktiskt från front-end också",
       help: true,
@@ -95,7 +95,7 @@ export default function LogInPage(props) {
             width="100%"
             colorScheme="blue"
             position="center"
-            onClick={logIn}
+            onClick={testFunction}
             mb={3}
           >
             {" "}
