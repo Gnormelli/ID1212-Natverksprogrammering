@@ -12,7 +12,8 @@ const ApiPost = {
           // HTTP headers
             "Content-Type": "application/json",
             "Access-Control-Allow-Headers":
-                "Origin, X-Requested-With, Content-Type, Accept",
+                // "Origin, X-Requested-With, " +
+                "Content-Type, Accept",
             "mode": "no-cors"
             },
             
@@ -34,7 +35,7 @@ const ApiPost = {
             return ApiPost.apiCall(postQueueEndpoint, object).then((data) => data);
         },
         postLoginInformation(loginForm) {
-            const postLoginEndpoint = "/login";
+            const postLoginEndpoint = "/perform_login";
             return ApiPost.apiCall(postLoginEndpoint, loginForm).then((data) => data);
         },
     };

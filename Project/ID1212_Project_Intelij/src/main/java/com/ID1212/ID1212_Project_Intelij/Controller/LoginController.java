@@ -18,14 +18,15 @@ public class LoginController {
     }
 
     @GetMapping("login")
-    public String login(User user){
-        System.out.println(user);
+    public String login(){
+        System.out.println();
         return "redirect: /home";
     }
 
     @PostMapping("/perform_login")
     public String login(@RequestParam String username, @RequestParam String password, HttpServletRequest request) {
         // authenticate the user and handle the login request
+        System.out.println(username + password + request.toString());
         return "redirect:/home";
     }
     @GetMapping("/logout")
