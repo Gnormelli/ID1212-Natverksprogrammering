@@ -15,7 +15,7 @@ const ApiPost = {
                 "Origin, X-Requested-With, " +
                 "Content-Type, Accept",
            // "Access-Control-Allow-Origin": "http://localhost:3000",
-            "mode": "no-cors"
+            //"mode": "no-cors"
             },
             
         body: JSON.stringify(object),
@@ -39,6 +39,10 @@ const ApiPost = {
             const postLoginEndpoint = "/perform_login";
             return ApiPost.apiCall(postLoginEndpoint, loginForm).then((data) => data);
         },
+        getLoginInformation(loginForm) {
+            const getLoginEndpoint = "/login";
+            return ApiPost.apiCall(getLoginEndpoint,loginForm).then((data) => data);
+    },
     };
 
 export default ApiPost;

@@ -24,6 +24,7 @@ export default function LogInPage(props) {
     console.log(formData);
     // ApiCall.getLoginInformation(formData).then((e) => console.log(e));
     ApiPost.postLoginInformation(formData).then((e) => console.log(e));
+    ApiCall.getLoginInformation(formData).then((e) => console.log(e));
   }
 
   const [formData, setFormData] = React.useState({
@@ -49,7 +50,7 @@ export default function LogInPage(props) {
 
     const post = {
       id: 20,
-      location: "Front-End",
+      location: "Front-Ends ska inta vara unique ",
       comment: "Det funkar ju faktiskt från front-end också",
       help: true,
       present: false,
@@ -95,7 +96,7 @@ export default function LogInPage(props) {
             width="100%"
             colorScheme="blue"
             position="center"
-            onClick={testFunction}
+            onClick={logIn}
             mb={3}
           >
             {" "}

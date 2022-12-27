@@ -31,10 +31,6 @@ const ApiCall = {
     const getQueueEndpoint = "/getQueue";
     return ApiCall.apiCall(getQueueEndpoint).then((data) => data);
   },
-  getLoginInformation(loginForm) {
-    const postLoginEndpoint = "/login";
-    return ApiCall.apiCall(postLoginEndpoint, loginForm).then((data) => data);
-  },
 };
 
 export default ApiCall;

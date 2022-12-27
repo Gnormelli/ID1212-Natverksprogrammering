@@ -17,9 +17,9 @@ public class LoginController {
         this.userService = userService;
     }
 
-    @GetMapping("login")
-    public String login(){
-        System.out.println();
+    @PostMapping("login")
+    public String login(@RequestParam String username, @RequestParam String password){
+        System.out.println(username+password);
         return "redirect: /home";
     }
 

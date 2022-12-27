@@ -33,6 +33,8 @@ public class Id1212ProjectIntelijApplication {
 				registry.addMapping("/postQueue").allowedOrigins("http://localhost:3000");
 				registry.addMapping("/getQueue").allowedOrigins("http://localhost:3000");
 				registry.addMapping("/login").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/perform_login").allowedOrigins("http://localhost:3000");
+
 			}
 		};
 	}

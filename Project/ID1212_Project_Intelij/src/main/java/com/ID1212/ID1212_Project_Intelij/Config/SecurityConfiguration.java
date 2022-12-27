@@ -65,9 +65,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception{
         http
-                .csrf()
+                .csrf().disable()
 //                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .and()
+//                .and()
 //                .cors().disable()
                 .authorizeRequests()
                 .antMatchers("/home").permitAll()
@@ -79,8 +79,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin").permitAll()
                 .antMatchers("/user").permitAll()
                 .anyRequest().authenticated()
-//                .and()
-//                .formLogin().loginPage("/login").permitAll()
+                .and()
+                .formLogin().loginPage("/login").permitAll()
                 .and().httpBasic();
     }
 
