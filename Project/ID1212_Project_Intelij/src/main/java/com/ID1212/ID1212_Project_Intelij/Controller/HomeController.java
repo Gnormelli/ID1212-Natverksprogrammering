@@ -27,6 +27,7 @@ public class HomeController {
 
     @PostMapping(value = "addrole")
     public Role role(@RequestBody Role role){
+
         return roleRepository.save(role);
     }
 

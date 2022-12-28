@@ -1,5 +1,6 @@
 package com.ID1212.ID1212_Project_Intelij.Controller;
 
+import com.ID1212.ID1212_Project_Intelij.Models.QueuePost;
 import com.ID1212.ID1212_Project_Intelij.Models.User;
 import com.ID1212.ID1212_Project_Intelij.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +18,34 @@ public class LoginController {
         this.userService = userService;
     }
 
-    @PostMapping("login")
-    public String login(@RequestParam String username, @RequestParam String password){
-        System.out.println(username+password);
-        return "redirect: /home";
-    }
+
 
     @PostMapping("/perform_login")
-    public String login(@RequestParam String username, @RequestParam String password, HttpServletRequest request) {
-        // authenticate the user and handle the login request
-        System.out.println(username + password + request.toString());
-        return "redirect:/home";
+    public Object login(@RequestBody User user) {
+
+        String username = user.getUsername();
+        String password = user.getPassword();
+        return userService.getUsernamesAndPassword(username, password);
+
+
+
     }
-    @GetMapping("/logout")
+    @GetMapping("/logout") //wont be used
     public String logout() {
         return "Logged out";
     }
+
+//    @PostMapping("/postQueue")
+//    public Object registerNewQueuePost(@RequestBody QueuePost queuePost){
+//
+//        // service.addNewQueuePost(queuePost);
+//        String username = queuePost.getLocation();
+//        String password = queuePost.getComment();
+//        service.getQueuePosts();
+//        if(true){ //somthing with service.getQuePost()
+//            return service.getUsernamesAndPassword(username, password);
+//        }else{
+//            return "by";
+//        }
 }
+

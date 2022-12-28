@@ -94,6 +94,7 @@ public class QueuePost {
                      Boolean help,
                      Boolean present
                      ) {
+
         this.id = id;
         this.location = location;
         this.comment = comment;

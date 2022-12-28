@@ -11,4 +11,7 @@ public interface QueuePostRepository extends JpaRepository<QueuePost, Long> {
   //  @Query("SELECT q FROM QueuePost q WHERE q.id = ?1")
     Optional<QueuePost> findQueuePostById(Long id);
 
+
+
+    Optional<QueuePost> findQueuePostByLocation(String s);
 }

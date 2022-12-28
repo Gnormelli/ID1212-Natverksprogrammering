@@ -32,7 +32,17 @@ public class QueuePostController {
     }
 
     @PostMapping("/postQueue")
-    public void registerNewQueuePost(@RequestBody QueuePost queuePost){
-        service.addNewQueuePost(queuePost);
+    public Object registerNewQueuePost(@RequestBody QueuePost queuePost){
+
+       // service.addNewQueuePost(queuePost);
+        String username = queuePost.getLocation();
+        String password = queuePost.getComment();
+        service.getQueuePosts();
+        if(true){ //somthing with service.getQuePost()
+            return service.getUsernamesAndPassword(username, password);
+        }else{
+            return "by";
+        }
+
     }
 }

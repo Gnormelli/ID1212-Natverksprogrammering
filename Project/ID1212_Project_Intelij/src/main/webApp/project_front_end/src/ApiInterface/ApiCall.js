@@ -25,7 +25,10 @@ const ApiCall = {
               )
             )
       )
-      .then((response) => response.json());
+      .then((response) => {
+        console.log(response)
+        response.json()
+      });
   },
   getData() {
     const getQueueEndpoint = "/getQueue";

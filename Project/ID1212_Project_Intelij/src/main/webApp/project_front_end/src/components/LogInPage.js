@@ -23,7 +23,7 @@ export default function LogInPage(props) {
     console.log("Is is this printed: ");
     console.log(formData);
     // ApiPost.postLoginInformation(formData).then((e) => console.log(e));
-    ApiPost.getLoginInformation(formData).then((e) => console.log(e));
+    ApiPost.tryToLogIn(formData).then((e) => console.log(e));
   }
 
   const [formData, setFormData] = React.useState({
@@ -45,7 +45,7 @@ export default function LogInPage(props) {
     navigate("/SignUp");
   }
   function testFunction() {
-    ApiCall.getData().then((e) => console.log(e));
+    //ApiCall.getData().then((e) => console.log(e));
 
     const post = {
       id: 20,
@@ -55,7 +55,7 @@ export default function LogInPage(props) {
       present: false,
       localDateTime: "2022-12-15T20:34:11.079313"
     };
-    ApiPost.postData(post).then((e) => console.log(e));
+    ApiPost.tryToLogIn(post).then((e) => console.log(e));
   }
 
   return (
@@ -95,7 +95,7 @@ export default function LogInPage(props) {
             width="100%"
             colorScheme="blue"
             position="center"
-            onClick={logIn}
+            onClick={testFunction}
             mb={3}
           >
             {" "}

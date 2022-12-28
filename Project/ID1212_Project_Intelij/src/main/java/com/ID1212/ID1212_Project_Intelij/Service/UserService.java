@@ -1,6 +1,7 @@
 package com.ID1212.ID1212_Project_Intelij.Service;
 
 import com.ID1212.ID1212_Project_Intelij.DataAccess.UserRepository;
+import com.ID1212.ID1212_Project_Intelij.Models.QueuePost;
 import com.ID1212.ID1212_Project_Intelij.Models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
 @Service
@@ -40,5 +40,13 @@ public class UserService implements UserDetailsService {
 
     public User createUser(User user){
         return userRepository.save(user);
+    }
+
+    public String getUsernamesAndPassword(String username, String password) {
+        Optional<QueuePost> fromDatabase = userRepository.findQueuePostByUsername(username);
+        if(fromDatabase.isPresent()){
+            return "We log in";
+        }else
+            return "We DONT log in";
     }
 }

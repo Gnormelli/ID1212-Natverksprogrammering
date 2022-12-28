@@ -3,7 +3,6 @@ package com.ID1212.ID1212_Project_Intelij.Service;
 import com.ID1212.ID1212_Project_Intelij.DataAccess.QueuePostRepository;
 import com.ID1212.ID1212_Project_Intelij.Models.QueuePost;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +25,15 @@ public class ProvideService {
 
     public List<QueuePost> getQueuePosts(){
         return queuePostRepository.findAll();
+    }
+
+    public String getUsernamesAndPassword(String username, String password){
+        Optional<QueuePost> fromDatabase = queuePostRepository.findQueuePostByLocation(username);
+        if(fromDatabase.isPresent()){
+            return "hi";
+        }else
+            return "hi";
+
     }
 
     public void addNewQueuePost(QueuePost queuePost) {   //get it to save it to database
