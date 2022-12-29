@@ -31,6 +31,10 @@ public class ProfilePictureService {
 
     }
 
+    public ProfilePicture getProfilePictureFromDB(String id){
+        return profilePictureRepository.findProfilePictureById(id);
+    }
+
 
 
     /**

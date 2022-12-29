@@ -1,26 +1,19 @@
 package com.ID1212.ID1212_Project_Intelij.Models;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Collections;
 
 @Entity
-@Table(name = "user_info")
+@Table(name = "profile_picture")
 public class ProfilePicture {
 
     @Id
     @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence",
+            name = "picture_sequence",
+            sequenceName = "picture_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "user_sequence"
+            generator = "picture_sequence"
     )
     @Column(
             name = "id",
@@ -28,30 +21,23 @@ public class ProfilePicture {
     )
     Long id;
     @Column(
-            name = "username",
+            name = "picture",
             nullable = false,
             columnDefinition = "TEXT"
     )
-    String username;
+    String picture;
+    @Column(
+            name = "title",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
+    String title;
 
-    protected ProfilePicture(){}
-
-    public ProfilePicture(String username
-                         ) {
-        this.username = username;
-
+    protected  ProfilePicture(){
     }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' + '}';
-    }
-
-
-    public String getUsername() {
-        return username;
+    public ProfilePicture(String picture, String title) {
+        this.picture = picture;
+        this.title = title;
     }
 
     public Long getId() {
@@ -62,8 +48,28 @@ public class ProfilePicture {
         this.id = id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public String getPicture() {
+        return picture;
     }
 
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    @Override
+    public String toString() {
+        return "ProfilePicture{" +
+                "id=" + id +
+                ", picture='" + picture + '\'' +
+                ", title='" + title + '\'' +
+                '}';
+    }
 }

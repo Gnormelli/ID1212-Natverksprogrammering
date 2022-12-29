@@ -1,8 +1,9 @@
 package com.ID1212.ID1212_Project_Intelij.Controller;
 
+import com.ID1212.ID1212_Project_Intelij.Models.ProfilePicture;
 import com.ID1212.ID1212_Project_Intelij.Models.User;
+import com.ID1212.ID1212_Project_Intelij.Service.ProfilePictureService;
 import com.ID1212.ID1212_Project_Intelij.Service.UserService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -12,9 +13,11 @@ import java.util.HashMap;
 @RequestMapping("/")
 public class LoginController {
     private final UserService userService;
+    private final ProfilePictureService ppService;
 
-    public LoginController(UserService userService) {
+    public LoginController(UserService userService, ProfilePictureService ppService) {
         this.userService = userService;
+        this.ppService = ppService;
     }
 
 
@@ -39,12 +42,14 @@ public class LoginController {
     }
     @PostMapping(value = "/create_user")
     public String createUser(@RequestBody User user){
-        String whatHappend =userService.createUser(user);
-        if(whatHappend.equals("Already a user by that username")){
-            return "We did not log in";
-        }else{
-            return "We logged in";
-        }
+        return ppService.getProfilePictureFromDB("1").toString();
+//        user.setProfilePicture(profilePicture);
+//        String whatHappend = userService.createUser(user);
+//        if(whatHappend.equals("Already a user by that username")){
+//            return "We did not log in";
+//        }else{
+//            return "We logged in";
+//        }
     }
 
     @GetMapping("/logout") //wont be used

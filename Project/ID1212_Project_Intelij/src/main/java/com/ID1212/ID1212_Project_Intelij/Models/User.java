@@ -51,12 +51,9 @@ public class User implements UserDetails {
     @JoinColumn(name = "fk_id_role")
     Role userRole;
 
-    @Column(
-            name = "profile_picture",
-            nullable = true,
-            columnDefinition = "TEXT"
-    )
-    String profilePicture;
+    @ManyToOne
+    @JoinColumn(name = "fk_id_profile_picture")
+    ProfilePicture profilePicture;
 
     @Column(
             name = "locked",
@@ -78,7 +75,7 @@ public class User implements UserDetails {
                 String password,
                 String email,
                 Role userRole,
-                String profilePicture,
+                ProfilePicture profilePicture,
                 Boolean locked,
                 Boolean enabled) {
         this.username = username;
@@ -176,11 +173,11 @@ public class User implements UserDetails {
         this.userRole = userRole;
     }
 
-    public String getProfilePicture() {
+    public ProfilePicture getProfilePicture() {
         return profilePicture;
     }
 
-    public void setProfilePicture(String profilePicture) {
+    public void setProfilePicture(ProfilePicture profilePicture) {
         this.profilePicture = profilePicture;
     }
 
