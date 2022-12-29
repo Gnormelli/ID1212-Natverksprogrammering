@@ -28,12 +28,14 @@ public class LoginController {
         String username = user.getUsername();
         String password = user.getPassword();
         User usr = userService.canWeLogIn(username, password);
+
         if(usr == null){
             HashMap<String, String> map = new HashMap<>();
             map.put("id", "Bad credentials");
             return map;
         }else{
             //return usr;
+            
             return usr;
         }
 
@@ -41,18 +43,24 @@ public class LoginController {
 
     }
     @PostMapping(value = "/create_user")
-    public String createUser(@RequestBody User user){
-        return ppService.getProfilePictureFromDB("1").toString();
-//        user.setProfilePicture(profilePicture);
-//        String whatHappend = userService.createUser(user);
-//        if(whatHappend.equals("Already a user by that username")){
-//            map.put("id", "Alredy a user by that name");
-//            return map;
-//        }else{
-//            map.put("id", "User created");
-//            return map;
-//
+    public Object createUser(@RequestBody User user){
+
+        ProfilePicture profilePicture = ppService.getProfilePictureFromDB(1L);
+        user.setProfilePicture(profilePicture);
+
+
+
+        String whatHappend = userService.createUser(user);
+        HashMap<String, String> map = new HashMap<>();
+        if(whatHappend.equals("Already a user by that username")){
+            map.put("id", "Alredy a user by that name");
+            return map;
+        }else {
+            map.put("id", "User created");
+            return map;
         }
+
+    }
 
 //    @PostMapping("/postQueue")
 //    public Object registerNewQueuePost(@RequestBody QueuePost queuePost){

@@ -14,6 +14,8 @@ import {
   useColorModeValue,
   Select,
 } from "@chakra-ui/react";
+import ApiCall from "../ApiInterface/ApiCall";
+import ApiPost from "../ApiInterface/ApiPost";
 
 export default function ProfilePage(props) {
   const navigate = useNavigate();
@@ -22,9 +24,13 @@ export default function ProfilePage(props) {
 
   React.useEffect(() => {
     //Get profile picture from database and use instead of static TODO
-    const savedPictureUrl = getProfilePicture(
-      props.userProfileInfoForUI.profilePictureID
-    );
+
+    const post = {
+      id: props.userProfileInfoForUI.profilePictureID
+    };
+    ApiPost.getProfilePicture(post).then(e=>console.log(e));
+
+
     setProfileNumber(props.userProfileInfoForUI.profilePictureID);
   }, []);
 
@@ -64,7 +70,7 @@ export default function ProfilePage(props) {
     props.updateChatsMembershipFunction(id);
   }
   function getProfilePicture(numberToGet) {
-    //this needs a function to get from database
+
 
     const profilePictureItem = profileData.find(
       (element) => element.id == numberToGet

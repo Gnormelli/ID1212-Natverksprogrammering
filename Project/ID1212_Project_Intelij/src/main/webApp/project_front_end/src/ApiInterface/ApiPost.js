@@ -52,6 +52,10 @@ const ApiPost = {
         const getLoginEndpoint = "/perform_login";
         return ApiPost.apiCall(getLoginEndpoint,loginForm).then((data) => data);
     },
+    getProfilePicture(loginForm) {
+        const getLoginEndpoint = "/get_profile_picture";
+        return ApiPost.apiCall(getLoginEndpoint,loginForm).then((data) => data);
+    },
     createUser(loginForm) {
         const getLoginEndpoint = "/create_user";
         return ApiPost.apiCall(getLoginEndpoint,loginForm).then((data) => data);

@@ -12,5 +12,5 @@ public interface ProfilePictureRepository extends JpaRepository<ProfilePicture, 
 
 
 
-    ProfilePicture findProfilePictureById(String id);
+    ProfilePicture findProfilePictureById(Long id);
 }

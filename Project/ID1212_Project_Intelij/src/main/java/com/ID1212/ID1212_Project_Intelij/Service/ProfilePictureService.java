@@ -24,14 +24,9 @@ public class ProfilePictureService {
         this.profilePictureRepository=profilePictureRepository;
     }
 
-    public String getUsernamesAndPassword(String id){
-        ProfilePicture fromDatabase = profilePictureRepository.findProfilePictureById(id);
 
-            return "hi";
 
-    }
-
-    public ProfilePicture getProfilePictureFromDB(String id){
+    public ProfilePicture getProfilePictureFromDB(Long id){
         return profilePictureRepository.findProfilePictureById(id);
     }
 
