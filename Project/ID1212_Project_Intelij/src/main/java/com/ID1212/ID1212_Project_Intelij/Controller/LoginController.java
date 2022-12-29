@@ -1,12 +1,11 @@
 package com.ID1212.ID1212_Project_Intelij.Controller;
 
-import com.ID1212.ID1212_Project_Intelij.Models.QueuePost;
 import com.ID1212.ID1212_Project_Intelij.Models.User;
 import com.ID1212.ID1212_Project_Intelij.Service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 
 
 @RestController
@@ -25,11 +24,29 @@ public class LoginController {
 
         String username = user.getUsername();
         String password = user.getPassword();
-        return userService.getUsernamesAndPassword(username, password);
+        User usr = userService.canWeLogIn(username, password);
+        if(usr == null){
+            HashMap<String, String> map = new HashMap<>();
+            map.put("id", "Bad credentials");
+            return map;
+        }else{
+            //return usr;
+            return usr;
+        }
 
 
 
     }
+    @PostMapping(value = "/create_user")
+    public String createUser(@RequestBody User user){
+        String whatHappend =userService.createUser(user);
+        if(whatHappend.equals("Already a user by that username")){
+            return "We did not log in";
+        }else{
+            return "We logged in";
+        }
+    }
+
     @GetMapping("/logout") //wont be used
     public String logout() {
         return "Logged out";

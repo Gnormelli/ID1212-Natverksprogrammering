@@ -1,7 +1,6 @@
 package com.ID1212.ID1212_Project_Intelij.Service;
 
 import com.ID1212.ID1212_Project_Intelij.DataAccess.UserRepository;
-import com.ID1212.ID1212_Project_Intelij.Models.QueuePost;
 import com.ID1212.ID1212_Project_Intelij.Models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -38,15 +37,43 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(), authority);
     }
 
-    public User createUser(User user){
-        return userRepository.save(user);
+    public String createUser(User user){
+
+
+        Optional<User> fromDatabase = Optional.ofNullable(userRepository.findByUsername(user.getUsername()));
+        if(fromDatabase.isPresent()){
+                return "Already a user by that username";
+
+        }else
+            userRepository.save(user);
+
+            return "User created";
     }
 
-    public String getUsernamesAndPassword(String username, String password) {
-        Optional<QueuePost> fromDatabase = userRepository.findQueuePostByUsername(username);
+    public User canWeLogIn(String username, String password) {
+
+        Optional<User> fromDatabase = Optional.ofNullable(userRepository.findByUsername(username));
         if(fromDatabase.isPresent()){
-            return "We log in";
+            User usr = userRepository.findByUsername(username);
+
+            if(usr.getPassword().equals(password)){
+                return usr;
+            }else{
+                return null;
+            }
+
+
         }else
-            return "We DONT log in";
+            return null;
+    }
+
+    public boolean DoesUserExsist(String username) {
+
+        Optional<User> fromDatabase = Optional.ofNullable(userRepository.findByUsername(username));
+        if(fromDatabase.isPresent()){
+           return true;
+
+        }else
+            return false;
     }
 }

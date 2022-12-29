@@ -65,6 +65,7 @@ export default function ProfilePage(props) {
   }
   function getProfilePicture(numberToGet) {
     //this needs a function to get from database
+
     const profilePictureItem = profileData.find(
       (element) => element.id == numberToGet
     );

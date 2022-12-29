@@ -9,20 +9,34 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-
+import ApiPost from "../ApiInterface/ApiPost";
 export default function SignUp(props) {
   const { toggleColorMode } = useColorMode();
   const formBackground = useColorModeValue("gray.100", "gray.700");
   const navigate = useNavigate();
 
   function signUp() {
-    console.log("We try to log in sending ");
-    console.log(formData);
+    //console.log("We try to log in sending ");
+    //console.log(formData);
+
+
+
 
     if (
       formData.password === formData.confirmPassword &&
       !(formData.confirmPassword === "")
     ) {
+      const post = {
+        id: 0,
+        username: formData.username,
+        password: formData.password,
+        email: "toBeDecided@gmail.com",
+        profile_picture: "1",
+        locked: false,
+        enabled: true
+      };
+      ApiPost.createUser(post).then((e) => console.log(e));
+
       if (!usernameExist()) {
         //Create user in database TODO
         props.createProfileFunction(formData.username, formData.password);

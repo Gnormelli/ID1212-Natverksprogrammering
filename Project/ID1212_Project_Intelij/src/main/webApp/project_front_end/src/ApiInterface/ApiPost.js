@@ -32,14 +32,6 @@ const ApiPost = {
                 )
             )
             .then((response) => {
-                console.log("3")
-                //console.log(response.json())
-                console.log("6")
-                // if(JSON.stringify(response) === "{}"){
-                //     console.log("7")
-                //     return ({"tests1": "tests2"})
-                // }else
-                    console.log("8")
                     return response.json()
             });
         },
@@ -60,6 +52,10 @@ const ApiPost = {
         const getLoginEndpoint = "/perform_login";
         return ApiPost.apiCall(getLoginEndpoint,loginForm).then((data) => data);
     },
+    createUser(loginForm) {
+        const getLoginEndpoint = "/create_user";
+        return ApiPost.apiCall(getLoginEndpoint,loginForm).then((data) => data);
+    }
     };
 
 export default ApiPost;

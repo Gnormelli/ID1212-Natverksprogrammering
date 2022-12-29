@@ -11,6 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import ApiPost from "../ApiInterface/ApiPost";
 import ApiCall from "../ApiInterface/ApiCall";
+import {type} from "@testing-library/user-event/dist/type";
 
 export default function LogInPage(props) {
   const { toggleColorMode } = useColorMode();
@@ -18,17 +19,9 @@ export default function LogInPage(props) {
   const navigate = useNavigate();
   //const [jwt, setJwt] = useLocalState("", "jwt")
 
-  function logIn() {
-    console.log("Sending request to login");
-    console.log("Is is this printed: ");
-    console.log(formData);
-    // ApiPost.postLoginInformation(formData).then((e) => console.log(e));
-    ApiPost.tryToLogIn(formData).then((e) => console.log(e));
-  }
-
   const [formData, setFormData] = React.useState({
-    username: "Luke",
-    password: "qwerty",
+    username: "",
+    password: "",
   });
 
   function handelChange(event) {
@@ -44,18 +37,27 @@ export default function LogInPage(props) {
   function goToCreateAccount() {
     navigate("/SignUp");
   }
-  function testFunction() {
+  function logIn() {
     //ApiCall.getData().then((e) => console.log(e));
 
     const post = {
       id: 20,
-      location: "Front-Ends ska inta vara unique ",
-      comment: "Det funkar ju faktiskt från front-end också",
-      help: true,
-      present: false,
-      localDateTime: "2022-12-15T20:34:11.079313"
+      username: formData.username,
+      password: formData.password,
+      email: "hi@gmail.com",
+      locked: false,
+      enabled: true
     };
-    ApiPost.tryToLogIn(post).then((e) => console.log(e));
+    ApiPost.tryToLogIn(post).then((e) => {
+      if(e.id === "Bad credentials"){
+        console.log(e.id)
+      }else{
+        console.log(e)
+        props.setFullUserGlobal({"id": formData.username, "profilePictureID": e.profilePicture})
+        navigate("/Profile");
+      }
+    });
+
   }
 
   return (
@@ -95,7 +97,7 @@ export default function LogInPage(props) {
             width="100%"
             colorScheme="blue"
             position="center"
-            onClick={testFunction}
+            onClick={logIn}
             mb={3}
           >
             {" "}

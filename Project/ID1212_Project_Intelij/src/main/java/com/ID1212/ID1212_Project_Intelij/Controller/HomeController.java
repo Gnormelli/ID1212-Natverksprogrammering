@@ -31,11 +31,11 @@ public class HomeController {
         return roleRepository.save(role);
     }
 
-    @PostMapping(value = "createUser")
-    public User createUser(@RequestBody User user){
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        return userService.createUser(user);
-    }
+//    @PostMapping(value = "createUser")
+//    public User createUser(@RequestBody User user){
+//        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+//        return userService.createUser(user);
+//    }
 
 
 }

@@ -17,17 +17,25 @@ export default function App() {
     profilePictureID: 1,
   });
 
+
+
+
   function test(e) {
     console.log(userProfileInfoForUI.profilePictureID);
   }
 
-  function createProfile(username, password) {
+  function createProfile(username) {
     //Create profile in database TODO (username/password, set profile picture defult to 1)
     setAuthorized(true);
     setUserProfileInfoForUI({
       id: username,
       profilePictureID: 1,
     });
+  }
+
+  function setFullUser(info){
+    setAuthorized(true);
+    setUserProfileInfoForUI(info)
   }
 
   function changeUserInfo(name, value) {
@@ -78,7 +86,7 @@ export default function App() {
         <Route
           exact
           path="/"
-          element={<LogInPage logIn={tryToLogIn} authorized={authorized} />}
+          element={<LogInPage logIn={tryToLogIn} authorized={authorized} setFullUserGlobal={setFullUser} />}
         />
         <Route
           exact
@@ -87,6 +95,7 @@ export default function App() {
             <SignUp
               authorized={authorized}
               createProfileFunction={createProfile}
+
             />
           }
         />
