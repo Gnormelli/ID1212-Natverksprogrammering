@@ -7,6 +7,7 @@ target/
 
 ### Properties ###
 .properties
+/node_modules
 
 ### STS ###
 .apt_generated
