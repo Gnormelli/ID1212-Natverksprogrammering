@@ -35,15 +35,16 @@ export default function SignUp(props) {
         locked: false,
         enabled: true
       };
-      ApiPost.createUser(post).then((e) => console.log(e));
+      ApiPost.createUser(post).then((e) => {
 
-      if (!usernameExist()) {
-        //Create user in database TODO
-        props.createProfileFunction(formData.username, formData.password);
-        goToProfile();
-      } else {
-        console.log("Username alredy in use");
-      }
+        if (!usernameExist()) {
+          //Create user in database TODO
+          props.createProfileFunction(formData.username, formData.password);
+          goToProfile();
+        } else {
+          console.log("Username alredy in use")
+        }
+      });
     } else {
       console.log("Passwords dont match");
     }

@@ -16,7 +16,7 @@ public class ProfilePictureController {
 
     @GetMapping("/get_profile_picture")
     public Object login(@RequestBody ProfilePicture profilePicture) {
-        ProfilePicture e = profilePictureService.
+        //ProfilePicture e = profilePictureService.
 
     return null;
 

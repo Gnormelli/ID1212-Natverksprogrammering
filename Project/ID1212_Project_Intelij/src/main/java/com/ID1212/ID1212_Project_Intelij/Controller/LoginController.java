@@ -38,12 +38,17 @@ public class LoginController {
 
     }
     @PostMapping(value = "/create_user")
-    public String createUser(@RequestBody User user){
+    public Object createUser(@RequestBody User user){
         String whatHappend =userService.createUser(user);
+        HashMap<String, String> map = new HashMap<>();
+
         if(whatHappend.equals("Already a user by that username")){
-            return "We did not log in";
+            map.put("id", "Alredy a user by that name");
+            return map;
         }else{
-            return "We logged in";
+            map.put("id", "User created");
+            return map;
+
         }
     }
 
