@@ -46,16 +46,13 @@ public class LoginController {
 //        user.setProfilePicture(profilePicture);
 //        String whatHappend = userService.createUser(user);
 //        if(whatHappend.equals("Already a user by that username")){
-//            return "We did not log in";
+//            map.put("id", "Alredy a user by that name");
+//            return map;
 //        }else{
-//            return "We logged in";
-//        }
-    }
-
-    @GetMapping("/logout") //wont be used
-    public String logout() {
-        return "Logged out";
-    }
+//            map.put("id", "User created");
+//            return map;
+//
+        }
 
 //    @PostMapping("/postQueue")
 //    public Object registerNewQueuePost(@RequestBody QueuePost queuePost){
