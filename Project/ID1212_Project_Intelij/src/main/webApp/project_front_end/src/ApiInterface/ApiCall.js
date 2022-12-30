@@ -26,12 +26,18 @@ const ApiCall = {
             )
       )
       .then((response) => {
-        console.log(response)
-        response.json()
+
+       // console.log(response.json())
+        return response.json()
+
       });
   },
   getData() {
     const getQueueEndpoint = "/getQueue";
+    return ApiCall.apiCall(getQueueEndpoint).then((data) => data);
+  },
+  getPictures() {
+    const getQueueEndpoint = "/get_profile_picture";
     return ApiCall.apiCall(getQueueEndpoint).then((data) => data);
   },
 };

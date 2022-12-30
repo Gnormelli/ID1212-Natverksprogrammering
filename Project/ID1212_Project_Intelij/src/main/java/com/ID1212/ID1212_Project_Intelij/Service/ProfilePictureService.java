@@ -30,6 +30,9 @@ public class ProfilePictureService {
         return profilePictureRepository.findProfilePictureById(id);
     }
 
+    public List<ProfilePicture> getAllProfilePictureFromDB(){
+        return profilePictureRepository.findAll();
+    }
 
 
     /**

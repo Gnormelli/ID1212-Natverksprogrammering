@@ -1,6 +1,5 @@
 import React from "react";
 import { Form, Navigate, useNavigate } from "react-router-dom";
-import profileData from "../profileData";
 import chatData from "../chatData";
 import {
   Button,
@@ -15,20 +14,19 @@ import {
   Select,
 } from "@chakra-ui/react";
 import ApiCall from "../ApiInterface/ApiCall";
-import ApiPost from "../ApiInterface/ApiPost";
+import profileData from "../profileData";
 
 export default function ProfilePage(props) {
   const navigate = useNavigate();
   const [profileNumber, setProfileNumber] = React.useState();
   const [profileUrl, setProfileUrl] = React.useState();
 
+
   React.useEffect(() => {
     //Get profile picture from database and use instead of static TODO
 
-    const post = {
-      id: props.userProfileInfoForUI.profilePictureID
-    };
-    ApiPost.getProfilePicture(post).then(e=>console.log(e));
+
+    //ApiPost.getProfilePicture(post).then(e=>console.log(e));
 
 
     setProfileNumber(props.userProfileInfoForUI.profilePictureID);
@@ -100,20 +98,13 @@ export default function ProfilePage(props) {
   }
 
   function test() {
-    function testFunction() {
-      //request.open("GET", url, true);
-      //console.log(request.send(hold));'
-      //ApiCall.getData().then((e) => console.log(e));
-      //const url = "https://stackoverflow.com";
-      // fetch(url)
-      //   .then(
-      //     (response) => response.text() // .json(), .blob(), etc.
-      //   )
-      //   .then(
-      //     (text) => console.log(text) // Handle here
-      //   );
-    }
-    //console.log(profileUrl);
+
+    const h = ["one","two","tre","four"]
+    console.log(h.at(1))
+
+    ApiCall.getPictures().then(e=>{
+      e.map(el=> el);
+    });
   }
 
   return (
