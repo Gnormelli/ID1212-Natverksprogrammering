@@ -6,18 +6,18 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "group_member")
-@IdClass(GroupMember.class)
+@IdClass(GroupMemberCompositeKey.class)
 public class GroupMember implements Serializable {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "fk_id_user_info")
+    @JoinColumn(name = "id_user_info")
     User user;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "fk_id_conversation")
-   Conversation conversation;
+    @JoinColumn(name = "id_conversation")
+    Conversation conversation;
 
     protected GroupMember(){
 
