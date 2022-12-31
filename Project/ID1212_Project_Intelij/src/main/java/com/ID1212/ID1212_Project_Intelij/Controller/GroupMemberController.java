@@ -23,9 +23,13 @@ public class GroupMemberController {
 
     @Autowired
     ConversationService conversationService;
+    
+    @PostMapping( "/update_membership")
+    public Object updateMemebership(@RequestBody User user) {
 
-
-    @PostMapping(value = "/group_member_by_conId")
+        return null;
+    }
+    @PostMapping( "/group_member_by_conId")
     public Object findGroupMemberByConversationID(@RequestBody Conversation conversation){
         Long conID = conversation.getId();
         Collection<GroupMember> collectionOfGroupMembers =
@@ -39,7 +43,7 @@ public class GroupMemberController {
         }
     }
 
-    @PostMapping(value = "/conversations_by_userID")
+    @PostMapping( "/conversations_by_userID")
     public Object findConversationsByUserID(@RequestBody User user){
         Long userId = user.getId();
         Collection<GroupMember> collectionOfConversations =
@@ -54,7 +58,7 @@ public class GroupMemberController {
     }
 
     //Not priority right now
-    @PostMapping(name = "/new_conversation")
+    @PostMapping("/new_conversation")
     public String createNewConversation(@RequestBody String convName){
         return conversationService.createConversation(convName);
     };

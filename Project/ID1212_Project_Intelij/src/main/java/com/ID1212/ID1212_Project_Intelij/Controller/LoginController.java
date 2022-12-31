@@ -20,16 +20,6 @@ public class LoginController {
         this.ppService = ppService;
     }
 
-
-    @PostMapping( "/update_membership")
-    public Object updateMemebership(@RequestBody User user) {
-
-        return null;
-    }
-
-
-
-
     @PostMapping("/update_profile_picture")
     public Object updateProfilePicture(@RequestBody User user) {
 
@@ -40,9 +30,6 @@ public class LoginController {
         map.put("id", "Done");
         return map;
     }
-
-
-
 
     @PostMapping("/perform_login")
     public Object login(@RequestBody User user) {
@@ -83,18 +70,5 @@ public class LoginController {
         }
 
     }
-
-//    @PostMapping("/postQueue")
-//    public Object registerNewQueuePost(@RequestBody QueuePost queuePost){
-//
-//        // service.addNewQueuePost(queuePost);
-//        String username = queuePost.getLocation();
-//        String password = queuePost.getComment();
-//        service.getQueuePosts();
-//        if(true){ //somthing with service.getQuePost()
-//            return service.getUsernamesAndPassword(username, password);
-//        }else{
-//            return "by";
-//        }
 }
 
