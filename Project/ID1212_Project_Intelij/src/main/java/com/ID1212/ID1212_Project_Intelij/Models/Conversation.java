@@ -1,7 +1,6 @@
 package com.ID1212.ID1212_Project_Intelij.Models;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "conversation")
@@ -27,6 +26,11 @@ public class Conversation {
             columnDefinition = "TEXT"
     )
     String name;
+
+    protected Conversation(){}
+    public Conversation(String name) {
+        this.name = name;
+    }
 
     public Long getId() {
         return id;
