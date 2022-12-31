@@ -85,6 +85,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/group_member_by_conId").permitAll()
                 .antMatchers("/messages_from_conv").permitAll()
                 .antMatchers("/new_message").permitAll()
+                .antMatchers("/update_profile_picture").permitAll()
+                .antMatchers("/update_membership").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").permitAll()

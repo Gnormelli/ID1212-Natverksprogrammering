@@ -40,6 +40,8 @@ public class Id1212ProjectIntelijApplication {
 				registry.addMapping("/group_member_by_conId").allowedOrigins("http://localhost:3000");
 				registry.addMapping("/messages_from_conv").allowedOrigins("http://localhost:3000");
 				registry.addMapping("/new_message").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/update_profile_picture").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/update_membership").allowedOrigins("http://localhost:3000");
 
 
 			}
