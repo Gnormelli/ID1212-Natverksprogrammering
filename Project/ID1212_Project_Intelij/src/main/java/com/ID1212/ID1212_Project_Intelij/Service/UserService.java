@@ -1,5 +1,6 @@
 package com.ID1212.ID1212_Project_Intelij.Service;
 
+import com.ID1212.ID1212_Project_Intelij.DataAccess.ProfilePictureRepository;
 import com.ID1212.ID1212_Project_Intelij.DataAccess.UserRepository;
 import com.ID1212.ID1212_Project_Intelij.Models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class UserService implements UserDetailsService {
     // Instead of contructor userRepository is autowired
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    ProfilePictureRepository profilePictureRepository;
 
     /**
      * Service to handle requests for finding usernames
@@ -47,6 +51,14 @@ public class UserService implements UserDetailsService {
         }else
             userRepository.save(user);
             return "User created";
+    }
+
+
+    public String updateUserProfilePicture(String username, Long profilePictureId){
+        User user = userRepository.findByUsername(username);
+        user.setProfilePicture(profilePictureRepository.findProfilePictureById(profilePictureId));
+        userRepository.save(user);
+        return "Done";
     }
 
     public User canWeLogIn(String username, String password) {
