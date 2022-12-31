@@ -25,9 +25,15 @@ public class GroupMemberController {
     ConversationService conversationService;
 
     @PostMapping( "/update_membership")
-    public Object updateMemebership(@RequestBody User user) {
+    public Object updateMemebership(@RequestBody GroupMember groupMember) {
+        System.out.println(groupMember.getCompositeKey());
 
-        return null;
+        groupMemberService.updateMembership(1l, 1l);
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("id", "Done");
+        return map;
+
     }
     @PostMapping( "/group_member_by_conId")
     public Object findGroupMemberByConversationID(@RequestBody Conversation conversation){

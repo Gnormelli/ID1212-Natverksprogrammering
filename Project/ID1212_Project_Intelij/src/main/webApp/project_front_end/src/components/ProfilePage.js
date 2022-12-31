@@ -25,7 +25,7 @@ export default function ProfilePage(props) {
   const [optionsToChooseForProfile, setOptionsToChooseForProfile] = React.useState();
 
   React.useEffect(() => {
-
+    console.log(props.authorized)
     ApiCall.getPictures().then(e => {
       setProfilePicturesFull(e);
 

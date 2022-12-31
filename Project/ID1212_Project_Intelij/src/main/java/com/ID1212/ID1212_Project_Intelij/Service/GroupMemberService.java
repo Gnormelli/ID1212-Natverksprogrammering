@@ -24,4 +24,11 @@ public class GroupMemberService {
     public Collection<GroupMember> findConversationsByUserID(Long userId){
         return groupMemberRepository.findGroupMembersByCompositeKey_User_Id(userId);
     }
+
+    public String updateMembership(Long userId, Long conversationID){
+
+
+
+        return "hi";
+    }
 }

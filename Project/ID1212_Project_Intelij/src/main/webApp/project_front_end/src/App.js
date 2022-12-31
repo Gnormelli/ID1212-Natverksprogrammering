@@ -12,7 +12,8 @@ import ApiPost from "./ApiInterface/ApiPost";
 
 export default function App() {
   const navigate = useNavigate();
-  const [authorized, setAuthorized] = React.useState(true);
+  const [authorized, setAuthorized] = React.useState(false);
+  const [chatsUserIsMemberOf, setChatsUserIsMemberOf] = React.useState([]);
   const [userProfileInfoForUI, setUserProfileInfoForUI] = React.useState({
     id: "Nobody",
     profilePictureID: 1,
@@ -20,6 +21,18 @@ export default function App() {
 
 
 
+  function updateMembership(chatId){
+    if(chatsUserIsMemberOf.includes(chatId)){
+      const h = chatsUserIsMemberOf.filter()
+      setChatsUserIsMemberOf(h);
+      //the api call
+    }else{
+      setChatsUserIsMemberOf(prevState => {
+        return prevState.push(chatId)
+      });
+    }
+
+  }
 
   function test(e) {
     console.log(userProfileInfoForUI.profilePictureID);
@@ -52,10 +65,11 @@ export default function App() {
   function updateChatsMembership(chatID) {
     //send info to database about who joied what TODO
     const post = {
-       username: userProfileInfoForUI.id,
-        userEmail: chatID,
+      id_conversation: userProfileInfoForUI.id,
+      id_user_info: chatID,
 
     }
+
     ApiPost.updateMembership(post).then(e=>console.log(e))
   }
 

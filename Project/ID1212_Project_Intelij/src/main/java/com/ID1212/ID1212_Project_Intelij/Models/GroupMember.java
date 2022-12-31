@@ -26,6 +26,7 @@ public class GroupMember implements Serializable {
         this.compositeKey = compositeKey;
     }
 
+
     @Override
     public String toString() {
         return "GroupMember{" +
