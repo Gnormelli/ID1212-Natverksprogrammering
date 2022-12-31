@@ -20,23 +20,39 @@ export default function ProfilePage(props) {
   const navigate = useNavigate();
   const [profileNumber, setProfileNumber] = React.useState();
   const [profileUrl, setProfileUrl] = React.useState();
-
+  const [profilePicturesFull, setProfilePicturesFull] = React.useState();
+  const [optionsToChooseForProfile, setOptionsToChooseForProfile] = React.useState();
 
   React.useEffect(() => {
-    //Get profile picture from database and use instead of static TODO
 
+    ApiCall.getPictures().then(e => {
+      setProfilePicturesFull(e);
 
-    //ApiPost.getProfilePicture(post).then(e=>console.log(e));
+      setOptionsToChooseForProfile(e.map(el => <option key={el.id} value={el.id}>
+        {el.title}
+      </option>))
 
+      const profilePictureItem = e.find(
+          (element) => element.id == props.userProfileInfoForUI.profilePictureID
+      );
+      setProfileUrl(profilePictureItem.picture)
 
-    setProfileNumber(props.userProfileInfoForUI.profilePictureID);
+    });
+
   }, []);
 
-  const optionsForProfile = profileData.map((info) => (
-    <option key={info.id} value={info.id}>
-      {info.title}
-    </option>
-  ));
+
+  function getProfilePicture(numberToGet) {
+
+    const profilePictureItem = profilePicturesFull.find(
+        (element) => element.id == numberToGet
+    );
+    setProfileUrl(profilePictureItem.picture);
+  }
+
+
+
+
 
   const chatOptions = chatData.map((e) => {
     const userInfo = props.userProfileInfoForUI;
@@ -67,14 +83,6 @@ export default function ProfilePage(props) {
     const id = 0;
     props.updateChatsMembershipFunction(id);
   }
-  function getProfilePicture(numberToGet) {
-
-
-    const profilePictureItem = profileData.find(
-      (element) => element.id == numberToGet
-    );
-    setProfileUrl(profilePictureItem.url);
-  }
 
   const formBackground = useColorModeValue("gray.100", "gray.700");
   if (!props.authorized) {
@@ -99,12 +107,11 @@ export default function ProfilePage(props) {
 
   function test() {
 
-    const h = ["one","two","tre","four"]
-    console.log(h.at(1))
+    ApiCall.getPictures().then(e => setProfilePicturesFull(e));
+  }
 
-    ApiCall.getPictures().then(e=>{
-      e.map(el=> el);
-    });
+  function test2() {
+    console.log(profileUrl)
   }
 
   return (
@@ -122,7 +129,7 @@ export default function ProfilePage(props) {
       />{" "}
       <Flex direction="column" background={formBackground} p={12} rounded={6}>
         <Select placeholder="Select profile picture" onChange={changeProfile}>
-          {optionsForProfile}
+          {optionsToChooseForProfile}
         </Select>{" "}
         <Image src={profileUrl} boxSize="100px" />
         <Heading>What chats do you wanna join</Heading>
@@ -158,6 +165,16 @@ export default function ProfilePage(props) {
         >
           {" "}
           test
+        </Button>
+        <Button
+            width="100%"
+            colorScheme="blue"
+            position="top"
+            onClick={test2}
+            mb={3}
+        >
+          {" "}
+          test2
         </Button>
       </Flex>
     </Flex>
