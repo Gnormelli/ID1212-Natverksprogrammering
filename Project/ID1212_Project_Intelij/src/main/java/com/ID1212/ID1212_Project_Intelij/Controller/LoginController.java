@@ -21,6 +21,28 @@ public class LoginController {
     }
 
 
+    @PostMapping( "/update_membership")
+    public Object updateMemebership(@RequestBody User user) {
+
+        return null;
+    }
+
+
+
+
+    @PostMapping("/update_profile_picture")
+    public Object updateProfilePicture(@RequestBody User user) {
+
+        userService.updateUserProfilePicture(user.getUsername(), user.getProfilePicture().getId());
+
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("id", "Done");
+        return map;
+    }
+
+
+
 
     @PostMapping("/perform_login")
     public Object login(@RequestBody User user) {
