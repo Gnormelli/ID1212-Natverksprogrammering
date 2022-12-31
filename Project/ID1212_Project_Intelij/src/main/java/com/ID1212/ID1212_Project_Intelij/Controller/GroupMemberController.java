@@ -23,7 +23,7 @@ public class GroupMemberController {
 
     @Autowired
     ConversationService conversationService;
-    
+
     @PostMapping( "/update_membership")
     public Object updateMemebership(@RequestBody User user) {
 
