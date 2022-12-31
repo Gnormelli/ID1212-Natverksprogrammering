@@ -48,8 +48,15 @@ const ApiPost = {
     getLoginInformation(loginForm) {
         const getLoginEndpoint = "/login";
         return ApiPost.apiCall(getLoginEndpoint,loginForm).then((data) => data);
-    },tryToLogIn(loginForm) {
+    },changeProfilePicture(loginForm) {
+        const getLoginEndpoint = "/update_profile_picture";
+        return ApiPost.apiCall(getLoginEndpoint,loginForm).then((data) => data);
+    },
+    tryToLogIn(loginForm) {
         const getLoginEndpoint = "/perform_login";
+        return ApiPost.apiCall(getLoginEndpoint,loginForm).then((data) => data);
+    },updateMembership(loginForm) {
+        const getLoginEndpoint = "/update_membership";
         return ApiPost.apiCall(getLoginEndpoint,loginForm).then((data) => data);
     },
     createUser(loginForm) {
@@ -59,3 +66,4 @@ const ApiPost = {
     };
 
 export default ApiPost;
+
