@@ -1,10 +1,8 @@
 package com.ID1212.ID1212_Project_Intelij.Service;
 
 import com.ID1212.ID1212_Project_Intelij.DataAccess.GroupMemberRepository;
-import com.ID1212.ID1212_Project_Intelij.Models.Conversation;
 import com.ID1212.ID1212_Project_Intelij.Models.GroupMember;
 import com.ID1212.ID1212_Project_Intelij.Models.GroupMemberCompositeKey;
-import com.ID1212.ID1212_Project_Intelij.Models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +21,7 @@ public class GroupMemberService {
         return groupMemberRepository.findGroupMembersByCompositeKey_Conversation_Id(conID);
     }
 
-    public Collection<GroupMember> findGroupMemberByUserID(Long userId){
+    public Collection<GroupMember> findConversationsByUserID(Long userId){
         return groupMemberRepository.findGroupMembersByCompositeKey_User_Id(userId);
     }
 }

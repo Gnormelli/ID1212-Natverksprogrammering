@@ -6,42 +6,6 @@ import java.util.Objects;
 
 @Embeddable
 public class GroupMemberCompositeKey implements Serializable {
-//
-//    @JoinColumn(name = "id_user_info")
-//    private Long userID;
-//    @JoinColumn(name = "id_conversation")
-//    private Long convID;
-//
-//    protected GroupMemberCompositeKey(){}
-//
-//    public GroupMemberCompositeKey(Long userID, Long convID) {
-//        this.userID = userID;
-//        this.convID = convID;
-//    }
-//
-//    public Long getUserID() {
-//        return userID;
-//    }
-//
-//    public void setUserID(Long userID) {
-//        this.userID = userID;
-//    }
-//
-//    public Long getConvID() {
-//        return convID;
-//    }
-//
-//    public void setConvID(Long convID) {
-//        this.convID = convID;
-//    }
-//
-//    @Override
-//    public String toString() {
-//        return "GroupMemberCompositeKey{" +
-//                "userID=" + userID +
-//                ", convID=" + convID +
-//                '}';
-//    }
 
     @ManyToOne
     @JoinColumn(name = "id_user_info")

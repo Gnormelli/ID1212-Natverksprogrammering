@@ -2,7 +2,6 @@ package com.ID1212.ID1212_Project_Intelij.Controller;
 
 import com.ID1212.ID1212_Project_Intelij.Models.Conversation;
 import com.ID1212.ID1212_Project_Intelij.Models.GroupMember;
-import com.ID1212.ID1212_Project_Intelij.Models.GroupMemberCompositeKey;
 import com.ID1212.ID1212_Project_Intelij.Models.User;
 import com.ID1212.ID1212_Project_Intelij.Service.ConversationService;
 import com.ID1212.ID1212_Project_Intelij.Service.GroupMemberService;
@@ -27,28 +26,34 @@ public class GroupMemberController {
 
 
     @PostMapping(value = "/group_member_by_conId")
-    public Object findGroupMemberByConversationID(@RequestBody Long conID){
-        return groupMemberService.findGroupMemberByConversationID(conID);
-    }
-
-    @PostMapping(value = "/group_member_by_userID")
-    public Object findGroupMemberByUserID(@RequestBody User user){
-
-        System.out.println("this is the composite key: " + user.toString());
-        System.out.println("This does work");
-        Long userId = user.getId();
-        Collection<GroupMember> memberOfTheseGroups = groupMemberService.findGroupMemberByUserID(userId);
-        if(user == null){
+    public Object findGroupMemberByConversationID(@RequestBody Conversation conversation){
+        Long conID = conversation.getId();
+        Collection<GroupMember> collectionOfGroupMembers =
+                groupMemberService.findGroupMemberByConversationID(conID);
+        if(collectionOfGroupMembers.isEmpty()){
             HashMap<String, String> map = new HashMap<>();
-            map.put("id", "CompositeKey does not exist");
+            map.put("id", "Conversation does not exist");
             return map;
         }else{
-
-            return memberOfTheseGroups;
+            return collectionOfGroupMembers;
         }
     }
 
-    //Might not need this one
+    @PostMapping(value = "/conversations_by_userID")
+    public Object findConversationsByUserID(@RequestBody User user){
+        Long userId = user.getId();
+        Collection<GroupMember> collectionOfConversations =
+                groupMemberService.findConversationsByUserID(userId);
+        if(collectionOfConversations.isEmpty()){
+            HashMap<String, String> map = new HashMap<>();
+            map.put("id", "User does not exist");
+            return map;
+        }else{
+            return collectionOfConversations;
+        }
+    }
+
+    //Not priority right now
     @PostMapping(name = "/new_conversation")
     public String createNewConversation(@RequestBody String convName){
         return conversationService.createConversation(convName);
