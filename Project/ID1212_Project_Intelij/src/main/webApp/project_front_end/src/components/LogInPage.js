@@ -52,8 +52,8 @@ export default function LogInPage(props) {
       if(e.id === "Bad credentials"){
         console.log(e.id)
       }else{
-        console.log(e)
-        props.setFullUserGlobal({"id": formData.username, "profilePictureID": e.profilePicture})
+
+        props.setFullUserGlobal({"id": formData.username, "profilePictureID": e.profilePicture.id})
         navigate("/Profile");
       }
     });

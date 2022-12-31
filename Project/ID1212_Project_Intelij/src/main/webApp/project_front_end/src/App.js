@@ -8,6 +8,7 @@ import Chat from "./components/Chat";
 import chatData from "./chatData";
 import profileData from "./profileData";
 import { useNavigate } from "react-router-dom";
+import ApiPost from "./ApiInterface/ApiPost";
 
 export default function App() {
   const navigate = useNavigate();
@@ -50,6 +51,12 @@ export default function App() {
 
   function updateChatsMembership(chatID) {
     //send info to database about who joied what TODO
+    const post = {
+       username: userProfileInfoForUI.id,
+        userEmail: chatID,
+
+    }
+    ApiPost.updateMembership(post).then(e=>console.log(e))
   }
 
   function tryToLogIn() {

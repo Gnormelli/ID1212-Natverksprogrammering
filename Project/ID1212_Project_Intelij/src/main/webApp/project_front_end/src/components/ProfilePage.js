@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import ApiCall from "../ApiInterface/ApiCall";
 import profileData from "../profileData";
+import ApiPost from "../ApiInterface/ApiPost";
 
 export default function ProfilePage(props) {
   const navigate = useNavigate();
@@ -32,10 +33,15 @@ export default function ProfilePage(props) {
         {el.title}
       </option>))
 
+
+
       const profilePictureItem = e.find(
           (element) => element.id == props.userProfileInfoForUI.profilePictureID
       );
+
+
       setProfileUrl(profilePictureItem.picture)
+
 
     });
 
@@ -98,6 +104,17 @@ export default function ProfilePage(props) {
     props.changeUserInfoFunction("profilePictureID", value);
     setProfileNumber(value);
     getProfilePicture(value);
+
+
+    const post = {
+      username: props.userProfileInfoForUI.id,
+      profilePicture: {id: value, picture: "0", title: "0"},
+
+    };
+    ApiPost.changeProfilePicture(post).then((e) => console.log(e))
+
+
+
   }
 
   function logOut() {
