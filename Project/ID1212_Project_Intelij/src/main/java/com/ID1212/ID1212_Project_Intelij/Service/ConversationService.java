@@ -6,6 +6,7 @@ import com.ID1212.ID1212_Project_Intelij.Models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,5 +32,9 @@ public class ConversationService {
         }else
             conversationRepository.save(new Conversation(convName));
         return "User created";
+    }
+
+    public List<Conversation> getAllConversations(){
+        return  conversationRepository.findAll();
     }
 }

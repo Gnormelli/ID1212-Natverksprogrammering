@@ -1,13 +1,16 @@
 package com.ID1212.ID1212_Project_Intelij.Controller;
 
+import com.ID1212.ID1212_Project_Intelij.Models.Conversation;
 import com.ID1212.ID1212_Project_Intelij.Models.ProfilePicture;
 import com.ID1212.ID1212_Project_Intelij.Models.User;
+import com.ID1212.ID1212_Project_Intelij.Service.ConversationService;
 import com.ID1212.ID1212_Project_Intelij.Service.ProfilePictureService;
 import com.ID1212.ID1212_Project_Intelij.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 
 @RestController
@@ -18,6 +21,8 @@ public class LoginController {
     UserService userService;
     @Autowired
     ProfilePictureService ppService;
+    @Autowired
+    ConversationService conversationService;
 
     @PostMapping("/update_profile_picture")
     public Object updateProfilePicture(@RequestBody User user) {
@@ -28,6 +33,11 @@ public class LoginController {
         HashMap<String, String> map = new HashMap<>();
         map.put("id", "Done");
         return map;
+    }
+
+    @GetMapping("/get_all_conversations")
+    public List<Conversation> getAllConversations(){
+        return conversationService.getAllConversations();
     }
 
     @PostMapping("/perform_login")

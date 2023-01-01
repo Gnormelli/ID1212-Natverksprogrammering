@@ -40,6 +40,10 @@ const ApiCall = {
     const getQueueEndpoint = "/get_profile_picture";
     return ApiCall.apiCall(getQueueEndpoint).then((data) => data);
   },
+  getAllConversations() {
+    const getAllConversations = "/get_all_conversations";
+    return ApiCall.apiCall(getAllConversations).then((data) => data);
+  },
 
 
 

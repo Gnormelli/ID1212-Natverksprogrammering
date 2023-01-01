@@ -31,21 +31,12 @@ export default function ProfilePage(props) {
       setOptionsToChooseForProfile(e.map(el => <option key={el.id} value={el.id}>
         {el.title}
       </option>))
-
-
-
       const profilePictureItem = e.find(
           (element) => element.id == props.userProfileInfoForUI.profilePictureID
       );
-
-
       setProfileUrl(profilePictureItem.picture)
-
-
     });
-
   }, []);
-
 
   function getProfilePicture(numberToGet) {
 
@@ -56,10 +47,7 @@ export default function ProfilePage(props) {
   }
 
 
-
-
-
-  const chatOptions = chatData.map((e) => {
+  const chatOptions = ApiCall.getAllConversations().then(payload.map((e) => {
     const userInfo = props.userProfileInfoForUI;
     // console.log(userInfo);
     if (e.members.includes(userInfo.id)) {
@@ -81,7 +69,7 @@ export default function ProfilePage(props) {
         </Checkbox>
       );
     }
-  });
+  }));
 
   function hold(event) {
     //console.log(event);
@@ -104,16 +92,12 @@ export default function ProfilePage(props) {
     setProfileNumber(value);
     getProfilePicture(value);
 
-
     const post = {
       username: props.userProfileInfoForUI.id,
       profilePicture: {id: value, picture: "0", title: "0"},
 
     };
     ApiPost.changeProfilePicture(post).then((e) => console.log(e))
-
-
-
   }
 
   function logOut() {
