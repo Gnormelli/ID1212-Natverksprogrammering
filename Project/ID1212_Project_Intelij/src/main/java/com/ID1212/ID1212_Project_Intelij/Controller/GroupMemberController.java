@@ -38,14 +38,14 @@ public class GroupMemberController {
     @PostMapping( "/group_member_by_conId")
     public Object findGroupMemberByConversationID(@RequestBody Conversation conversation){
         Long conID = conversation.getId();
-        Collection<GroupMember> collectionOfGroupMembers =
+        Collection<User> collectionOfUsersInGroup =
                 groupMemberService.findGroupMemberByConversationID(conID);
-        if(collectionOfGroupMembers.isEmpty()){
+        if(collectionOfUsersInGroup.isEmpty()){
             HashMap<String, String> map = new HashMap<>();
             map.put("id", "Conversation does not exist");
             return map;
         }else{
-            return collectionOfGroupMembers;
+            return collectionOfUsersInGroup;
         }
     }
 

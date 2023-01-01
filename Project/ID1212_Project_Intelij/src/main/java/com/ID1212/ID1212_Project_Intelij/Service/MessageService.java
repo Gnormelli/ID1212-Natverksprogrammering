@@ -14,15 +14,10 @@ import java.util.stream.Collectors;
 public class MessageService {
 private final MessageRepository messageRepository;
 
-
     @Autowired
     public MessageService(MessageRepository messageRepository) {
         this.messageRepository = messageRepository;
     }
-
-//    public Collection<Message> getAllMessagesForConversationID(Long convId){
-//        return messageRepository.findMessagesByFk_conversationIs(convId);
-//    }
 
     public void createNewMessage(Message message) {
         message.setSentDateTime(LocalDateTime.now());
@@ -33,7 +28,8 @@ private final MessageRepository messageRepository;
 
         List<Message> h = messageRepository.findAll();
 
-        List<Message> result = h.stream().filter(msg -> msg.getFk_conversation().getId().equals(2L)).collect(Collectors.toList());  ;
+        List<Message> result = h.stream().filter(msg ->
+                msg.getFk_conversation().getId().equals(2L)).collect(Collectors.toList());  ;
         return result;
 
     }
