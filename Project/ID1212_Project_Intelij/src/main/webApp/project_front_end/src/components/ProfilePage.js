@@ -123,7 +123,7 @@ export default function ProfilePage(props) {
 
   function test() {
 
-    ApiCall.getPictures().then(e => setProfilePicturesFull(e));
+    console.log(props.userProfileInfoForUI.theRealID)
   }
 
   function test2() {

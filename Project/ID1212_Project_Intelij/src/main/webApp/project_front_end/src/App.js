@@ -17,6 +17,7 @@ export default function App() {
   const [userProfileInfoForUI, setUserProfileInfoForUI] = React.useState({
     id: "Nobody",
     profilePictureID: 1,
+    theRealID: 0,
   });
 
 
@@ -38,12 +39,13 @@ export default function App() {
     console.log(userProfileInfoForUI.profilePictureID);
   }
 
-  function createProfile(username) {
+  function createProfile(username, id) {
     //Create profile in database TODO (username/password, set profile picture defult to 1)
     setAuthorized(true);
     setUserProfileInfoForUI({
       id: username,
       profilePictureID: 1,
+      theRealID: id,
     });
   }
 

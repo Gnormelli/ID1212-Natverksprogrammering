@@ -45,17 +45,18 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(), authority);
     }
 
-    public String createUser(User user){
+    public Object createUser(User user){
 
         Optional<User> fromDatabase = Optional.ofNullable(userRepository.findByUsername(user.getUsername()));
 
         if(fromDatabase.isPresent()){
-                return "Already a user by that username";
+                return null;
 
         }else
             user.setUserRole(roleRepository.findRoleById(0L));
             userRepository.save(user);
-            return "User created";
+            User userWithID = userRepository.findByUsername(user.getUsername());
+            return userWithID;
     }
 
 

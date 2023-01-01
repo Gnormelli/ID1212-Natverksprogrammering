@@ -27,22 +27,17 @@ export default function SignUp(props) {
       !(formData.confirmPassword === "")
     ) {
       const post = {
-        id: 0,
         username: formData.username,
-        password: formData.password,
-        email: "toBeDecided@gmail.com",
-        profile_picture: "1",
-        locked: false,
-        enabled: true
+        password: formData.password
       };
       ApiPost.createUser(post).then((e) => {
 
-        if (!usernameExist()) {
-          //Create user in database TODO
-          props.createProfileFunction(formData.username, formData.password);
-          goToProfile();
-        } else {
+        if (e.id === "Alredy a user by that name") {
           console.log("Username alredy in use")
+
+        } else {
+          props.createProfileFunction(formData.username, formData.password, e.id);
+          goToProfile();
         }
       });
     } else {

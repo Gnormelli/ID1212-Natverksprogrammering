@@ -71,7 +71,10 @@ const ApiPost = {
         const getLoginEndpoint = "/get_message";
         return ApiPost.apiCall(getLoginEndpoint,loginForm).then((data) => data);
     },
-
+    getChatsUserIsPartOf(loginForm) {
+        const getLoginEndpoint = "/conversations_by_userID";
+        return ApiPost.apiCall(getLoginEndpoint,loginForm).then((data) => data);
+    },
 
     };
 

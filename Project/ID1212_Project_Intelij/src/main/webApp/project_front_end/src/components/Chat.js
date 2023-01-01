@@ -25,6 +25,8 @@ export default function Chat(props) {
   const formBackground = useColorModeValue("gray.100", "gray.700");
   const [whatChatToShow, setWhatChatToShow] = React.useState(1);
   const [messageToSend, setMessageToSend] = React.useState("");
+  const [messagesToShow, setMessagesToShow] = React.useState();
+  const [chatsUserIsPartOf, setChatsUserIsPartOf] = React.useState();
   const [currentGroupMembers, setCurrentGroupMembers] = React.useState([
     0,
     "Nobody",
@@ -41,7 +43,7 @@ export default function Chat(props) {
 
 
   React.useEffect(() => {
-    //console.log(userData.find((user) => user.id === 1));
+
     var users = [];
     currentChat.members.map((e) => {
       users.push(userData.find((user) => user.id === e));
@@ -63,54 +65,16 @@ export default function Chat(props) {
   function findUserName(id) {
     //this part needs help, wait for state to update (Works bcs workaround)
     if (id !== undefined && id !== 0) {
-      console.log(id);
-      console.log(currentGroupMembers);
+
       const usr = currentGroupMembers.find((e) => e.id === id);
-      console.log(usr);
+
       return "h";
     } else {
       return "Error";
     }
   }
 
-  const chatMessages = currentChat.messages.map((item) => {
-    if (props.currentUser !== item.Sender) {
-      return (
-        <Flex
-          key={item.orderNumber}
-          background="red.200"
-          width="fit-content"
-          minWidth="100px"
-          borderRadius="lg"
-          p={3}
-          alignSelf="flex-end"
-        >
-          <Text>
-            {
-              //currentGroupMembers.find((e) => e.id === item.Sender)}
-            }
-            From {item.Sender}: {item.message}
-            {
-              //current group member is not set when this runs, so it crashes
-            }
-          </Text>
-        </Flex>
-      );
-    } else {
-      return (
-        <Flex
-          key={item.orderNumber}
-          background="green.200"
-          width="fit-content"
-          minWidth="100px"
-          borderRadius="lg"
-          p={3}
-        >
-          <Text>{item.message}</Text>
-        </Flex>
-      );
-    }
-  });
+
 
   function gree(element) {
     //return element.message.includes(props.userProfileInfoForUI.id);
@@ -120,11 +84,17 @@ export default function Chat(props) {
     return chatMembers.includes(currentUser);
   }
 
-  const chatsUserIsPartOf = chatData.filter(gree);
-  const switchChatButtons = chatsUserIsPartOf.map((e) => {
-    //not working bcs cant use inf in map?
-    //console.log(e.members);
-    // e.members.find(1);
+
+  function getChatUserIsPartOf(){
+    const post = {
+      fk_conversation: {id: 1, name: "hold"}
+    };
+
+    ApiPost.getChatsUserIsPartOf(post).then(e=> console.log(e))
+  }
+  const chatsUserIsPartOf1 = chatData.filter(gree);
+  const switchChatButtons = chatsUserIsPartOf1.map((e) => {
+
     if (true) {
       return (
         <Button key={e.id} onClick={switchChat}>
@@ -139,11 +109,48 @@ export default function Chat(props) {
     navigate("/profile");
   }
 
-  function testFunction() {
+  function getMessages() {
     const post = {
       fk_conversation: {id: 1, name: "hold"}
     };
-    ApiPost.getMessagesFromChat(post).then(e=> console.log(e))
+    ApiPost.getMessagesFromChat(post).then(e=> {
+      console.log(e)
+      const textMessagesElement = e.map(el=> {
+        if(el.fromUser !== props.currentUser ){
+          return (
+              <Flex
+                  key={el.id}
+                  background="red.200"
+                  width="fit-content"
+                  minWidth="100px"
+                  borderRadius="lg"
+                  p={3}
+                  alignSelf="flex-end"
+              >
+                <Text>
+                  From {el.fromUser}: {el.messageText}
+                </Text>
+              </Flex>
+          );
+        }else{
+          return (
+              <Flex
+                  key={el.id}
+                  background="green.200"
+                  width="fit-content"
+                  minWidth="100px"
+                  borderRadius="lg"
+                  p={3}
+              >
+                <Text>{el.messageText}</Text>
+              </Flex>
+          );
+        }
+      })
+      setMessagesToShow(textMessagesElement);
+
+    })
+
   }
 
   function updateMessage(event) {
@@ -157,30 +164,103 @@ export default function Chat(props) {
     //function that sends message TODO
     const post = {
       fromUser: props.userProfileInfoForUI.id,
+      //fromUser: "as",
       fk_conversation: {id: whatChatToShow, name: "Chat with friends"},
       //fk_conversation: {id: 3, name: "Chat with friends"},
       messageText: messageToSend,
 
     };
 
-    ApiPost.sendMessage(post).then((e)=> console.log(e))
+    ApiPost.sendMessage(post).then(e =>getMessages())
     //function that gets the new messages TODO
     setMessageToSend("");
+
+
   }
 
+
   var requestLoop = setInterval(function(){
-    console.log("hi")
     const post = {
-      fromUser: currentChat.id,
-
+      fk_conversation: {id: 1, name: "hold"}
     };
-   //ApiPost.getMessagesFromChat(post).then(e=> console.log(e))
-    // {
-    // update CurrentChat}
-    // )
+    ApiPost.getMessagesFromChat(post).then(e=> {
+      console.log(e)
+      const textMessagesElement = e.map(el=> {
+        if(el.fromUser !== props.currentUser ){
+          return (
+              <Flex
+                  key={el.id}
+                  background="red.200"
+                  width="fit-content"
+                  minWidth="100px"
+                  borderRadius="lg"
+                  p={3}
+                  alignSelf="flex-end"
+              >
+                <Text>
+                  From {el.fromUser}: {el.messageText}
+                </Text>
+              </Flex>
+          );
+        }else{
+          return (
+              <Flex
+                  key={el.id}
+                  background="green.200"
+                  width="fit-content"
+                  minWidth="100px"
+                  borderRadius="lg"
+                  p={3}
+              >
+                <Text>{el.messageText}</Text>
+              </Flex>
+          );
+        }
+      })
+      setMessagesToShow(textMessagesElement);
+
+    })
 
 
-  }, 60000000);
+  }, 1000000);
+
+
+  const chatMessages = currentChat.messages.map((item) => {
+    if (props.currentUser !== item.Sender) {
+      return (
+          <Flex
+              key={item.orderNumber}
+              background="red.200"
+              width="fit-content"
+              minWidth="100px"
+              borderRadius="lg"
+              p={3}
+              alignSelf="flex-end"
+          >
+            <Text>
+              From {item.Sender}: {item.message}
+            </Text>
+          </Flex>
+      );
+    } else {
+      return (
+          <Flex
+              key={item.orderNumber}
+              background="green.200"
+              width="fit-content"
+              minWidth="100px"
+              borderRadius="lg"
+              p={3}
+          >
+            <Text>{item.message}</Text>
+          </Flex>
+      );
+    }
+  });
+
+  function test(){
+    console.log(props.userProfileInfoForUI.theRealID)
+  }
 
   if (!props.authorized) {
     //return <Navigate to="/" />;
@@ -200,7 +280,7 @@ export default function Chat(props) {
           flex={1}
           overflowX="scroll"
         >
-          {chatMessages}
+          {messagesToShow}
         </Flex>
 
         <FormControl>
@@ -250,7 +330,7 @@ export default function Chat(props) {
         className="toProfileButton"
         width="100%"
         colorScheme="blue"
-        onClick={testFunction}
+        onClick={test}
         mb={3}
       >
         {" "}

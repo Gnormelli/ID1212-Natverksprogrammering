@@ -53,7 +53,7 @@ export default function LogInPage(props) {
         console.log(e.id)
       }else{
 
-        props.setFullUserGlobal({"id": formData.username, "profilePictureID": e.profilePicture.id})
+        props.setFullUserGlobal({"id": formData.username, "profilePictureID": e.profilePicture.id, "theRealID": e.id})
         navigate("/Profile");
       }
     });
