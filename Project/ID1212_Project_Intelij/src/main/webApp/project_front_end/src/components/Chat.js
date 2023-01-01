@@ -140,17 +140,10 @@ export default function Chat(props) {
   }
 
   function testFunction() {
-    ApiCall.getData().then((e) => console.log(e));
-    
     const post = {
-      id: 6,
-      location: "Front-End",
-      comment: "Det funkar ju faktiskt från front-end också",
-      help: true,
-      present: false,
-      localDateTime: "2022-12-15T20:34:11.079313"
-      };
-    ApiPost.postData(post).then((e) => console.log(e));
+      fk_conversation: {id: 1, name: "hold"}
+    };
+    ApiPost.getMessagesFromChat(post).then(e=> console.log(e))
   }
 
   function updateMessage(event) {
@@ -177,10 +170,17 @@ export default function Chat(props) {
 
   var requestLoop = setInterval(function(){
     console.log("hi")
-   // ApiCall.getMessagesFromChat().then(e=> console.log(e))
+    const post = {
+      fromUser: currentChat.id,
+
+    };
+   //ApiPost.getMessagesFromChat(post).then(e=> console.log(e))
+    // {
+    // update CurrentChat}
+    // )
 
 
-  }, 6000000);
+  }, 60000000);
 
   if (!props.authorized) {
     //return <Navigate to="/" />;
