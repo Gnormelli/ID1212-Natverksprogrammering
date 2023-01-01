@@ -4,6 +4,7 @@ import com.ID1212.ID1212_Project_Intelij.Models.ProfilePicture;
 import com.ID1212.ID1212_Project_Intelij.Models.User;
 import com.ID1212.ID1212_Project_Intelij.Service.ProfilePictureService;
 import com.ID1212.ID1212_Project_Intelij.Service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -12,13 +13,11 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/")
 public class LoginController {
-    private final UserService userService;
-    private final ProfilePictureService ppService;
 
-    public LoginController(UserService userService, ProfilePictureService ppService) {
-        this.userService = userService;
-        this.ppService = ppService;
-    }
+    @Autowired
+    UserService userService;
+    @Autowired
+    ProfilePictureService ppService;
 
     @PostMapping("/update_profile_picture")
     public Object updateProfilePicture(@RequestBody User user) {
@@ -47,17 +46,12 @@ public class LoginController {
 
             return usr;
         }
-
-
-
     }
     @PostMapping(value = "/create_user")
     public Object createUser(@RequestBody User user){
 
         ProfilePicture profilePicture = ppService.getProfilePictureFromDB(1L);
         user.setProfilePicture(profilePicture);
-
-
 
         String whatHappend = userService.createUser(user);
         HashMap<String, String> map = new HashMap<>();

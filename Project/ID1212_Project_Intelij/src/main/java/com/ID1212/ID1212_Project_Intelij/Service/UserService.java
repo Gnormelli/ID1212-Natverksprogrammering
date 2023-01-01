@@ -1,6 +1,7 @@
 package com.ID1212.ID1212_Project_Intelij.Service;
 
 import com.ID1212.ID1212_Project_Intelij.DataAccess.ProfilePictureRepository;
+import com.ID1212.ID1212_Project_Intelij.DataAccess.RoleRepository;
 import com.ID1212.ID1212_Project_Intelij.DataAccess.UserRepository;
 import com.ID1212.ID1212_Project_Intelij.Models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     ProfilePictureRepository profilePictureRepository;
 
+    @Autowired
+    RoleRepository roleRepository;
+
     /**
      * Service to handle requests for finding usernames
      * @param username simple string
@@ -43,12 +47,13 @@ public class UserService implements UserDetailsService {
 
     public String createUser(User user){
 
-
         Optional<User> fromDatabase = Optional.ofNullable(userRepository.findByUsername(user.getUsername()));
+
         if(fromDatabase.isPresent()){
                 return "Already a user by that username";
 
         }else
+            user.setUserRole(roleRepository.findRoleById(0L));
             userRepository.save(user);
             return "User created";
     }
