@@ -42,10 +42,16 @@ public class GroupMemberService {
         return conversations;
     }
 
-    public String updateMembership(Long userId, Long conversationID){
+    public String updateMembership(GroupMember groupMember){
 
-
-
-        return "hi";
+        GroupMember databaseGroupMember =
+                groupMemberRepository.findGroupMemberByCompositeKey(groupMember.getCompositeKey());
+        if(databaseGroupMember != null){
+            groupMemberRepository.delete(databaseGroupMember);
+            return "Group Member already exists";
+        }else {
+            groupMemberRepository.save(groupMember);
+            return "Group Member added";
+        }
     }
 }

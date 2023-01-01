@@ -25,13 +25,13 @@ public class GroupMemberController {
     ConversationService conversationService;
 
     @PostMapping( "/update_membership")
-    public Object updateMemebership(@RequestBody GroupMember groupMember) {
-        System.out.println(groupMember.getCompositeKey());
+    public Object updateMembership(@RequestBody GroupMember groupMember) {
+        System.out.println(groupMember.toString());
 
-        groupMemberService.updateMembership(1l, 1l);
+        String entryResult= groupMemberService.updateMembership(groupMember);
 
         HashMap<String, String> map = new HashMap<>();
-        map.put("id", "Done");
+        map.put("id", "Done: " + entryResult);
         return map;
 
     }
