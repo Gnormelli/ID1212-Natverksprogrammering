@@ -53,14 +53,14 @@ public class LoginController {
         ProfilePicture profilePicture = ppService.getProfilePictureFromDB(1L);
         user.setProfilePicture(profilePicture);
 
-        String whatHappend = userService.createUser(user);
+        Object userWIthID = userService.createUser(user);
         HashMap<String, String> map = new HashMap<>();
-        if(whatHappend.equals("Already a user by that username")){
+        if(userWIthID == null){
             map.put("id", "Alredy a user by that name");
             return map;
         }else {
-            map.put("id", "User created");
-            return map;
+
+            return userWIthID;
         }
 
     }
