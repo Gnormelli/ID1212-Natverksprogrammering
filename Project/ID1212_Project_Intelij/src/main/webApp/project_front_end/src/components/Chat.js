@@ -23,7 +23,8 @@ import ApiPost from "../ApiInterface/ApiPost";
 export default function Chat(props) {
   const navigate = useNavigate();
   const formBackground = useColorModeValue("gray.100", "gray.700");
-  const [whatChatToShow, setWhatChatToShow] = React.useState(1);
+  const [whatChatToShow, setWhatChatToShow] = React.useState(0);
+  const [whatGroupToShow, setWhatGroupToShow] = React.useState(1);
   const [messageToSend, setMessageToSend] = React.useState("");
   const [messagesToShow, setMessagesToShow] = React.useState();
   const [chatsUserIsPartOf, setChatsUserIsPartOf] = React.useState();
@@ -40,6 +41,13 @@ export default function Chat(props) {
 
 
 
+
+
+
+  React.useEffect(() => {
+
+    getChatUserIsPartOf()
+  }, []);
 
 
   React.useEffect(() => {
@@ -87,23 +95,27 @@ export default function Chat(props) {
 
   function getChatUserIsPartOf(){
     const post = {
-      id: 6
+      id: props.userProfileInfoForUI.theRealID
     };
 
-    ApiPost.getChatsUserIsPartOf(post).then(e=> console.log(e))
+    ApiPost.getChatsUserIsPartOf(post).then(e=> {
+
+      const chats = e.map((el) => {
+
+          return (
+              <Button key={el.id} onClick={switchChat}>
+                {" "}
+                {el.name}{" "}
+              </Button>
+          );
+
+      })
+      setWhatGroupToShow(chats)
+    })
+
   }
   const chatsUserIsPartOf1 = chatData.filter(gree);
-  const switchChatButtons = chatsUserIsPartOf1.map((e) => {
 
-    if (true) {
-      return (
-        <Button key={e.id} onClick={switchChat}>
-          {" "}
-          {e.title}{" "}
-        </Button>
-      );
-    }
-  });
 
   function navigateToProfile() {
     navigate("/profile");
@@ -179,7 +191,7 @@ export default function Chat(props) {
   }
 
 
-  var requestLoop = setInterval(function(){
+  var requestLoop = setInterval(function(){ //Dont remove
     const post = {
       fk_conversation: {id: 1, name: "hold"}
     };
@@ -223,6 +235,14 @@ export default function Chat(props) {
 
 
   }, 1000000);
+
+
+
+  var ddd = setInterval(function(){ //Dont remove
+
+    console.log("ga")
+
+  }, 5000);
 
 
   const chatMessages = currentChat.messages.map((item) => {
@@ -323,19 +343,9 @@ export default function Chat(props) {
           {" "}
           To profile
         </Button>
-        {switchChatButtons}
+        {whatGroupToShow}
       </Flex>
       <Spacer />
-      <Button
-        className="toProfileButton"
-        width="100%"
-        colorScheme="blue"
-        onClick={test}
-        mb={3}
-      >
-        {" "}
-        Test button
-      </Button>
 
       <Flex direction="column">{whatChatToShow !== 0 && chatWindow}</Flex>
     </Flex>
