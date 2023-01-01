@@ -62,7 +62,13 @@ const ApiPost = {
     createUser(loginForm) {
         const getLoginEndpoint = "/create_user";
         return ApiPost.apiCall(getLoginEndpoint,loginForm).then((data) => data);
-    }
+    },
+    sendMessage(loginForm) {
+        const getLoginEndpoint = "/send_message";
+        return ApiPost.apiCall(getLoginEndpoint,loginForm).then((data) => data);
+    },
+
+
     };
 
 export default ApiPost;

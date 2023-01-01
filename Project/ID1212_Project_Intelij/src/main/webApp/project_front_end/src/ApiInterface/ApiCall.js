@@ -40,6 +40,13 @@ const ApiCall = {
     const getQueueEndpoint = "/get_profile_picture";
     return ApiCall.apiCall(getQueueEndpoint).then((data) => data);
   },
+  getMessagesFromChat() {
+  const getQueueEndpoint = "/get_profile_picture";
+  return ApiCall.apiCall(getQueueEndpoint).then((data) => data);
+},
+
+
+
 };
 
 export default ApiCall;

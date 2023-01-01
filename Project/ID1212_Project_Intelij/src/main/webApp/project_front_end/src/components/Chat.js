@@ -23,7 +23,7 @@ import ApiPost from "../ApiInterface/ApiPost";
 export default function Chat(props) {
   const navigate = useNavigate();
   const formBackground = useColorModeValue("gray.100", "gray.700");
-  const [whatChatToShow, setWhatChatToShow] = React.useState(0);
+  const [whatChatToShow, setWhatChatToShow] = React.useState(1);
   const [messageToSend, setMessageToSend] = React.useState("");
   const [currentGroupMembers, setCurrentGroupMembers] = React.useState([
     0,
@@ -36,6 +36,10 @@ export default function Chat(props) {
     members: [0],
   });
 
+
+
+
+
   React.useEffect(() => {
     //console.log(userData.find((user) => user.id === 1));
     var users = [];
@@ -45,6 +49,9 @@ export default function Chat(props) {
 
     setCurrentGroupMembers(users);
   }, [currentChat]);
+
+
+
 
   function switchChat(event) {
     const buttonClicked = event.target.innerText;
@@ -153,10 +160,27 @@ export default function Chat(props) {
   }
 
   function sendMessage() {
+    //var dateString = new Date().toISOString().substring(0,10);
     //function that sends message TODO
+    const post = {
+      fromUser: props.userProfileInfoForUI.id,
+      fk_conversation: {id: whatChatToShow, name: "Chat with friends"},
+      //fk_conversation: {id: 3, name: "Chat with friends"},
+      messageText: messageToSend,
+
+    };
+
+    ApiPost.sendMessage(post).then((e)=> console.log(e))
     //function that gets the new messages TODO
     setMessageToSend("");
   }
+
+  var requestLoop = setInterval(function(){
+    console.log("hi")
+   // ApiCall.getMessagesFromChat().then(e=> console.log(e))
+
+
+  }, 6000000);
 
   if (!props.authorized) {
     //return <Navigate to="/" />;

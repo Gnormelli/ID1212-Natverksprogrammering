@@ -31,6 +31,21 @@ public class MessageController {
 //        }
 //
 //    }
+
+    @PostMapping("/send_message")
+    public Object takeNewMessage(@RequestBody Message message){
+
+
+
+        message.setSentDateTime(LocalDateTime.now());
+        System.out.println(message);
+        messageService.createNewMessage(message);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("id", message.toString());
+        return map;
+    }
+
+
     @PostMapping("/new_message")
     public Object createNewMessage(@RequestBody Message message){
 //        if(message.getMessageText() == null){

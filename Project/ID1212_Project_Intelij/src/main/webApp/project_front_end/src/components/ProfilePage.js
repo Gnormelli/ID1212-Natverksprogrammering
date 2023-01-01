@@ -14,7 +14,6 @@ import {
   Select,
 } from "@chakra-ui/react";
 import ApiCall from "../ApiInterface/ApiCall";
-import profileData from "../profileData";
 import ApiPost from "../ApiInterface/ApiPost";
 
 export default function ProfilePage(props) {

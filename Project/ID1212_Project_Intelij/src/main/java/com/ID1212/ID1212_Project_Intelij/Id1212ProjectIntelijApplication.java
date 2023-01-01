@@ -42,6 +42,8 @@ public class Id1212ProjectIntelijApplication {
 				registry.addMapping("/new_message").allowedOrigins("http://localhost:3000");
 				registry.addMapping("/update_profile_picture").allowedOrigins("http://localhost:3000");
 				registry.addMapping("/update_membership").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/send_message").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/get_profile_picture").allowedOrigins("http://localhost:3000");
 
 
 			}
