@@ -65,6 +65,10 @@ const ApiPost = {
     },
     sendMessage(loginForm) {
         const getLoginEndpoint = "/send_message";
+        return ApiPost.apiCall(getLoginEndpoint, loginForm).then((data) => data);
+    },
+    getMessagesFromChat(loginForm) {
+        const getLoginEndpoint = "/get_message";
         return ApiPost.apiCall(getLoginEndpoint,loginForm).then((data) => data);
     },
 

@@ -33,7 +33,8 @@ private final MessageRepository messageRepository;
 
         List<Message> h = messageRepository.findAll();
 
-        List<Message> result = h.stream().filter(msg -> msg.getFk_conversation().getId().equals(2L)).collect(Collectors.toList());  ;
+        List<Message> result = h.stream().filter(msg -> msg.getFk_conversation().getId().equals(id)).collect(Collectors.toList());  ;
+
         return result;
 
     }

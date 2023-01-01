@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/")
@@ -42,12 +43,9 @@ public class MessageController {
 
     @PostMapping("/get_message")
     public Object getMessages(@RequestBody Message message){
-        messageService.getMessagesByConversationId(message.getId());
-
-
-        HashMap<String, String> map = new HashMap<>();
-        map.put("id", "Hold");
-        return map;
+        System.out.println(message.toString());
+        List<Message> conversationMessages = messageService.getMessagesByConversationId(message.getFk_conversation().getId());
+        return conversationMessages;
     }
 
 
