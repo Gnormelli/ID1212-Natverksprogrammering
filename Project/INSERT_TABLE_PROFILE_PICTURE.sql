@@ -10,10 +10,10 @@ INSERT INTO profile_picture (id, picture, title) VALUES
 INSERT INTO role (id, role_name) VALUES (0 , 'USER');
 INSERT INTO role (id, role_name) VALUES (1 , 'ADMIN');
 
-INSERT INTO conversation (id, conversation_name) VALUES (0, 'Chat with friends');
-INSERT INTO conversation (id, conversation_name) VALUES (1, 'Chat with family');
-INSERT INTO conversation (id, conversation_name) VALUES (2, 'Chat with random');
-INSERT INTO conversation (id, conversation_name) VALUES (3, 'A big chat chat');
+INSERT INTO conversation (id, conversation_name) VALUES (1, 'Chat with friends');
+INSERT INTO conversation (id, conversation_name) VALUES (2, 'Chat with family');
+INSERT INTO conversation (id, conversation_name) VALUES (3, 'Chat with random');
+INSERT INTO conversation (id, conversation_name) VALUES (4, 'A big chat chat');
 
 INSERT INTO user_info (id, user_email, unlocked, locked, password, username, fk_id_profile_picture, fk_id_role)
 VALUES (1, 'AnEmail@gamil.com', true, false, 'qwerty', 'Han', 1, 0);
@@ -21,9 +21,11 @@ INSERT INTO user_info (id, user_email, unlocked, locked, password, username, fk_
 VALUES (2, 'AnEmail@gamil.com', true, false, 'qwerty', 'Luke', 2, 0);
 INSERT INTO user_info (id, user_email, unlocked, locked, password, username, fk_id_profile_picture, fk_id_role)
 VALUES (3, 'AnEmail@gamil.com', true, false, 'qwerty', 'Leia', 3, 0);
+INSERT INTO user_info (id, user_email, unlocked, locked, password, username, fk_id_profile_picture, fk_id_role)
+VALUES (4, 'AnEmail@gamil.com', true, false, 'rw', 'rw', 4, 0);
 
-INSERT INTO group_member (id_conversation, id_user_info) VALUES (0,1);
-INSERT INTO group_member (id_conversation, id_user_info) VALUES (0,2);
+INSERT INTO group_member (id_conversation, id_user_info) VALUES (1,1);
 INSERT INTO group_member (id_conversation, id_user_info) VALUES (1,2);
-INSERT INTO group_member (id_conversation, id_user_info) VALUES (1,3);
+INSERT INTO group_member (id_conversation, id_user_info) VALUES (2,2);
+INSERT INTO group_member (id_conversation, id_user_info) VALUES (2,3);
 

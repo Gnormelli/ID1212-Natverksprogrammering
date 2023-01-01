@@ -87,7 +87,7 @@ export default function Chat(props) {
 
   function getChatUserIsPartOf(){
     const post = {
-      fk_conversation: {id: 1, name: "hold"}
+      id: 6
     };
 
     ApiPost.getChatsUserIsPartOf(post).then(e=> console.log(e))
@@ -259,7 +259,7 @@ export default function Chat(props) {
   });
 
   function test(){
-    console.log(props.userProfileInfoForUI.theRealID)
+    getChatUserIsPartOf()
   }
 
   if (!props.authorized) {
