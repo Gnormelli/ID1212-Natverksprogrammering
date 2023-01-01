@@ -22,9 +22,11 @@ export default function ProfilePage(props) {
   const [profileUrl, setProfileUrl] = React.useState();
   const [profilePicturesFull, setProfilePicturesFull] = React.useState();
   const [optionsToChooseForProfile, setOptionsToChooseForProfile] = React.useState();
+  const [groupsUserIsPartOf, setGroupsUserIsPartOf] = React.useState();
+  const [optionsOfChants, setOoptionsOfChants] = React.useState();
 
   React.useEffect(() => {
-    console.log(props.authorized)
+
     ApiCall.getPictures().then(e => {
       setProfilePicturesFull(e);
 
@@ -36,7 +38,55 @@ export default function ProfilePage(props) {
       );
       setProfileUrl(profilePictureItem.picture)
     });
+    const post ={
+      id: props.userProfileInfoForUI.theRealID
+    }
+    ApiPost.getChatsUserIsPartOf(post).then(e => setGroupsUserIsPartOf(e))
+
   }, []);
+
+  React.useEffect(() => {
+
+    ApiCall.getAllConversations().then(e => {
+      if(groupsUserIsPartOf != null){
+        const filterdList = groupsUserIsPartOf.map(item => item.id)
+        const checkmarks = e.map(item=>{
+          if(filterdList.includes(item.id)){//if item is in groupsUserIsPartOf
+            return (
+                <Checkbox
+                    value={item.id}
+                    colorScheme="green"
+                    key={item.id}
+                    onChange={updateMemebership}
+                    defaultChecked
+                >
+                  {item.name}
+                </Checkbox>
+            );
+          }else{
+            return (
+                <Checkbox value={item.id} colorScheme="green" key={item.id} onChange={updateMemebership}>
+                  {item.name}
+                </Checkbox>
+            );
+          }
+        })
+        setOoptionsOfChants(checkmarks);
+      }else{
+        console.log("hi")
+      }
+
+    })
+    }, [groupsUserIsPartOf]);
+
+
+  function updateMemebership(event) {
+
+    const id = event.target.value;
+    props.updateChatsMembershipFunction(id);
+  }
+
+
 
   function getProfilePicture(numberToGet) {
 
@@ -47,36 +97,6 @@ export default function ProfilePage(props) {
   }
 
 
-  const chatOptions = ApiCall.getAllConversations().then(payload.map((e) => {
-    const userInfo = props.userProfileInfoForUI;
-    // console.log(userInfo);
-    if (e.members.includes(userInfo.id)) {
-      return (
-        <Checkbox
-          value={e.id}
-          colorScheme="green"
-          key={e.id}
-          onChange={hold}
-          defaultChecked
-        >
-          {e.title}
-        </Checkbox>
-      );
-    } else {
-      return (
-        <Checkbox value={e.id} colorScheme="green" key={e.id} onChange={hold}>
-          {e.title}
-        </Checkbox>
-      );
-    }
-  }));
-
-  function hold(event) {
-    //console.log(event);
-    const id = 0;
-    props.updateChatsMembershipFunction(id);
-  }
-
   const formBackground = useColorModeValue("gray.100", "gray.700");
   if (!props.authorized) {
     return <Navigate to="/" />;
@@ -86,11 +106,12 @@ export default function ProfilePage(props) {
     navigate("/chat");
   }
 
-  function changeProfile(event) {
+  function changeProfile(event) { //wtf happend here
     const value = event.target.value;
     props.changeUserInfoFunction("profilePictureID", value);
     setProfileNumber(value);
     getProfilePicture(value);
+
 
     const post = {
       username: props.userProfileInfoForUI.id,
@@ -98,20 +119,11 @@ export default function ProfilePage(props) {
 
     };
     ApiPost.changeProfilePicture(post).then((e) => console.log(e))
-  }
 
+  }
   function logOut() {
     props.logOut();
     navigate("/");
-  }
-
-  function test() {
-
-    console.log(props.userProfileInfoForUI.theRealID)
-  }
-
-  function test2() {
-    console.log(profileUrl)
   }
 
   return (
@@ -134,7 +146,7 @@ export default function ProfilePage(props) {
         <Image src={profileUrl} boxSize="100px" />
         <Heading>What chats do you wanna join</Heading>
         <Stack spacing={2} direction="column">
-          {chatOptions}
+          {optionsOfChants}
         </Stack>
         <Button
           width="100%"
@@ -155,26 +167,6 @@ export default function ProfilePage(props) {
         >
           {" "}
           Log out
-        </Button>
-        <Button
-          width="100%"
-          colorScheme="blue"
-          position="top"
-          onClick={test}
-          mb={3}
-        >
-          {" "}
-          test
-        </Button>
-        <Button
-            width="100%"
-            colorScheme="blue"
-            position="top"
-            onClick={test2}
-            mb={3}
-        >
-          {" "}
-          test2
         </Button>
       </Flex>
     </Flex>

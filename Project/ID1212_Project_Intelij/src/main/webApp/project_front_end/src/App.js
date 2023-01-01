@@ -67,12 +67,13 @@ export default function App() {
   function updateChatsMembership(chatID) {
     //send info to database about who joied what TODO
     const post = {
-      id_conversation: userProfileInfoForUI.id,
-      id_user_info: chatID,
-
+      compositeKey: {
+        id_conversation: userProfileInfoForUI.id,
+        id_user_info: chatID,
+      }
     }
 
-    ApiPost.updateMembership(post).then(e=>console.log(e))
+    ApiPost.updateMembership(post).then(e=> console.log(e))
   }
 
   function tryToLogIn() {
