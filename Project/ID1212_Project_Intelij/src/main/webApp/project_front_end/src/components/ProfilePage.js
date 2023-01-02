@@ -31,8 +31,14 @@ export default function ProfilePage(props) {
 
    // ApiCall.getPosts().then(el => {
      const item = [{id: 1, fromUser: "david", postText: "A message"},{id: 2, fromUser: "corry", postText: "A mege"},{id: 3, fromUser: "dd", postText: "A age"},{id: 4, fromUser: "ad", postText: "A mess"},{id: 5, fromUser: "david", postText: "A message"},{id: 6, fromUser: "corry", postText: "A mege"},{id: 7, fromUser: "dd", postText: "A age"},{id: 8, fromUser: "ad", postText: "A mess"}]
-     const greg = item.map(e => <Flex mb={3} position="screenLeft" key={e.id} p={3} boxSize rounded={6} backgroundColor={"whiteAlpha.400"}> Poster {e.fromUser}:  {e.postText} </Flex>)
-     setPosts(greg)
+
+    ApiCall.getPosts().then(e =>{
+      const thePosts = e.map(e => <Flex mb={3} position="screenLeft" key={e.id} p={3} boxSize rounded={6} backgroundColor={"whiteAlpha.400"}> Poster {e.fromUser}:  {e.postText} </Flex>)
+      setPosts(thePosts)
+    })
+
+
+
    // })
 
     ApiCall.getPictures().then(e => {
@@ -198,12 +204,13 @@ export default function ProfilePage(props) {
     setMessageToSend(textMessage);
   }
 
-  function sendMessage() {
+  function sendPost() {
+
     const post = {
       fromUser: props.userProfileInfoForUI.id,
-      messageText: messageToSend,
+      postText: messageToSend,
     };
-    ApiPost.sendPost(post).then(e => console.log(e))
+    ApiPost.sendPost(post).then(e => console.log("Post sent"))
     setMessageToSend("");
   }
 
@@ -259,7 +266,7 @@ export default function ProfilePage(props) {
                 name="messageToSend"
                 value={messageToSend}
             />
-            <Button type="submit" onClick={sendMessage} backgroundColor={"blue.300"}>
+            <Button type="submit" onClick={sendPost} backgroundColor={"blue.300"}>
               Send
             </Button>
          </FormControl>

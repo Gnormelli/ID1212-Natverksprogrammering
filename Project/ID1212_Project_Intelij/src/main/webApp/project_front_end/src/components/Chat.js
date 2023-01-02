@@ -26,6 +26,7 @@ export default function Chat(props) {
   const [whatChatToShow, setWhatChatToShow] = React.useState(0);
   const [whatGroupToShow, setWhatGroupToShow] = React.useState(1);
   const [messageToSend, setMessageToSend] = React.useState("");
+  const [count, setCount] = React.useState(0)
   const [messagesToShow, setMessagesToShow] = React.useState();
   const [chatsUserIsPartOf, setChatsUserIsPartOf] = React.useState();
   const [currentGroupMembers, setCurrentGroupMembers] = React.useState([
@@ -46,7 +47,55 @@ export default function Chat(props) {
 
   React.useEffect(() => {
 
+
+
+
     getChatUserIsPartOf()
+
+    var requestLoop = setInterval(function(){ //Dont remove
+      const post = {
+        fk_conversation: {id: 1, name: "hold"}
+      };
+      ApiPost.getMessagesFromChat(post).then(e=> {
+
+        const textMessagesElement = e.map(el=> {
+          if(el.fromUser !== props.currentUser ){
+            return (
+                <Flex
+                    key={el.id}
+                    background="red.200"
+                    width="fit-content"
+                    minWidth="100px"
+                    borderRadius="lg"
+                    p={3}
+                    alignSelf="flex-end"
+                >
+                  <Text>
+                    From {el.fromUser}: {el.messageText}
+                  </Text>
+                </Flex>
+            );
+          }else{
+            return (
+                <Flex
+                    key={el.id}
+                    background="green.200"
+                    width="fit-content"
+                    minWidth="100px"
+                    borderRadius="lg"
+                    p={3}
+                >
+                  <Text>{el.messageText}</Text>
+                </Flex>
+            );
+          }
+        })
+        setMessagesToShow(textMessagesElement);
+
+      })
+      setCount(prevValue => prevValue++)
+      console.log(count)
+    }, 5000);
   }, []);
 
 
@@ -126,7 +175,7 @@ export default function Chat(props) {
       fk_conversation: {id: 1, name: "hold"}
     };
     ApiPost.getMessagesFromChat(post).then(e=> {
-      console.log(e)
+
       const textMessagesElement = e.map(el=> {
         if(el.fromUser !== props.currentUser ){
           return (
@@ -182,58 +231,15 @@ export default function Chat(props) {
   }
 
 
-  var requestLoop = setInterval(function(){ //Dont remove
-    const post = {
-      fk_conversation: {id: 1, name: "hold"}
-    };
-    ApiPost.getMessagesFromChat(post).then(e=> {
-      console.log(e)
-      const textMessagesElement = e.map(el=> {
-        if(el.fromUser !== props.currentUser ){
-          return (
-              <Flex
-                  key={el.id}
-                  background="red.200"
-                  width="fit-content"
-                  minWidth="100px"
-                  borderRadius="lg"
-                  p={3}
-                  alignSelf="flex-end"
-              >
-                <Text>
-                  From {el.fromUser}: {el.messageText}
-                </Text>
-              </Flex>
-          );
-        }else{
-          return (
-              <Flex
-                  key={el.id}
-                  background="green.200"
-                  width="fit-content"
-                  minWidth="100px"
-                  borderRadius="lg"
-                  p={3}
-              >
-                <Text>{el.messageText}</Text>
-              </Flex>
-          );
-        }
-      })
-      setMessagesToShow(textMessagesElement);
-
-    })
-
-
-  }, 1000000);
 
 
 
-  var ddd = setInterval(function(){ //Dont remove
 
-    console.log("ga")
-
-  }, 5000);
+  // var ddd = setInterval(function(){ //Dont remove
+  //
+  //
+  //
+  // }, 5000);
 
 
   const chatMessages = currentChat.messages.map((item) => {

@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface QueuePostRepository extends JpaRepository<QueuePost, Long> {
 
-    @Query(value = "SELECT * FROM queue_post ORDER BY posted_date_time DESC LIMIT 3",
+    @Query(value = "SELECT * FROM queue_post ORDER BY posted_date_time DESC LIMIT 10",
             nativeQuery = true)
     List<QueuePost> findLastTenRecords();
 }

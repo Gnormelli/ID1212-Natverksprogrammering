@@ -45,8 +45,8 @@ const ApiCall = {
     return ApiCall.apiCall(getAllConversations).then((data) => data);
   },
   getPosts() {
-    const getAllConversations = "/get_posts";
-    return ApiCall.apiCall(getAllConversations).then((data) => data);
+    const getPosts = "/get_posts";
+    return ApiCall.apiCall(getPosts).then((data) => data);
   },
 
 

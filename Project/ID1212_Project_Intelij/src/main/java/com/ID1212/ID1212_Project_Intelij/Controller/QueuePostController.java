@@ -31,6 +31,7 @@ public class QueuePostController {
 
     @PostMapping("/send_post")
     public Object registerNewQueuePost(@RequestBody QueuePost queuePost){
+
         queuePost.setPostedAt(LocalDateTime.now());
         service.addNewQueuePost(queuePost);
         HashMap<String, String> map = new HashMap<>();
