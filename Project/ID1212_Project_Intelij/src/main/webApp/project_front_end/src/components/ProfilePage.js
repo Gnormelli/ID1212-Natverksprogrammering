@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState } from "react";
 import { Form, Navigate, useNavigate } from "react-router-dom";
 import chatData from "../chatData";
 import {
@@ -11,7 +11,7 @@ import {
   Image,
   useColorMode,
   useColorModeValue,
-  Select,
+  Select, FormControl,
 } from "@chakra-ui/react";
 import ApiCall from "../ApiInterface/ApiCall";
 import ApiPost from "../ApiInterface/ApiPost";
@@ -22,10 +22,18 @@ export default function ProfilePage(props) {
   const [profileUrl, setProfileUrl] = React.useState();
   const [profilePicturesFull, setProfilePicturesFull] = React.useState();
   const [optionsToChooseForProfile, setOptionsToChooseForProfile] = React.useState();
-  const [groupsUserIsPartOf, setGroupsUserIsPartOf] = React.useState();
-  const [optionsOfChants, setOoptionsOfChants] = React.useState();
+  const [groupsUserIsPartOf, setGroupsUserIsPartOf] = React.useState([0]);
+  const [optionsOfChats, setOptionsOfChats] = React.useState();
+  const [posts, setPosts] = React.useState()
+  const [messageToSend, setMessageToSend] = React.useState()
 
   React.useEffect(() => {
+
+   // ApiCall.getPosts().then(el => {
+     const item = [{id: 1, fromUser: "david", postText: "A message"},{id: 2, fromUser: "corry", postText: "A mege"},{id: 3, fromUser: "dd", postText: "A age"},{id: 4, fromUser: "ad", postText: "A mess"},{id: 5, fromUser: "david", postText: "A message"},{id: 6, fromUser: "corry", postText: "A mege"},{id: 7, fromUser: "dd", postText: "A age"},{id: 8, fromUser: "ad", postText: "A mess"}]
+     const greg = item.map(e => <Flex mb={3} position="screenLeft" key={e.id} p={3} boxSize rounded={6} backgroundColor={"whiteAlpha.400"}> Poster {e.fromUser}:  {e.postText} </Flex>)
+     setPosts(greg)
+   // })
 
     ApiCall.getPictures().then(e => {
       setProfilePicturesFull(e);
@@ -41,14 +49,37 @@ export default function ProfilePage(props) {
     const post ={
       id: props.userProfileInfoForUI.theRealID
     }
-    ApiPost.getChatsUserIsPartOf(post).then(e => setGroupsUserIsPartOf(e))
+    ApiPost.getChatsUserIsPartOf(post).then(e => {
+      console.log(e)
+      console.log(typeof e.id)
+      if(e.id != 'User does not exist'){
+        setGroupsUserIsPartOf(e)
+      }else{
+        console.log("e")
+        setGroupsUserIsPartOf([0])
+      }
+
+    })
 
   }, []);
 
-  React.useEffect(() => {
 
+
+  function useForceUpdate(){
+    const [value, setValue] = useState(0); // integer state
+    return () => setValue(value => value + 1); // update state to force render
+    // An function that increment 👆🏻 the previous state like here
+    // is better than directly setting `value + 1`
+  }
+
+
+  React.useEffect(() => {
+    console.log("första")
     ApiCall.getAllConversations().then(e => {
+
+      console.log(groupsUserIsPartOf)
       if(groupsUserIsPartOf != null){
+        console.log("by")
         const filterdList = groupsUserIsPartOf.map(item => item.id)
         const checkmarks = e.map(item=>{
           if(filterdList.includes(item.id)){//if item is in groupsUserIsPartOf
@@ -59,26 +90,57 @@ export default function ProfilePage(props) {
                     key={item.id}
                     onChange={updateMemebership}
                     defaultChecked
+
                 >
                   {item.name}
                 </Checkbox>
             );
           }else{
+
             return (
-                <Checkbox value={item.id} colorScheme="green" key={item.id} onChange={updateMemebership}>
+                <Checkbox value={item.id} colorScheme="green" key={e.length + item.id} onChange={updateMemebership}>
                   {item.name}
                 </Checkbox>
             );
           }
         })
-        setOoptionsOfChants(checkmarks);
+
+        console.log(checkmarks)
+        setOptionsOfChats(checkmarks);
       }else{
         console.log("hi")
+
+        const checkmarks =  e.map(item=> {
+          return (
+              <Checkbox value={item.id} colorScheme="green" key={item.id} onChange={updateMemebership}>
+                {item.name}
+              </Checkbox>
+
+          );
+        })
+        setOptionsOfChats(checkmarks);
       }
 
     })
-    }, [groupsUserIsPartOf]);
+  }, [groupsUserIsPartOf]);
 
+
+
+  // const useConversations = () => {
+  //   return ApiCall.getAllConversations()
+  // }
+  //
+  // const conversations = useConversations().then(e => e.map((conversation) => <Checkbox/>)).then(e=> console.log(e))
+
+
+  // const useConversations = () => {
+  //   url = "..."
+  //   return (
+  //       fetch(url)
+  //           .then((e) => e.json())
+  //           .catch((error) => console.log(error))
+  //   )
+  // }
 
   function updateMemebership(event) {
 
@@ -95,6 +157,11 @@ export default function ProfilePage(props) {
     );
     setProfileUrl(profilePictureItem.picture);
   }
+  function hold(){
+    console.log(optionsOfChats)
+
+  }
+
 
 
   const formBackground = useColorModeValue("gray.100", "gray.700");
@@ -126,6 +193,20 @@ export default function ProfilePage(props) {
     navigate("/");
   }
 
+  function updateMessage(event) {
+    const textMessage = event.target.value;
+    setMessageToSend(textMessage);
+  }
+
+  function sendMessage() {
+    const post = {
+      fromUser: props.userProfileInfoForUI.id,
+      messageText: messageToSend,
+    };
+    ApiPost.sendPost(post).then(e => console.log(e))
+    setMessageToSend("");
+  }
+
   return (
     <Flex
       height="100vh"
@@ -146,7 +227,7 @@ export default function ProfilePage(props) {
         <Image src={profileUrl} boxSize="100px" />
         <Heading>What chats do you wanna join</Heading>
         <Stack spacing={2} direction="column">
-          {optionsOfChants}
+          {optionsOfChats}
         </Stack>
         <Button
           width="100%"
@@ -158,6 +239,36 @@ export default function ProfilePage(props) {
           {" "}
           Go to chats
         </Button>
+        <Button
+            width="100%"
+            colorScheme="blue"
+            position="top"
+            onClick={hold}
+            mb={3}
+        >
+          {" "}
+          test
+        </Button>
+        <h1>Send a post</h1>
+
+          <FormControl>
+            <Input
+                type="text"
+                placeholder="What are you feeling atm"
+                onChange={updateMessage}
+                name="messageToSend"
+                value={messageToSend}
+            />
+            <Button type="submit" onClick={sendMessage} backgroundColor={"blue.300"}>
+              Send
+            </Button>
+         </FormControl>
+
+
+       <Flex overflowY="scroll" height = "300px" backgroundColor={"teal.300"} p={6} rounded={6} direction="column">
+         {posts}
+
+       </Flex>
         <Button
           width="100%"
           colorScheme="blue"
