@@ -11,7 +11,7 @@ import {
   Image,
   useColorMode,
   useColorModeValue,
-  Select,
+  Select, FormControl,
 } from "@chakra-ui/react";
 import ApiCall from "../ApiInterface/ApiCall";
 import ApiPost from "../ApiInterface/ApiPost";
@@ -24,8 +24,16 @@ export default function ProfilePage(props) {
   const [optionsToChooseForProfile, setOptionsToChooseForProfile] = React.useState();
   const [groupsUserIsPartOf, setGroupsUserIsPartOf] = React.useState();
   const [optionsOfChants, setOoptionsOfChants] = React.useState();
+  const [posts, setPosts] = React.useState()
+  const [messageToSend, setMessageToSend] = React.useState()
 
   React.useEffect(() => {
+
+   // ApiCall.getPosts().then(el => {
+     const item = [{id: 1, fromUser: "david", postText: "A message"},{id: 2, fromUser: "corry", postText: "A mege"},{id: 3, fromUser: "dd", postText: "A age"},{id: 4, fromUser: "ad", postText: "A mess"},{id: 5, fromUser: "david", postText: "A message"},{id: 6, fromUser: "corry", postText: "A mege"},{id: 7, fromUser: "dd", postText: "A age"},{id: 8, fromUser: "ad", postText: "A mess"}]
+     const greg = item.map(e => <Flex mb={3} position="screenLeft" key={e.id} p={3} boxSize rounded={6} backgroundColor={"whiteAlpha.400"}> Poster {e.fromUser}:  {e.postText} </Flex>)
+     setPosts(greg)
+   // })
 
     ApiCall.getPictures().then(e => {
       setProfilePicturesFull(e);
@@ -95,7 +103,9 @@ export default function ProfilePage(props) {
     );
     setProfileUrl(profilePictureItem.picture);
   }
+  function hold(){
 
+  }
 
   const formBackground = useColorModeValue("gray.100", "gray.700");
   if (!props.authorized) {
@@ -124,6 +134,20 @@ export default function ProfilePage(props) {
   function logOut() {
     props.logOut();
     navigate("/");
+  }
+
+  function updateMessage(event) {
+    const textMessage = event.target.value;
+    setMessageToSend(textMessage);
+  }
+
+  function sendMessage() {
+    const post = {
+      fromUser: props.userProfileInfoForUI.id,
+      messageText: messageToSend,
+    };
+    ApiPost.sendPost(post).then(e => console.log(e))
+    setMessageToSend("");
   }
 
   return (
@@ -158,6 +182,26 @@ export default function ProfilePage(props) {
           {" "}
           Go to chats
         </Button>
+        <h1>Send a post</h1>
+
+          <FormControl>
+            <Input
+                type="text"
+                placeholder="What are you feeling atm"
+                onChange={updateMessage}
+                name="messageToSend"
+                value={messageToSend}
+            />
+            <Button type="submit" onClick={sendMessage} backgroundColor={"blue.300"}>
+              Send
+            </Button>
+         </FormControl>
+
+
+       <Flex overflowY="scroll" height = "300px" backgroundColor={"teal.300"} p={6} rounded={6} direction="column">
+         {posts}
+
+       </Flex>
         <Button
           width="100%"
           colorScheme="blue"

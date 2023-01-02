@@ -65,15 +65,24 @@ export default function App() {
   }
 
   function updateChatsMembership(chatID) {
-    //send info to database about who joied what TODO
-    const post = {
-      compositeKey: {
-        id_conversation: userProfileInfoForUI.id,
-        id_user_info: chatID,
-      }
-    }
 
-    ApiPost.updateMembership(post).then(e=> console.log(e))
+    const post = {
+        compositeKey: {
+          user: {
+            id: userProfileInfoForUI.theRealID},
+          conversation:{id: chatID},
+        }
+      }
+
+      ApiPost.updateMembership(post).then(e=> {
+        if(e.id.localeCompare('Done: Group Member added') === 0){
+            console.log("Joined group")
+        }else{
+          console.log("Left chat")
+        }
+      })
+
+
   }
 
   function tryToLogIn() {

@@ -172,22 +172,13 @@ export default function Chat(props) {
   }
 
   function sendMessage() {
-    //var dateString = new Date().toISOString().substring(0,10);
-    //function that sends message TODO
     const post = {
       fromUser: props.userProfileInfoForUI.id,
-      //fromUser: "as",
       fk_conversation: {id: whatChatToShow, name: "Chat with friends"},
-      //fk_conversation: {id: 3, name: "Chat with friends"},
       messageText: messageToSend,
-
     };
-
     ApiPost.sendMessage(post).then(e =>getMessages())
-    //function that gets the new messages TODO
     setMessageToSend("");
-
-
   }
 
 

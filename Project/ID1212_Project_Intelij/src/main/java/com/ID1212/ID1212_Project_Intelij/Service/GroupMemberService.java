@@ -43,14 +43,21 @@ public class GroupMemberService {
     }
 
     public String updateMembership(GroupMember groupMember){
+        System.out.println("in");
 
+        System.out.println("aggg");
         GroupMember databaseGroupMember =
                 groupMemberRepository.findGroupMemberByCompositeKey(groupMember.getCompositeKey());
+        System.out.println("secound");
+        System.out.println(databaseGroupMember);
         if(databaseGroupMember != null){
             groupMemberRepository.delete(databaseGroupMember);
             return "Group Member already exists";
         }else {
+            System.out.println("4");
+            System.out.println(groupMember);
             groupMemberRepository.save(groupMember);
+            System.out.println("5");
             return "Group Member added";
         }
     }

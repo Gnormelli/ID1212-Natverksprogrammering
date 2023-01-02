@@ -75,6 +75,12 @@ const ApiPost = {
         const getLoginEndpoint = "/conversations_by_userID";
         return ApiPost.apiCall(getLoginEndpoint,loginForm).then((data) => data);
     },
+    sendPost(loginForm) {
+    const getLoginEndpoint = "/send_post";
+    return ApiPost.apiCall(getLoginEndpoint,loginForm).then((data) => data);
+    },
+
+
 
     };
 
