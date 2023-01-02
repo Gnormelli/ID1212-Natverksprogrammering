@@ -5,6 +5,8 @@ import com.ID1212.ID1212_Project_Intelij.Models.QueuePost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,48 +16,15 @@ import java.util.Optional;
 @Service
 public class ProvideService {
 
-    private final QueuePostRepository queuePostRepository;
-
     @Autowired
-    public ProvideService(
-            QueuePostRepository queuePostRepository
-                          ){
-        this.queuePostRepository=queuePostRepository;
-    }
+    QueuePostRepository queuePostRepository;
 
     public List<QueuePost> getQueuePosts(){
-        return queuePostRepository.findAll();
-    }
-
-    public String getUsernamesAndPassword(String username, String password){
-        Optional<QueuePost> fromDatabase = queuePostRepository.findQueuePostByLocation(username);
-        if(fromDatabase.isPresent()){
-            return "hi";
-        }else
-            return "hi";
-
+       return queuePostRepository.findLastTenRecords();
     }
 
     public void addNewQueuePost(QueuePost queuePost) {   //get it to save it to database
-        Optional<QueuePost> postById = queuePostRepository.findQueuePostById(queuePost.getId());
-        if (postById.isPresent()) {
-            throw new IllegalArgumentException("Id taken");
-        } else {
-            queuePostRepository.save(queuePost);
-            System.out.println(queuePost);
-        }
+        queuePostRepository.save(queuePost);
     }
 
-
-    /**
-    public List<QueuePost> getQueuePosts(){
-        return List.of(
-                new QueuePost(
-                        1L,
-                        "This is my location",
-                        "I have commented this",
-                        true,
-                        false
-                ));
-    }*/
 }

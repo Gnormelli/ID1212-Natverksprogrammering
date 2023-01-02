@@ -29,3 +29,11 @@ INSERT INTO group_member (id_conversation, id_user_info) VALUES (1,2);
 INSERT INTO group_member (id_conversation, id_user_info) VALUES (2,2);
 INSERT INTO group_member (id_conversation, id_user_info) VALUES (2,3);
 
+INSERT INTO queue_post (id, from_user, post_text, posted_date_time) VALUES
+        (1, 'Han', 'The Millennium Falcon needs service, sigh!!', '2023-01-01T12:12:08.111606600');
+INSERT INTO queue_post (id, from_user, post_text, posted_date_time) VALUES
+    (2, 'Luke', 'Yoda is a bitch!!!', '2023-01-01T11:12:08.111606600');
+INSERT INTO queue_post (id, from_user, post_text, posted_date_time) VALUES
+    (3, 'Han', 'Chewbacca mother is so hairy....really hairy', '2023-01-01T10:12:08.111606600');
+INSERT INTO queue_post (id, from_user, post_text, posted_date_time) VALUES
+    (4, 'Leia', 'I forgot my blaster', '2023-01-01T09:12:08.111606600');

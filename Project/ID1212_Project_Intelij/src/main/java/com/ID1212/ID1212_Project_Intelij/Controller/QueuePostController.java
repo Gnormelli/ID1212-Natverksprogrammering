@@ -5,44 +5,36 @@ import com.ID1212.ID1212_Project_Intelij.Service.ProvideService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
 @RequestMapping(path = "/")
 public class QueuePostController {
-    private final ProvideService service;
 
     /**
      * Injected to through autowiring
      * @param service
      */
     @Autowired
-    public QueuePostController(ProvideService service) {
-        this.service = service;
-    }
+    ProvideService service;
 
     /**
      * Uses RestController and set to GetMapping to make it a RestFull endpoint
      * @return QueuePost JSON
      */
-//    @CrossOrigin(origins = "http://localhost:3000")
-    @GetMapping("/getQueue")
+    @GetMapping("/get_posts")
     public List<QueuePost> getQueuePosts(){
         return service.getQueuePosts();
     }
 
-    @PostMapping("/postQueue")
+    @PostMapping("/send_post")
     public Object registerNewQueuePost(@RequestBody QueuePost queuePost){
-
-       // service.addNewQueuePost(queuePost);
-        String username = queuePost.getLocation();
-        String password = queuePost.getComment();
-        service.getQueuePosts();
-        if(true){ //somthing with service.getQuePost()
-            return service.getUsernamesAndPassword(username, password);
-        }else{
-            return "by";
-        }
-
+        queuePost.setPostedAt(LocalDateTime.now());
+        service.addNewQueuePost(queuePost);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("id", "Post has been sent");
+        return map;
     }
 }

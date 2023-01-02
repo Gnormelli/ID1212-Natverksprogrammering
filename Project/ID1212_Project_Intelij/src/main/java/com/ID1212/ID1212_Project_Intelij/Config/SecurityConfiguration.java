@@ -89,6 +89,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/get_profile_picture").permitAll()
                 .antMatchers("/get_message").permitAll()
                 .antMatchers("/get_all_conversations").permitAll()
+                .antMatchers("/get_posts").permitAll()
+                .antMatchers("/send_post").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").permitAll()
