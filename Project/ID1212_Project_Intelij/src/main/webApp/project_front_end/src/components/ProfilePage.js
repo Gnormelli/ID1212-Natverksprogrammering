@@ -49,7 +49,10 @@ export default function ProfilePage(props) {
     const post ={
       id: props.userProfileInfoForUI.theRealID
     }
-    ApiPost.getChatsUserIsPartOf(post).then(e => setGroupsUserIsPartOf(e))
+    ApiPost.getChatsUserIsPartOf(post).then(e => {
+      console.log(e)
+      setGroupsUserIsPartOf(e)
+    })
 
   }, []);
 
@@ -57,6 +60,7 @@ export default function ProfilePage(props) {
 
     ApiCall.getAllConversations().then(e => {
       if(groupsUserIsPartOf != null){
+        console.log("by")
         const filterdList = groupsUserIsPartOf.map(item => item.id)
         const checkmarks = e.map(item=>{
           if(filterdList.includes(item.id)){//if item is in groupsUserIsPartOf
@@ -82,10 +86,20 @@ export default function ProfilePage(props) {
         setOoptionsOfChants(checkmarks);
       }else{
         console.log("hi")
+
+        const checkmarks =  e.map(item=> {
+          return (
+              <Checkbox value={item.id} colorScheme="green" key={item.id} onChange={updateMemebership}>
+                {item.name}
+              </Checkbox>
+
+          );
+        })
+        setOoptionsOfChants(checkmarks);
       }
 
     })
-    }, [groupsUserIsPartOf]);
+  }, [groupsUserIsPartOf]);
 
 
   function updateMemebership(event) {

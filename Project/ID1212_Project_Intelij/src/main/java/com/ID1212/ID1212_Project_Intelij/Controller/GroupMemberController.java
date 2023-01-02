@@ -26,12 +26,10 @@ public class GroupMemberController {
 
     @PostMapping( "/update_membership")
     public Object updateMembership(@RequestBody GroupMember groupMember) {
-        System.out.println("start");
-
-        System.out.println(groupMember.getCompositeKey().getConversation());
-        System.out.println(groupMember.getCompositeKey().getUser());
+        System.out.println(groupMember.toString());
 
         String entryResult= groupMemberService.updateMembership(groupMember);
+
         HashMap<String, String> map = new HashMap<>();
         map.put("id", "Done: " + entryResult);
         return map;
