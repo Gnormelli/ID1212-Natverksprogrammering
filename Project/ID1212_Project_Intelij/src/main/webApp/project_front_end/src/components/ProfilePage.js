@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState } from "react";
 import { Form, Navigate, useNavigate } from "react-router-dom";
 import chatData from "../chatData";
 import {
@@ -22,8 +22,8 @@ export default function ProfilePage(props) {
   const [profileUrl, setProfileUrl] = React.useState();
   const [profilePicturesFull, setProfilePicturesFull] = React.useState();
   const [optionsToChooseForProfile, setOptionsToChooseForProfile] = React.useState();
-  const [groupsUserIsPartOf, setGroupsUserIsPartOf] = React.useState();
-  const [optionsOfChants, setOoptionsOfChants] = React.useState();
+  const [groupsUserIsPartOf, setGroupsUserIsPartOf] = React.useState([0]);
+  const [optionsOfChats, setOptionsOfChats] = React.useState();
   const [posts, setPosts] = React.useState()
   const [messageToSend, setMessageToSend] = React.useState()
 
@@ -51,14 +51,33 @@ export default function ProfilePage(props) {
     }
     ApiPost.getChatsUserIsPartOf(post).then(e => {
       console.log(e)
-      setGroupsUserIsPartOf(e)
+      console.log(typeof e.id)
+      if(e.id != 'User does not exist'){
+        setGroupsUserIsPartOf(e)
+      }else{
+        console.log("e")
+        setGroupsUserIsPartOf([0])
+      }
+
     })
 
   }, []);
 
-  React.useEffect(() => {
 
+
+  function useForceUpdate(){
+    const [value, setValue] = useState(0); // integer state
+    return () => setValue(value => value + 1); // update state to force render
+    // An function that increment 👆🏻 the previous state like here
+    // is better than directly setting `value + 1`
+  }
+
+
+  React.useEffect(() => {
+    console.log("första")
     ApiCall.getAllConversations().then(e => {
+
+      console.log(groupsUserIsPartOf)
       if(groupsUserIsPartOf != null){
         console.log("by")
         const filterdList = groupsUserIsPartOf.map(item => item.id)
@@ -71,19 +90,23 @@ export default function ProfilePage(props) {
                     key={item.id}
                     onChange={updateMemebership}
                     defaultChecked
+
                 >
                   {item.name}
                 </Checkbox>
             );
           }else{
+
             return (
-                <Checkbox value={item.id} colorScheme="green" key={item.id} onChange={updateMemebership}>
+                <Checkbox value={item.id} colorScheme="green" key={e.length + item.id} onChange={updateMemebership}>
                   {item.name}
                 </Checkbox>
             );
           }
         })
-        setOoptionsOfChants(checkmarks);
+
+        console.log(checkmarks)
+        setOptionsOfChats(checkmarks);
       }else{
         console.log("hi")
 
@@ -95,12 +118,29 @@ export default function ProfilePage(props) {
 
           );
         })
-        setOoptionsOfChants(checkmarks);
+        setOptionsOfChats(checkmarks);
       }
 
     })
   }, [groupsUserIsPartOf]);
 
+
+
+  // const useConversations = () => {
+  //   return ApiCall.getAllConversations()
+  // }
+  //
+  // const conversations = useConversations().then(e => e.map((conversation) => <Checkbox/>)).then(e=> console.log(e))
+
+
+  // const useConversations = () => {
+  //   url = "..."
+  //   return (
+  //       fetch(url)
+  //           .then((e) => e.json())
+  //           .catch((error) => console.log(error))
+  //   )
+  // }
 
   function updateMemebership(event) {
 
@@ -118,8 +158,11 @@ export default function ProfilePage(props) {
     setProfileUrl(profilePictureItem.picture);
   }
   function hold(){
+    console.log(optionsOfChats)
 
   }
+
+
 
   const formBackground = useColorModeValue("gray.100", "gray.700");
   if (!props.authorized) {
@@ -184,7 +227,7 @@ export default function ProfilePage(props) {
         <Image src={profileUrl} boxSize="100px" />
         <Heading>What chats do you wanna join</Heading>
         <Stack spacing={2} direction="column">
-          {optionsOfChants}
+          {optionsOfChats}
         </Stack>
         <Button
           width="100%"
@@ -195,6 +238,16 @@ export default function ProfilePage(props) {
         >
           {" "}
           Go to chats
+        </Button>
+        <Button
+            width="100%"
+            colorScheme="blue"
+            position="top"
+            onClick={hold}
+            mb={3}
+        >
+          {" "}
+          test
         </Button>
         <h1>Send a post</h1>
 

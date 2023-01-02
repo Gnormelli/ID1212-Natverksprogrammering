@@ -10,6 +10,7 @@ import profileData from "./profileData";
 import { useNavigate } from "react-router-dom";
 import ApiPost from "./ApiInterface/ApiPost";
 
+
 export default function App() {
   const navigate = useNavigate();
   const [authorized, setAuthorized] = React.useState(false);
@@ -36,7 +37,7 @@ export default function App() {
   }
 
   function test(e) {
-    console.log(userProfileInfoForUI.profilePictureID);
+    //console.log(userProfileInfoForUI.profilePictureID);
   }
 
   function createProfile(username, id) {
@@ -85,25 +86,7 @@ export default function App() {
 
   }
 
-  function tryToLogIn() {
-    const login = !authorized; //this is the database call TODO
 
-    setAuthorized((prevValue) => !prevValue); //Taken from login TODO
-    if (login) {
-      //database call to get information TODO
-
-      setUserProfileInfoForUI({
-        id: "Obi-Wan",
-        profilePictureID: 3,
-        chatsPartOf: [1, 4],
-      });
-      console.log("Login succseded");
-      navigate("/profile");
-    } else {
-      console.log("login failed");
-      navigate("/");
-    }
-  }
 
   function logOut() {
     setUserProfileInfoForUI({
@@ -119,7 +102,7 @@ export default function App() {
         <Route
           exact
           path="/"
-          element={<LogInPage logIn={tryToLogIn} authorized={authorized} setFullUserGlobal={setFullUser} />}
+          element={<LogInPage authorized={authorized} setFullUserGlobal={setFullUser} />}
         />
         <Route
           exact
@@ -139,7 +122,6 @@ export default function App() {
             <ProfilePage
               test={test}
               authorized={authorized}
-              logIn={tryToLogIn}
               logOut={logOut}
               changeUserInfoFunction={changeUserInfo}
               userProfileInfoForUI={userProfileInfoForUI}
