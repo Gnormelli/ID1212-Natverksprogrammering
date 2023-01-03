@@ -120,11 +120,8 @@ export default function Chat(props) {
   }
 
   function findUserName(id) {
-    //this part needs help, wait for state to update (Works bcs workaround)
     if (id !== undefined && id !== 0) {
-
       const usr = currentGroupMembers.find((e) => e.id === id);
-
       return "h";
     } else {
       return "Error";
@@ -134,7 +131,7 @@ export default function Chat(props) {
 
 
   function gree(element) {
-    //return element.message.includes(props.userProfileInfoForUI.id);
+
     const currentUser = props.userProfileInfoForUI.id;
     const chatMembers = element.members;
 
@@ -148,20 +145,16 @@ export default function Chat(props) {
     };
 
     ApiPost.getChatsUserIsPartOf(post).then(e=> {
-
       const chats = e.map((el) => {
-
           return (
               <Button key={el.id} onClick={switchChat}>
                 {" "}
                 {el.name}{" "}
               </Button>
           );
-
       })
       setWhatGroupToShow(chats)
     })
-
   }
   const chatsUserIsPartOf1 = chatData.filter(gree);
 
