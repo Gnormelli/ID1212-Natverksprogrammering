@@ -27,17 +27,17 @@ export default function Chat(props) {
   const [whatGroupToShow, setWhatGroupToShow] = React.useState(1);
   const [messageToSend, setMessageToSend] = React.useState("");
   const [count, setCount] = React.useState(0)
+  const [listOfChats,setListOfChats] = React.useState([12]);
   const [messagesToShow, setMessagesToShow] = React.useState();
   const [chatsUserIsPartOf, setChatsUserIsPartOf] = React.useState();
+  const [displayName, setDisplayName] = React.useState("Error")
   const [currentGroupMembers, setCurrentGroupMembers] = React.useState([
     0,
     "Nobody",
   ]);
   const [currentChat, setCurrentChat] = React.useState({
     id: 0,
-    title: "",
-    messages: [{ message: "", Sender: 0, orderNumber: 1 }],
-    members: [0],
+    name: "error"
   });
 
 
@@ -47,14 +47,11 @@ export default function Chat(props) {
 
   React.useEffect(() => {
 
-
-
-
     getChatUserIsPartOf()
 
     var requestLoop = setInterval(function(){ //Dont remove
-      const post = {
-        fk_conversation: {id: 1, name: "hold"}
+      const post = { //todo
+        fk_conversation: {id: currentChat.id, name: "hold"}
       };
       ApiPost.getMessagesFromChat(post).then(e=> {
 
@@ -95,28 +92,81 @@ export default function Chat(props) {
       })
       setCount(prevValue => prevValue++)
       console.log(count)
-    }, 5000);
+    }, 5000000);
   }, []);
 
 
-  React.useEffect(() => {
+  // React.useEffect(() => {
+  //
+  //   var users = [];
+  //   currentChat.members.map((e) => {
+  //     users.push(userData.find((user) => user.id === e));
+  //   });
+  //
+  //   setCurrentGroupMembers(users);
+  // }, [currentChat]);
 
-    var users = [];
-    currentChat.members.map((e) => {
-      users.push(userData.find((user) => user.id === e));
-    });
-
-    setCurrentGroupMembers(users);
-  }, [currentChat]);
 
 
 
 
   function switchChat(event) {
-    const buttonClicked = event.target.innerText;
-    const chatItem = chatData.find((element) => element.title == buttonClicked);
-    setWhatChatToShow(chatItem.id);
-    setCurrentChat(chatItem);
+
+    // const chatItem = chatData.find((element) => element.title == buttonClicked);
+
+    setDisplayName(event.target.innerText)
+
+
+
+    const chatItem = listOfChats.find(element => element.name == event.target.innerText)
+    setWhatChatToShow(event.target.value);
+    setCurrentChat(event.target.value);
+    getMessagesWithValue(event.target.value)
+
+  }
+
+  function getMessagesWithValue(value){
+    const post = {
+      fk_conversation: {id: value, name: "hold"}
+    };
+
+    ApiPost.getMessagesFromChat(post).then(e=> {
+
+      const textMessagesElement = e.map(el=> {
+        if(el.fromUser !== props.currentUser ){
+          return (
+              <Flex
+                  key={el.id}
+                  background="red.200"
+                  width="fit-content"
+                  minWidth="100px"
+                  borderRadius="lg"
+                  p={3}
+                  alignSelf="flex-end"
+              >
+                <Text>
+                  From {el.fromUser}: {el.messageText}
+                </Text>
+              </Flex>
+          );
+        }else{
+          return (
+              <Flex
+                  key={el.id}
+                  background="green.200"
+                  width="fit-content"
+                  minWidth="100px"
+                  borderRadius="lg"
+                  p={3}
+              >
+                <Text>{el.messageText}</Text>
+              </Flex>
+          );
+        }
+      })
+      setMessagesToShow(textMessagesElement);
+
+    })
   }
 
   function findUserName(id) {
@@ -145,15 +195,23 @@ export default function Chat(props) {
     };
 
     ApiPost.getChatsUserIsPartOf(post).then(e=> {
-      const chats = e.map((el) => {
+      if(((typeof e.id)).localeCompare("string") !== 0){
+        const chats = e.map((el) => {
           return (
-              <Button key={el.id} onClick={switchChat}>
+              <Button key={el.id} onClick={switchChat} value={el.id}>
                 {" "}
                 {el.name}{" "}
               </Button>
           );
-      })
-      setWhatGroupToShow(chats)
+        })
+
+        setListOfChats(e) //here
+
+        setWhatGroupToShow(chats)
+      }else{
+        setWhatGroupToShow([1])
+      }
+
     })
   }
   const chatsUserIsPartOf1 = chatData.filter(gree);
@@ -165,8 +223,9 @@ export default function Chat(props) {
 
   function getMessages() {
     const post = {
-      fk_conversation: {id: 1, name: "hold"}
+      fk_conversation: {id: currentChat, name: "hold"}
     };
+
     ApiPost.getMessagesFromChat(post).then(e=> {
 
       const textMessagesElement = e.map(el=> {
@@ -214,13 +273,17 @@ export default function Chat(props) {
   }
 
   function sendMessage() {
-    const post = {
-      fromUser: props.userProfileInfoForUI.id,
-      fk_conversation: {id: whatChatToShow, name: "Chat with friends"},
-      messageText: messageToSend,
-    };
-    ApiPost.sendMessage(post).then(e =>getMessages())
-    setMessageToSend("");
+
+    if(messageToSend.localeCompare ("")){
+      const post = {
+        fromUser: props.userProfileInfoForUI.id,
+        fk_conversation: {id: whatChatToShow, name: "Chat with friends"},
+        messageText: messageToSend,
+      };
+      ApiPost.sendMessage(post).then(e =>getMessages())
+      setMessageToSend("");
+    }
+
   }
 
 
@@ -235,42 +298,40 @@ export default function Chat(props) {
   // }, 5000);
 
 
-  const chatMessages = currentChat.messages.map((item) => {
-    if (props.currentUser !== item.Sender) {
-      return (
-          <Flex
-              key={item.orderNumber}
-              background="red.200"
-              width="fit-content"
-              minWidth="100px"
-              borderRadius="lg"
-              p={3}
-              alignSelf="flex-end"
-          >
-            <Text>
-              From {item.Sender}: {item.message}
-            </Text>
-          </Flex>
-      );
-    } else {
-      return (
-          <Flex
-              key={item.orderNumber}
-              background="green.200"
-              width="fit-content"
-              minWidth="100px"
-              borderRadius="lg"
-              p={3}
-          >
-            <Text>{item.message}</Text>
-          </Flex>
-      );
-    }
-  });
+  // const chatMessages = currentChat.messages.map((item) => {
+  //   if (props.currentUser !== item.Sender) {
+  //     return (
+  //         <Flex
+  //             key={item.orderNumber}
+  //             background="red.200"
+  //             width="fit-content"
+  //             minWidth="100px"
+  //             borderRadius="lg"
+  //             p={3}
+  //             alignSelf="flex-end"
+  //         >
+  //           <Text>
+  //             From {item.Sender}: {item.message}
+  //           </Text>
+  //         </Flex>
+  //     );
+  //   } else {
+  //     return (
+  //         <Flex
+  //             key={item.orderNumber}
+  //             background="green.200"
+  //             width="fit-content"
+  //             minWidth="100px"
+  //             borderRadius="lg"
+  //             p={3}
+  //         >
+  //           <Text>{item.message}</Text>
+  //         </Flex>
+  //     );
+  //   }
+  // });
 
-  function test(){
-    getChatUserIsPartOf()
-  }
+
 
   if (!props.authorized) {
     //return <Navigate to="/" />;
@@ -281,7 +342,8 @@ export default function Chat(props) {
       <Flex direction="column" background={"gray.100"} flex={100}>
         <Flex h="100px" background={"blue.100"} align="center" p={5}>
           <Avatar src="" />
-          <Heading size="lg">{currentChat.title}</Heading>
+
+          <Heading size="lg">{displayName}</Heading>
         </Flex>
 
         <Flex
@@ -324,16 +386,16 @@ export default function Chat(props) {
         height="100%"
       >
         <Button
-          className="toProfileButton"
-          width="100%"
-          colorScheme="blue"
-          onClick={navigateToProfile}
-          mb={3}
+            className="toProfileButton"
+            width="100%"
+            colorScheme="blue"
+            onClick={navigateToProfile}
+            mb={3}
         >
           {" "}
           To profile
         </Button>
-        {whatGroupToShow}
+        {(whatGroupToShow !== 1) && whatGroupToShow}
       </Flex>
       <Spacer />
 

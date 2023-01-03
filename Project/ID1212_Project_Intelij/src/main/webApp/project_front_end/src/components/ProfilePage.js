@@ -25,7 +25,7 @@ export default function ProfilePage(props) {
   const [groupsUserIsPartOf, setGroupsUserIsPartOf] = React.useState([0]);
   const [optionsOfChats, setOptionsOfChats] = React.useState();
   const [posts, setPosts] = React.useState()
-  const [messageToSend, setMessageToSend] = React.useState()
+  const [messageToSend, setMessageToSend] = React.useState("")
 
   React.useEffect(() => {
 

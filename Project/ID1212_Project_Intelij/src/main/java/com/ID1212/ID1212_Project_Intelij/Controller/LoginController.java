@@ -59,17 +59,14 @@ public class LoginController {
     }
     @PostMapping(value = "/create_user")
     public Object createUser(@RequestBody User user){
-
         ProfilePicture profilePicture = ppService.getProfilePictureFromDB(1L);
         user.setProfilePicture(profilePicture);
-
         Object userWIthID = userService.createUser(user);
         HashMap<String, String> map = new HashMap<>();
         if(userWIthID == null){
             map.put("id", "Alredy a user by that name");
             return map;
         }else {
-
             return userWIthID;
         }
 

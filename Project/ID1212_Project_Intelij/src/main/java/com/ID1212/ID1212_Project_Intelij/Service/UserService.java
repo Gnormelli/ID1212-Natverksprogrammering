@@ -46,14 +46,14 @@ public class UserService implements UserDetailsService {
     }
 
     public Object createUser(User user){
-
         Optional<User> fromDatabase = Optional.ofNullable(userRepository.findByUsername(user.getUsername()));
-
         if(fromDatabase.isPresent()){
                 return null;
-
         }else
             user.setUserRole(roleRepository.findRoleById(0L));
+            user.setLocked(false);
+            user.setEnabled(true);
+            user.setEmail("notToBeUsed@test.com");
             userRepository.save(user);
             User userWithID = userRepository.findByUsername(user.getUsername());
             return userWithID;
