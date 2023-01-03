@@ -56,12 +56,11 @@ export default function ProfilePage(props) {
       id: props.userProfileInfoForUI.theRealID
     }
     ApiPost.getChatsUserIsPartOf(post).then(e => {
-      console.log(e)
-      console.log(typeof e.id)
+
       if(e.id != 'User does not exist'){
         setGroupsUserIsPartOf(e)
       }else{
-        console.log("e")
+
         setGroupsUserIsPartOf([0])
       }
 
@@ -80,12 +79,12 @@ export default function ProfilePage(props) {
 
 
   React.useEffect(() => {
-    console.log("första")
+
     ApiCall.getAllConversations().then(e => {
 
-      console.log(groupsUserIsPartOf)
+
       if(groupsUserIsPartOf != null){
-        console.log("by")
+
         const filterdList = groupsUserIsPartOf.map(item => item.id)
         const checkmarks = e.map(item=>{
           if(filterdList.includes(item.id)){//if item is in groupsUserIsPartOf
@@ -111,10 +110,10 @@ export default function ProfilePage(props) {
           }
         })
 
-        console.log(checkmarks)
+
         setOptionsOfChats(checkmarks);
       }else{
-        console.log("hi")
+
 
         const checkmarks =  e.map(item=> {
           return (
@@ -191,7 +190,7 @@ export default function ProfilePage(props) {
       profilePicture: {id: value, picture: "0", title: "0"},
 
     };
-    ApiPost.changeProfilePicture(post).then((e) => console.log(e))
+    ApiPost.changeProfilePicture(post).then((e) => e)
 
   }
   function logOut() {
