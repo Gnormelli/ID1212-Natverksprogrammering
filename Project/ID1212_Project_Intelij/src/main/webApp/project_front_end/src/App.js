@@ -5,49 +5,26 @@ import ProfilePage from "./components/ProfilePage";
 import { ChakraProvider } from "@chakra-ui/react";
 import SignUp from "./components/SignUp";
 import Chat from "./components/Chat";
-
-
-import { useNavigate } from "react-router-dom";
+import Admin from "./components/Admin";
 import ApiPost from "./ApiInterface/ApiPost";
 
 
 export default function App() {
-  const navigate = useNavigate();
   const [authorized, setAuthorized] = React.useState(false);
-  const [chatsUserIsMemberOf, setChatsUserIsMemberOf] = React.useState([]);
   const [userProfileInfoForUI, setUserProfileInfoForUI] = React.useState({
     id: "Nobody",
     profilePictureID: 1,
     theRealID: 0,
+    role: 0
   });
 
-
-
-  function updateMembership(chatId){
-    if(chatsUserIsMemberOf.includes(chatId)){
-      const h = chatsUserIsMemberOf.filter()
-      setChatsUserIsMemberOf(h);
-      //the api call
-    }else{
-      setChatsUserIsMemberOf(prevState => {
-        return prevState.push(chatId)
-      });
-    }
-
-  }
-
-  function test(e) {
-    //console.log(userProfileInfoForUI.profilePictureID);
-  }
-
-
   function createProfile(username, id) {
-    //Create profile in database TODO (username/password, set profile picture defult to 1)
     setAuthorized(true);
     setUserProfileInfoForUI({
       id: username,
       profilePictureID: 1,
       theRealID: id,
+      role: 0
     });
 
   }
@@ -58,7 +35,6 @@ export default function App() {
   }
 
   function changeUserInfo(name, value) {
-    //Send to database update TODO
     setUserProfileInfoForUI((prevValues) => {
       return {
         ...prevValues,
@@ -76,7 +52,6 @@ export default function App() {
           conversation:{id: chatID},
         }
       }
-
       ApiPost.updateMembership(post).then(e=> {
         if(e.id.localeCompare('Done: Group Member added') === 0){
             console.log("Joined group")
@@ -84,11 +59,7 @@ export default function App() {
           console.log("Left chat")
         }
       })
-
-
   }
-
-
 
   function logOut() {
     setUserProfileInfoForUI({
@@ -122,7 +93,6 @@ export default function App() {
           path="/profile"
           element={
             <ProfilePage
-              test={test}
               authorized={authorized}
               logOut={logOut}
               changeUserInfoFunction={changeUserInfo}
@@ -132,16 +102,27 @@ export default function App() {
           }
         />
         <Route
-          exact
-          path="/chat"
-          element={
-            <Chat
-              authorized={authorized}
-              currentUser={userProfileInfoForUI.id}
-              logOut={logOut}
-              userProfileInfoForUI={userProfileInfoForUI}
-            />
-          }
+            exact
+            path="/chat"
+            element={
+              <Chat
+                  authorized={authorized}
+                  currentUser={userProfileInfoForUI.id}
+                  logOut={logOut}
+                  userProfileInfoForUI={userProfileInfoForUI}
+              />
+            }
+        />
+        <Route
+            exact
+            path="/admin"
+            element={
+              <Admin
+                  logOut={logOut}
+                  authorized={authorized}
+                  userProfileInfoForUI={userProfileInfoForUI}
+              />
+            }
         />
       </Routes>
     </ChakraProvider>

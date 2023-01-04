@@ -28,7 +28,6 @@ export default function ProfilePage(props) {
 
   React.useEffect(() => {
 
-   // ApiCall.getPosts().then(el => {
      const item = [{id: 1, fromUser: "david", postText: "A message"},{id: 2, fromUser: "corry", postText: "A mege"},{id: 3, fromUser: "dd", postText: "A age"},{id: 4, fromUser: "ad", postText: "A mess"},{id: 5, fromUser: "david", postText: "A message"},{id: 6, fromUser: "corry", postText: "A mege"},{id: 7, fromUser: "dd", postText: "A age"},{id: 8, fromUser: "ad", postText: "A mess"}]
 
     ApiCall.getPosts().then(e =>{
@@ -36,9 +35,6 @@ export default function ProfilePage(props) {
       setPosts(thePosts)
     })
 
-
-
-   // })
 
     ApiCall.getPictures().then(e => {
       setProfilePicturesFull(e);
@@ -51,9 +47,6 @@ export default function ProfilePage(props) {
       );
       setProfileUrl(profilePictureItem.picture)
     });
-
-
-
       const post = {
         id: props.userProfileInfoForUI.theRealID,
         username: "placeholder",
@@ -75,16 +68,6 @@ export default function ProfilePage(props) {
     })
 
   }, []);
-
-
-
-  function useForceUpdate(){
-    const [value, setValue] = useState(0); // integer state
-    return () => setValue(value => value + 1); // update state to force render
-    // An function that increment 👆🏻 the previous state like here
-    // is better than directly setting `value + 1`
-  }
-
 
   React.useEffect(() => {
 
@@ -137,30 +120,11 @@ export default function ProfilePage(props) {
     })
   }, [groupsUserIsPartOf]);
 
-
-
-  // const useConversations = () => {
-  //   return ApiCall.getAllConversations()
-  // }
-  //
-  // const conversations = useConversations().then(e => e.map((conversation) => <Checkbox/>)).then(e=> console.log(e))
-
-
-  // const useConversations = () => {
-  //   url = "..."
-  //   return (
-  //       fetch(url)
-  //           .then((e) => e.json())
-  //           .catch((error) => console.log(error))
-  //   )
-  // }
-
   function updateMemebership(event) {
 
     const id = event.target.value;
     props.updateChatsMembershipFunction(id);
   }
-
 
 
   function getProfilePicture(numberToGet) {
@@ -170,20 +134,6 @@ export default function ProfilePage(props) {
     );
     setProfileUrl(profilePictureItem.picture);
   }
-  function hold(){
-    const post = {
-      id: props.userProfileInfoForUI.theRealID,
-      username: "placeholder",
-      password: "placeholder",
-      email: "hi@gmail.com",
-      locked: false,
-      enabled: true
-    };
-    console.log(props.userProfileInfoForUI.theRealID)
-    ApiPost.getChatsUserIsPartOf(post).then(e => console.log(e))
-
-  }
-
 
 
   const formBackground = useColorModeValue("gray.100", "gray.700");
@@ -195,19 +145,19 @@ export default function ProfilePage(props) {
     navigate("/chat");
   }
 
-  function changeProfile(event) { //wtf happend here
+  function changeProfile(event) {
     const value = event.target.value;
-    props.changeUserInfoFunction("profilePictureID", value);
-    setProfileNumber(value);
-    getProfilePicture(value);
+    if(value != ""){
+      props.changeUserInfoFunction("profilePictureID", value);
+      setProfileNumber(value);
+      getProfilePicture(value);
+      const post = {
+        username: props.userProfileInfoForUI.id,
+        profilePicture: {id: value, picture: "0", title: "0"},
+      };
+      ApiPost.changeProfilePicture(post).then((e) => e)
+    }
 
-
-    const post = {
-      username: props.userProfileInfoForUI.id,
-      profilePicture: {id: value, picture: "0", title: "0"},
-
-    };
-    ApiPost.changeProfilePicture(post).then((e) => e)
 
   }
   function logOut() {
@@ -229,7 +179,20 @@ export default function ProfilePage(props) {
     ApiPost.sendPost(post).then(e => console.log("Post sent"))
     setMessageToSend("");
   }
+  const adminButton = <Button
+      width="100%"
+      colorScheme="blue"
+      position="top"
+      onClick={goToAdmin}
+      mb={3}
+  >
+    {" "}
+    Go to admin page
+  </Button>
 
+  function goToAdmin(){
+    navigate("/admin");
+  }
   return (
     <Flex
       height="100vh"
@@ -244,6 +207,7 @@ export default function ProfilePage(props) {
         alignItems="left"
       />{" "}
       <Flex direction="column" background={formBackground} p={12} rounded={6}>
+        {props.userProfileInfoForUI.role == 1 && adminButton}
         <Select placeholder="Select profile picture" onChange={changeProfile}>
           {optionsToChooseForProfile}
         </Select>{" "}
@@ -262,17 +226,8 @@ export default function ProfilePage(props) {
           {" "}
           Go to chats
         </Button>
-        <Button
-            width="100%"
-            colorScheme="blue"
-            position="top"
-            onClick={hold}
-            mb={3}
-        >
-          {" "}
-          test
-        </Button>
-        <h1>Send a post</h1>
+
+        <h1>{props.userProfileInfoForUI.id}, would you like to send a post?</h1>
 
           <FormControl>
             <Input

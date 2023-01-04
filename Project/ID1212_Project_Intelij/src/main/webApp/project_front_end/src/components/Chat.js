@@ -94,18 +94,6 @@ export default function Chat(props) {
   }, []);
 
 
-  // React.useEffect(() => {
-  //
-  //   var users = [];
-  //   currentChat.members.map((e) => {
-  //     users.push(userData.find((user) => user.id === e));
-  //   });
-  //
-  //   setCurrentGroupMembers(users);
-  // }, [currentChat]);
-
-
-
 
 
   function switchChat(event) {
@@ -163,29 +151,8 @@ export default function Chat(props) {
         }
       })
       setMessagesToShow(textMessagesElement);
-
     })
   }
-
-  function findUserName(id) {
-    if (id !== undefined && id !== 0) {
-      const usr = currentGroupMembers.find((e) => e.id === id);
-      return "h";
-    } else {
-      return "Error";
-    }
-  }
-
-
-
-  function gree(element) {
-
-    const currentUser = props.userProfileInfoForUI.id;
-    const chatMembers = element.members;
-
-    return chatMembers.includes(currentUser);
-  }
-
 
   function getChatUserIsPartOf(){
     const post = {
@@ -289,52 +256,14 @@ export default function Chat(props) {
 
 
 
-  // var ddd = setInterval(function(){ //Dont remove
-  //
-  //
-  //
-  // }, 5000);
 
-
-  // const chatMessages = currentChat.messages.map((item) => {
-  //   if (props.currentUser !== item.Sender) {
-  //     return (
-  //         <Flex
-  //             key={item.orderNumber}
-  //             background="red.200"
-  //             width="fit-content"
-  //             minWidth="100px"
-  //             borderRadius="lg"
-  //             p={3}
-  //             alignSelf="flex-end"
-  //         >
-  //           <Text>
-  //             From {item.Sender}: {item.message}
-  //           </Text>
-  //         </Flex>
-  //     );
-  //   } else {
-  //     return (
-  //         <Flex
-  //             key={item.orderNumber}
-  //             background="green.200"
-  //             width="fit-content"
-  //             minWidth="100px"
-  //             borderRadius="lg"
-  //             p={3}
-  //         >
-  //           <Text>{item.message}</Text>
-  //         </Flex>
-  //     );
-  //   }
-  // });
 
 
 
   if (!props.authorized) {
-    //return <Navigate to="/" />;
+    return <Navigate to="/" />;
   }
-  //Made a const for condisonal rendering
+
   const chatWindow = (
     <Flex background="red.200" flex={10} width="100%" height="100vh">
       <Flex direction="column" background={"gray.100"} flex={100}>
@@ -380,7 +309,7 @@ export default function Chat(props) {
         background={formBackground}
         p={12}
         rounded={6}
-        position="fixed" //This one makes it overlap
+        position="fixed"
         height="100%"
       >
         <Button
@@ -400,21 +329,4 @@ export default function Chat(props) {
       <Flex direction="column">{whatChatToShow !== 0 && chatWindow}</Flex>
     </Flex>
   );
-}
-
-{
-  /* <Button
-className="toProfileButton"
-width="100%"
-colorScheme="blue"
-onClick={testFunction}
-mb={3}
->
-{" "}
-Test button
-</Button>
-
-
-
-*/
 }

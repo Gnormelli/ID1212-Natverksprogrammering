@@ -5,13 +5,11 @@ import {
   Heading,
   Input,
   Image,
-  useColorMode,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import ApiPost from "../ApiInterface/ApiPost";
 export default function SignUp(props) {
-  const { toggleColorMode } = useColorMode();
   const formBackground = useColorModeValue("gray.100", "gray.700");
   const navigate = useNavigate();
 
@@ -31,7 +29,7 @@ export default function SignUp(props) {
           console.log("Username alredy in use")
 
         } else {
-          props.createProfileFunction(formData.username, formData.password, e.id);
+          props.createProfileFunction(formData.username, e.id);
           goToProfile();
         }
       });
@@ -40,10 +38,6 @@ export default function SignUp(props) {
     }
   }
 
-  function usernameExist() {
-    //check if username esist with backend and return true if it does TODO
-    return false;
-  }
 
   const [formData, setFormData] = React.useState({
     username: "",

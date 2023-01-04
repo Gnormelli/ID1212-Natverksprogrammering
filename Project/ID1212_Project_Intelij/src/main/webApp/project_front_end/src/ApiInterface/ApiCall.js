@@ -26,8 +26,6 @@ const ApiCall = {
             )
       )
       .then((response) => {
-
-       // console.log(response.json())
         return response.json()
 
       });

@@ -38,7 +38,6 @@ export default function LogInPage(props) {
     navigate("/SignUp");
   }
   function logIn() {
-    //ApiCall.getData().then((e) => console.log(e));
 
     const post = {
       id: 20,
@@ -52,12 +51,10 @@ export default function LogInPage(props) {
       if(e.id === "Bad credentials"){
         console.log(e.id)
       }else{
-
-        props.setFullUserGlobal({"id": formData.username, "profilePictureID": e.profilePicture.id, "theRealID": e.id})
+        props.setFullUserGlobal({"id": formData.username, "profilePictureID": e.profilePicture.id, "theRealID": e.id, role:e.userRole.id})
         navigate("/Profile");
       }
     });
-
   }
 
   return (

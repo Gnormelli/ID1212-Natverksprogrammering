@@ -11,13 +11,10 @@ const ApiPost = {
         method: "POST", // HTTP method
         crossDomain: true,
         headers: {
-          // HTTP headers
             "Content-Type": "application/json",
             "Access-Control-Allow-Headers":
                 "Origin, X-Requested-With, " +
                 "Content-Type, Accept",
-           // "Access-Control-Allow-Origin": "http://localhost:3000",
-            //"mode": "no-cors"
             },
             
         body: JSON.stringify(object),
@@ -79,9 +76,10 @@ const ApiPost = {
     const getLoginEndpoint = "/send_post";
     return ApiPost.apiCall(getLoginEndpoint,loginForm).then((data) => data);
     },
-
-
-
+    createNewChat(loginForm) {
+        const getLoginEndpoint = "/new_conversation";
+        return ApiPost.apiCall(getLoginEndpoint,loginForm).then((data) => data);
+    },
     };
 
 export default ApiPost;
