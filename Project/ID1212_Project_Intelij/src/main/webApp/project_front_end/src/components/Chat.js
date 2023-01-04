@@ -248,17 +248,7 @@ export default function Chat(props) {
       ApiPost.sendMessage(post).then(e =>getMessages())
       setMessageToSend("");
     }
-
   }
-
-
-
-
-
-
-
-
-
 
   if (!props.authorized) {
     return <Navigate to="/" />;

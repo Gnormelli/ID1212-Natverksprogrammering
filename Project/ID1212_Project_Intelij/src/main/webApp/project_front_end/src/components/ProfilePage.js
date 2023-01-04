@@ -226,7 +226,6 @@ export default function ProfilePage(props) {
           {" "}
           Go to chats
         </Button>
-
         <h1>{props.userProfileInfoForUI.id}, would you like to send a post?</h1>
 
           <FormControl>
