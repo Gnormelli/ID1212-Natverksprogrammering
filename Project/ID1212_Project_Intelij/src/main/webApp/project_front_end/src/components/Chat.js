@@ -1,6 +1,4 @@
 import React from "react";
-import chatData from "../chatData";
-import userData from "../userData";
 import { Navigate, useNavigate } from "react-router-dom";
 import {
   Button,
@@ -112,7 +110,7 @@ export default function Chat(props) {
 
   function switchChat(event) {
 
-    // const chatItem = chatData.find((element) => element.title == buttonClicked);
+
 
     setDisplayName(event.target.innerText)
 
@@ -214,7 +212,7 @@ export default function Chat(props) {
 
     })
   }
-  const chatsUserIsPartOf1 = chatData.filter(gree);
+
 
 
   function navigateToProfile() {

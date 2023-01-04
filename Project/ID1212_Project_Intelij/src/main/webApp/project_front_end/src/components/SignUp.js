@@ -16,11 +16,6 @@ export default function SignUp(props) {
   const navigate = useNavigate();
 
   function signUp() {
-    //console.log("We try to log in sending ");
-    //console.log(formData);
-
-
-
 
     if (
       formData.password === formData.confirmPassword &&

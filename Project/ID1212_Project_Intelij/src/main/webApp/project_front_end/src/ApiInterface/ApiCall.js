@@ -21,7 +21,7 @@ const ApiCall = {
           ? response
           : doThrow(
               new Error(
-                "Status was: " + response.statusText + " " + response.status
+                "Status was: " + response.statusText + " " + response.status + " " + params
               )
             )
       )

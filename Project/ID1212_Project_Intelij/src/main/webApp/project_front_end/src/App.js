@@ -5,8 +5,8 @@ import ProfilePage from "./components/ProfilePage";
 import { ChakraProvider } from "@chakra-ui/react";
 import SignUp from "./components/SignUp";
 import Chat from "./components/Chat";
-import chatData from "./chatData";
-import profileData from "./profileData";
+
+
 import { useNavigate } from "react-router-dom";
 import ApiPost from "./ApiInterface/ApiPost";
 
@@ -40,6 +40,7 @@ export default function App() {
     //console.log(userProfileInfoForUI.profilePictureID);
   }
 
+
   function createProfile(username, id) {
     //Create profile in database TODO (username/password, set profile picture defult to 1)
     setAuthorized(true);
@@ -48,6 +49,7 @@ export default function App() {
       profilePictureID: 1,
       theRealID: id,
     });
+
   }
 
   function setFullUser(info){

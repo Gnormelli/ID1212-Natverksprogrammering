@@ -1,6 +1,5 @@
 import React, {useState } from "react";
 import { Form, Navigate, useNavigate } from "react-router-dom";
-import chatData from "../chatData";
 import {
   Button,
   Flex,
@@ -52,9 +51,18 @@ export default function ProfilePage(props) {
       );
       setProfileUrl(profilePictureItem.picture)
     });
-    const post ={
-      id: props.userProfileInfoForUI.theRealID
-    }
+
+
+
+      const post = {
+        id: props.userProfileInfoForUI.theRealID,
+        username: "placeholder",
+        password: "placeholder",
+        email: "hi@gmail.com",
+        locked: false,
+        enabled: true
+      };
+
     ApiPost.getChatsUserIsPartOf(post).then(e => {
 
       if(e.id != 'User does not exist'){
@@ -163,7 +171,16 @@ export default function ProfilePage(props) {
     setProfileUrl(profilePictureItem.picture);
   }
   function hold(){
-    console.log(optionsOfChats)
+    const post = {
+      id: props.userProfileInfoForUI.theRealID,
+      username: "placeholder",
+      password: "placeholder",
+      email: "hi@gmail.com",
+      locked: false,
+      enabled: true
+    };
+    console.log(props.userProfileInfoForUI.theRealID)
+    ApiPost.getChatsUserIsPartOf(post).then(e => console.log(e))
 
   }
 
