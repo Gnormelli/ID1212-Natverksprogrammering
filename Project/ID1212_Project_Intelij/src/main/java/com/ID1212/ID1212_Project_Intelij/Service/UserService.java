@@ -82,14 +82,4 @@ public class UserService implements UserDetailsService {
         }else
             return null;
     }
-
-    public boolean DoesUserExsist(String username) {
-
-        Optional<User> fromDatabase = Optional.ofNullable(userRepository.findByUsername(username));
-        if(fromDatabase.isPresent()){
-           return true;
-
-        }else
-            return false;
-    }
 }
