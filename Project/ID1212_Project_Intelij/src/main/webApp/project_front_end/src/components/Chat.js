@@ -15,7 +15,7 @@ import {
   FormControl,
   Text,
 } from "@chakra-ui/react";
-import ApiCall from "../ApiInterface/ApiCall";
+
 import ApiPost from "../ApiInterface/ApiPost";
 
 export default function Chat(props) {
@@ -24,100 +24,37 @@ export default function Chat(props) {
   const [whatChatToShow, setWhatChatToShow] = React.useState(0);
   const [whatGroupToShow, setWhatGroupToShow] = React.useState(1);
   const [messageToSend, setMessageToSend] = React.useState("");
-  const [count, setCount] = React.useState(0)
-  const [listOfChats,setListOfChats] = React.useState([12]);
   const [messagesToShow, setMessagesToShow] = React.useState();
-  const [chatsUserIsPartOf, setChatsUserIsPartOf] = React.useState();
   const [displayName, setDisplayName] = React.useState("Error")
-  const [currentGroupMembers, setCurrentGroupMembers] = React.useState([
-    0,
-    "Nobody",
-  ]);
-  const [currentChat, setCurrentChat] = React.useState({
-    id: 0,
-    name: "error"
-  });
-
-
-
+  const [currentChat, setCurrentChat] = React.useState(0);
 
 
 
   React.useEffect(() => {
-
     getChatUserIsPartOf()
-
-    var requestLoop = setInterval(function(){ //Dont remove
-      const post = { //todo
-        fk_conversation: {id: currentChat.id, name: "hold"}
-      };
-      ApiPost.getMessagesFromChat(post).then(e=> {
-
-        const textMessagesElement = e.map(el=> {
-          if(el.fromUser !== props.currentUser ){
-            return (
-                <Flex
-                    key={el.id}
-                    background="red.200"
-                    width="fit-content"
-                    minWidth="100px"
-                    borderRadius="lg"
-                    p={3}
-                    alignSelf="flex-end"
-                >
-                  <Text>
-                    From {el.fromUser}: {el.messageText}
-                  </Text>
-                </Flex>
-            );
-          }else{
-            return (
-                <Flex
-                    key={el.id}
-                    background="green.200"
-                    width="fit-content"
-                    minWidth="100px"
-                    borderRadius="lg"
-                    p={3}
-                >
-                  <Text>{el.messageText}</Text>
-                </Flex>
-            );
-          }
-        })
-        setMessagesToShow(textMessagesElement);
-
-      })
-      setCount(prevValue => prevValue++)
-      console.log(count)
-    }, 5000000);
   }, []);
 
-
-
+  React.useEffect(() => {
+    const requestLoop = setInterval(function(){ //Dont remove
+      getMessages()
+    }, 1000);
+    return () => {
+      clearInterval(requestLoop);
+    };
+  }, [whatChatToShow]) ;
 
   function switchChat(event) {
-
-
-
     setDisplayName(event.target.innerText)
-
-
-
-    const chatItem = listOfChats.find(element => element.name == event.target.innerText)
     setWhatChatToShow(event.target.value);
     setCurrentChat(event.target.value);
     getMessagesWithValue(event.target.value)
 
   }
-
   function getMessagesWithValue(value){
     const post = {
       fk_conversation: {id: value, name: "hold"}
     };
-
     ApiPost.getMessagesFromChat(post).then(e=> {
-
       const textMessagesElement = e.map(el=> {
         if(el.fromUser !== props.currentUser ){
           return (
@@ -170,8 +107,6 @@ export default function Chat(props) {
           );
         })
 
-        setListOfChats(e) //here
-
         setWhatGroupToShow(chats)
       }else{
         setWhatGroupToShow([1])
@@ -179,20 +114,19 @@ export default function Chat(props) {
 
     })
   }
-
-
-
   function navigateToProfile() {
     navigate("/profile");
+  }
+
+  function test(){
+    getMessages();
   }
 
   function getMessages() {
     const post = {
       fk_conversation: {id: currentChat, name: "hold"}
     };
-
     ApiPost.getMessagesFromChat(post).then(e=> {
-
       const textMessagesElement = e.map(el=> {
         if(el.fromUser !== props.currentUser ){
           return (
@@ -255,68 +189,78 @@ export default function Chat(props) {
   }
 
   const chatWindow = (
-    <Flex background="red.200" flex={10} width="100%" height="100vh">
-      <Flex direction="column" background={"gray.100"} flex={100}>
-        <Flex h="100px" background={"blue.100"} align="center" p={5}>
-          <Avatar src="" />
+      <Flex background="red.200" flex={10} width="100%" height="100vh">
+        <Flex direction="column" background={"gray.100"} flex={100}>
+          <Flex h="100px" background={"blue.100"} align="center" p={5}>
+            <Avatar src="" />
 
-          <Heading size="lg">{displayName}</Heading>
+            <Heading size="lg">{displayName}</Heading>
+          </Flex>
+
+          <Flex
+              direction="column"
+              background={"gray.100"}
+              flex={1}
+              overflowX="scroll"
+          >
+            {messagesToShow}
+          </Flex>
+
+          <FormControl>
+            <Input
+                type="text"
+                placeholder="Type text to send"
+                onChange={updateMessage}
+                name="messageToSend"
+                value={messageToSend}
+            />
+            <Button type="submit" onClick={sendMessage}>
+              Send
+            </Button>
+          </FormControl>
         </Flex>
-
-        <Flex
-          direction="column"
-          background={"gray.100"}
-          flex={1}
-          overflowX="scroll"
-        >
-          {messagesToShow}
-        </Flex>
-
-        <FormControl>
-          <Input
-            type="text"
-            placeholder="Type text to send"
-            onChange={updateMessage}
-            name="messageToSend"
-            value={messageToSend}
-          />
-          <Button type="submit" onClick={sendMessage}>
-            Send
-          </Button>
-        </FormControl>
       </Flex>
-    </Flex>
   );
   return (
-    <Flex
-      height="100vh"
-      alignItems="top"
-      justifyContent="left"
-      backgroundColor="orange.400"
-    >
       <Flex
-        direction="column"
-        background={formBackground}
-        p={12}
-        rounded={6}
-        position="fixed"
-        height="100%"
+          height="100vh"
+          alignItems="top"
+          justifyContent="left"
+          backgroundColor="orange.400"
       >
-        <Button
-            className="toProfileButton"
-            width="100%"
-            colorScheme="blue"
-            onClick={navigateToProfile}
-            mb={3}
+        <Flex
+            direction="column"
+            background={formBackground}
+            p={12}
+            rounded={6}
+            position="fixed"
+            height="100%"
         >
-          {" "}
-          To profile
-        </Button>
-        {(whatGroupToShow !== 1) && whatGroupToShow}
-      </Flex>
-      <Spacer />
+          <Button
+              className="toProfileButton"
+              width="100%"
+              colorScheme="blue"
+              onClick={navigateToProfile}
+              mb={3}
+          >
+            {" "}
+            To profile
+          </Button>
+          <Button
+              className="toProfileButton"
+              width="100%"
+              colorScheme="blue"
+              onClick={test}
+              mb={3}
+          >
+            {" "}
+            test
+          </Button>
+          {(whatGroupToShow !== 1) && whatGroupToShow}
+        </Flex>
+        <Spacer />
 
-      <Flex direction="column">{whatChatToShow !== 0 && chatWindow}</Flex>
-    </Flex>
+        <Flex direction="column">{whatChatToShow !== 0 && chatWindow}</Flex>
+      </Flex>
   );
 }

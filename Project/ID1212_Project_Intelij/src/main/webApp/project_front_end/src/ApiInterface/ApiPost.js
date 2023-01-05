@@ -1,5 +1,3 @@
-import {resolveMotionValue} from "framer-motion";
-
 function doThrow(e) {
     throw e;
 }

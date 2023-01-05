@@ -1,5 +1,5 @@
-import React, {useState } from "react";
-import { Form, Navigate, useNavigate } from "react-router-dom";
+import React from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import {
   Button,
   Flex,
@@ -8,7 +8,6 @@ import {
   Stack,
   Input,
   Image,
-  useColorMode,
   useColorModeValue,
   Select, FormControl,
 } from "@chakra-ui/react";
@@ -17,7 +16,6 @@ import ApiPost from "../ApiInterface/ApiPost";
 
 export default function ProfilePage(props) {
   const navigate = useNavigate();
-  const [profileNumber, setProfileNumber] = React.useState();
   const [profileUrl, setProfileUrl] = React.useState();
   const [profilePicturesFull, setProfilePicturesFull] = React.useState();
   const [optionsToChooseForProfile, setOptionsToChooseForProfile] = React.useState();
@@ -27,15 +25,10 @@ export default function ProfilePage(props) {
   const [messageToSend, setMessageToSend] = React.useState("")
 
   React.useEffect(() => {
-
-     const item = [{id: 1, fromUser: "david", postText: "A message"},{id: 2, fromUser: "corry", postText: "A mege"},{id: 3, fromUser: "dd", postText: "A age"},{id: 4, fromUser: "ad", postText: "A mess"},{id: 5, fromUser: "david", postText: "A message"},{id: 6, fromUser: "corry", postText: "A mege"},{id: 7, fromUser: "dd", postText: "A age"},{id: 8, fromUser: "ad", postText: "A mess"}]
-
     ApiCall.getPosts().then(e =>{
       const thePosts = e.map(e => <Flex mb={3} position="screenLeft" key={e.id} p={3} boxSize rounded={6} backgroundColor={"whiteAlpha.400"}> Poster {e.fromUser}:  {e.postText} </Flex>)
       setPosts(thePosts)
     })
-
-
     ApiCall.getPictures().then(e => {
       setProfilePicturesFull(e);
 
@@ -57,25 +50,17 @@ export default function ProfilePage(props) {
       };
 
     ApiPost.getChatsUserIsPartOf(post).then(e => {
-
       if(e.id != 'User does not exist'){
         setGroupsUserIsPartOf(e)
       }else{
-
         setGroupsUserIsPartOf([0])
       }
-
     })
-
   }, []);
 
   React.useEffect(() => {
-
     ApiCall.getAllConversations().then(e => {
-
-
       if(groupsUserIsPartOf != null){
-
         const filterdList = groupsUserIsPartOf.map(item => item.id)
         const checkmarks = e.map(item=>{
           if(filterdList.includes(item.id)){//if item is in groupsUserIsPartOf
@@ -86,13 +71,11 @@ export default function ProfilePage(props) {
                     key={item.id}
                     onChange={updateMemebership}
                     defaultChecked
-
                 >
                   {item.name}
                 </Checkbox>
             );
           }else{
-
             return (
                 <Checkbox value={item.id} colorScheme="green" key={e.length + item.id} onChange={updateMemebership}>
                   {item.name}
@@ -100,18 +83,13 @@ export default function ProfilePage(props) {
             );
           }
         })
-
-
         setOptionsOfChats(checkmarks);
       }else{
-
-
         const checkmarks =  e.map(item=> {
           return (
               <Checkbox value={item.id} colorScheme="green" key={item.id} onChange={updateMemebership}>
                 {item.name}
               </Checkbox>
-
           );
         })
         setOptionsOfChats(checkmarks);
@@ -149,7 +127,6 @@ export default function ProfilePage(props) {
     const value = event.target.value;
     if(value != ""){
       props.changeUserInfoFunction("profilePictureID", value);
-      setProfileNumber(value);
       getProfilePicture(value);
       const post = {
         username: props.userProfileInfoForUI.id,
@@ -157,7 +134,6 @@ export default function ProfilePage(props) {
       };
       ApiPost.changeProfilePicture(post).then((e) => e)
     }
-
 
   }
   function logOut() {
@@ -171,7 +147,6 @@ export default function ProfilePage(props) {
   }
 
   function sendPost() {
-
     const post = {
       fromUser: props.userProfileInfoForUI.id,
       postText: messageToSend,

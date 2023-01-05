@@ -130,10 +130,6 @@ export default function SignUp(props) {
           </Button>
         </form>
 
-        {/* <Button colorScheme="blue" onClick={toggleColorMode}>
-          {" "}
-          DarkMode
-        </Button> */}
       </Flex>
     </Flex>
   );

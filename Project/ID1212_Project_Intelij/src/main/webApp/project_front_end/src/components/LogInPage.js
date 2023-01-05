@@ -5,19 +5,15 @@ import {
   Heading,
   Input,
   Image,
-  useColorMode,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import ApiPost from "../ApiInterface/ApiPost";
-import ApiCall from "../ApiInterface/ApiCall";
-import {type} from "@testing-library/user-event/dist/type";
 
 export default function LogInPage(props) {
-  const { toggleColorMode } = useColorMode();
   const formBackground = useColorModeValue("gray.100", "gray.700");
   const navigate = useNavigate();
-  //const [jwt, setJwt] = useLocalState("", "jwt")
+
 
   const [formData, setFormData] = React.useState({
     username: "",
@@ -112,10 +108,6 @@ export default function LogInPage(props) {
           </Button>
         </form>
 
-        {/* <Button colorScheme="blue" onClick={toggleColorMode}>
-          {" "}
-          DarkMode
-        </Button> */}
       </Flex>
     </Flex>
   );
