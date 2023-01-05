@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: com.ID1212.ID1212_Project_Intelij.Id1212ProjectIntelijApplic
+ ation
+
