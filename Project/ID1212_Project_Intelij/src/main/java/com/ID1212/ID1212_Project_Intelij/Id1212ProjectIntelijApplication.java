@@ -46,6 +46,7 @@ public class Id1212ProjectIntelijApplication {
 				registry.addMapping("/get_all_conversations").allowedOrigins("http://localhost:3000");
 				registry.addMapping("/get_posts").allowedOrigins("http://localhost:3000");
 				registry.addMapping("/send_post").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/new_conversation").allowedOrigins("http://localhost:3000");
 
 
 			}

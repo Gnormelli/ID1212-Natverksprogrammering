@@ -24,8 +24,6 @@ public class ProfilePictureService {
         this.profilePictureRepository=profilePictureRepository;
     }
 
-
-
     public ProfilePicture getProfilePictureFromDB(Long id){
         return profilePictureRepository.findProfilePictureById(id);
     }
@@ -34,16 +32,4 @@ public class ProfilePictureService {
         return profilePictureRepository.findAll();
     }
 
-
-    /**
-    public List<QueuePost> getQueuePosts(){
-        return List.of(
-                new QueuePost(
-                        1L,
-                        "This is my location",
-                        "I have commented this",
-                        true,
-                        false
-                ));
-    }*/
 }

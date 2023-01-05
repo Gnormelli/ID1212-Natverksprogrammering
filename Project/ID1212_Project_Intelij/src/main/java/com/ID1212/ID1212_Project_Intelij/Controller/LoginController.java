@@ -52,8 +52,6 @@ public class LoginController {
             map.put("id", "Bad credentials");
             return map;
         }else{
-            //return usr;
-
             return usr;
         }
     }

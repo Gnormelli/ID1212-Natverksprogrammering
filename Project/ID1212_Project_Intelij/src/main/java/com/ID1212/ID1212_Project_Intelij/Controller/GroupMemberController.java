@@ -65,7 +65,9 @@ public class GroupMemberController {
 
     //Not priority right now
     @PostMapping("/new_conversation")
-    public String createNewConversation(@RequestBody String convName){
+    public String createNewConversation(@RequestBody Conversation conversation){
+        String convName = conversation.getName();
         return conversationService.createConversation(convName);
+
     };
 }
