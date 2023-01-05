@@ -16,7 +16,7 @@ INSERT INTO conversation (id, conversation_name) VALUES (3, 'Chat with random');
 INSERT INTO conversation (id, conversation_name) VALUES (4, 'A big chat chat');
 
 INSERT INTO user_info (id, user_email, unlocked, locked, password, username, fk_id_profile_picture, fk_id_role)
-VALUES (1, 'AnEmail@gamil.com', true, false, 'qwerty', 'Han', 1, 0);
+VALUES (1, 'AnEmail@gamil.com', true, false, 'qwerty', 'Han', 1, 1);
 INSERT INTO user_info (id, user_email, unlocked, locked, password, username, fk_id_profile_picture, fk_id_role)
 VALUES (2, 'AnEmail@gamil.com', true, false, 'qwerty', 'Luke', 2, 0);
 INSERT INTO user_info (id, user_email, unlocked, locked, password, username, fk_id_profile_picture, fk_id_role)

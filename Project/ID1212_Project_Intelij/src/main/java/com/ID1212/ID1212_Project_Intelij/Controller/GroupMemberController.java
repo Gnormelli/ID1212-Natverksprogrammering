@@ -65,9 +65,12 @@ public class GroupMemberController {
 
     //Not priority right now
     @PostMapping("/new_conversation")
-    public String createNewConversation(@RequestBody Conversation conversation){
+    public Object createNewConversation(@RequestBody Conversation conversation){
         String convName = conversation.getName();
-        return conversationService.createConversation(convName);
+        String response = conversationService.createConversation(convName);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("response", response);
+        return map;
 
     };
 }

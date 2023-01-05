@@ -118,10 +118,6 @@ export default function Chat(props) {
     navigate("/profile");
   }
 
-  function test(){
-    getMessages();
-  }
-
   function getMessages() {
     const post = {
       fk_conversation: {id: currentChat, name: "hold"}
@@ -245,16 +241,6 @@ export default function Chat(props) {
           >
             {" "}
             To profile
-          </Button>
-          <Button
-              className="toProfileButton"
-              width="100%"
-              colorScheme="blue"
-              onClick={test}
-              mb={3}
-          >
-            {" "}
-            test
           </Button>
           {(whatGroupToShow !== 1) && whatGroupToShow}
         </Flex>

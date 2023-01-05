@@ -43,7 +43,10 @@ export default function ProfilePage(props) {
     const post = {
       name: newChatName
     };
-    ApiPost.createNewChat(post).then(e => console.log("Chat created"))
+    ApiPost.createNewChat(post).then(e => {
+      console.log(e.response)
+
+    })
     setNewChatName("");
   }
 
